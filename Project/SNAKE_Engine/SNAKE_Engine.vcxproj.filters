@@ -12,6 +12,9 @@
     <ClInclude Include="public\test.h">
       <Filter>public</Filter>
     </ClInclude>
+    <ClInclude Include="Private\includes.h">
+      <Filter>private</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="private\test.cpp">
