@@ -27,8 +27,11 @@ public:
 private:
     GLFWwindow* window = nullptr;
     static constexpr int MAX_KEYS = 349;
+    static constexpr int MAX_MOUSE_BUTTONS = 9;
     std::bitset<MAX_KEYS> currentKeyState;
     std::bitset<MAX_KEYS> previousKeyState;
+    std::bitset<MAX_MOUSE_BUTTONS> currentMouseState;
+    std::bitset<MAX_MOUSE_BUTTONS> previousMouseState;
 
     double mouseX = 0.0;
     double mouseY = 0.0;
@@ -130,4 +133,21 @@ enum InputKey
     KEY_RIGHT_SUPER = 347,
 
     KEY_MENU = 348
+};
+
+enum InputMouseButton
+{
+    MOUSE_BUTTON_1 = 0,
+    MOUSE_BUTTON_LEFT = MOUSE_BUTTON_1,  // alias
+    MOUSE_BUTTON_2 = 1,
+    MOUSE_BUTTON_RIGHT = MOUSE_BUTTON_2, // alias
+    MOUSE_BUTTON_3 = 2,
+    MOUSE_BUTTON_MIDDLE = MOUSE_BUTTON_3, // alias
+    MOUSE_BUTTON_4 = 3,
+    MOUSE_BUTTON_5 = 4,
+    MOUSE_BUTTON_6 = 5,
+    MOUSE_BUTTON_7 = 6,
+    MOUSE_BUTTON_8 = 7,
+
+    MOUSE_BUTTON_LAST = MOUSE_BUTTON_8
 };

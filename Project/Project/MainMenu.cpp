@@ -28,6 +28,18 @@ void MainMenu::Update(float dt, const EngineContext& engineContext)
 	{
 		engineContext.engine->RequestQuit();
 	}
+	if (engineContext.inputManager->IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+	{
+		std::cout << "[mainmenu] left mouse button click" << std::endl;
+	}
+	if (engineContext.inputManager->IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+	{
+		std::cout << "[mainmenu] left mouse button down" << std::endl;
+	}
+	if (engineContext.inputManager->IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
+	{
+		std::cout << "[mainmenu] left mouse button released" << std::endl;
+	}
 }
 
 void MainMenu::Draw()
