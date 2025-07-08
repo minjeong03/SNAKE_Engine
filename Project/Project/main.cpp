@@ -1,21 +1,19 @@
 #include <iostream>
 
 #include "MainMenu.h"
-#include "SNAKE_Engine.h"
-#include "StateManager.h"
+#include "Engine.h"
 
 int main(int argc, char* argv[])
 {
 	SNAKE_engine snakeEngine;
 
-
 	if (argc == 3)
 	{
-		snakeEngine.Init(argc, argv);
+		snakeEngine.Init(atoi(argv[1]),  atoi(argv[2]));
 	}
 	else if (argc == 1)
 	{
-		snakeEngine.Init();
+		snakeEngine.Init(800,600);
 	}
 	else
 	{
@@ -24,7 +22,7 @@ int main(int argc, char* argv[])
 	}
 
 
-	snakeEngine.GetStateManager().ChangeState(std::make_unique<MainMenu>());
+	snakeEngine.GetEngineContext().stateManager->ChangeState(std::make_unique<MainMenu>());
 
 	snakeEngine.Run();
 

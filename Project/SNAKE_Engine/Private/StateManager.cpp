@@ -1,5 +1,4 @@
-#define GLAD_GL_IMPLEMENTATION
-#include "includes.h"
+
 #include "StateManager.h"
 
 void StateManager::ChangeState(std::unique_ptr<GameState> newState)

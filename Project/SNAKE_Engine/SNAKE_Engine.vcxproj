@@ -27,16 +27,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Private\includes.h" />
+    <ClInclude Include="Public\Engine.h" />
     <ClInclude Include="Public\EngineContext.h" />
     <ClInclude Include="Public\GameState.h" />
+    <ClInclude Include="Public\InputManager.h" />
     <ClInclude Include="Public\SNAKE_Engine.h" />
     <ClInclude Include="Public\StateManager.h" />
+    <ClInclude Include="Public\WindowManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Private\GameState.cpp" />
+    <ClCompile Include="Private\InputManager.cpp" />
     <ClCompile Include="Private\SNAKE_Engine.cpp" />
     <ClCompile Include="Private\StateManager.cpp" />
+    <ClCompile Include="Private\WindowManager.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

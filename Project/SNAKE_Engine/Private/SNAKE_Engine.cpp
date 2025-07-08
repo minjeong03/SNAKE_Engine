@@ -1,61 +1,39 @@
-#include"includes.h"
+#define GLAD_GL_IMPLEMENTATION
+#include "glad/gl.h"
+#include"glfw3/glfw3.h"
+#include"glm/glm.hpp"
+
 #include "SNAKE_Engine.h"
 #include <iostream>
-#include <glfw3/glfw3.h>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
+    SNAKE_engine* engine = static_cast<SNAKE_engine*>(glfwGetWindowUserPointer(window));
+    if (engine)
+    {
+        engine->GetEngineContext().windowHeight = height;
+        engine->GetEngineContext().windowWidth = width;
+        //std::cout << "changed: " <<engine->GetEngineContext().windowHeight<< " "<<engine->GetEngineContext().windowWidth << std::endl;
+    }
+
 }
 
-bool SNAKE_engine::Init(int argc, char* argv[])
+void SNAKE_engine::SetEngineContext(int windowWidth, int windowHeight)
 {
-    if (argc == 3)
-    {
-        windowWidth = atoi(argv[1]);
-        windowHeight = atoi(argv[2]);
-    }
-    else if (argc != 1) 
-    {
-        std::cerr << "Invalid args.\n";
-        return false;
-    }
-
-    if (!glfwInit()) 
-    {
-        std::cerr << "Failed to initialize GLFW" << std::endl;
-        return false;
-    }
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    window = glfwCreateWindow(windowWidth, windowHeight, "GLFW + glad Window", nullptr, nullptr);
-    if (!window) 
-    {
-        std::cerr << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return false;
-    }
-
-    glfwMakeContextCurrent(window);
-
-    if (!gladLoadGL(glfwGetProcAddress)) 
-    {
-        std::cerr << "Failed to initialize GLAD" << std::endl;
-        return false;
-    }
-
-    glViewport(0, 0, windowWidth, windowHeight);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-
     engineContext.stateManager = &stateManager;
-
-    return true;
+    engineContext.window = window;
+    engineContext.windowWidth = windowWidth;
+    engineContext.windowHeight = windowHeight;
+    engineContext.engine = this;
 }
 
-bool SNAKE_engine::Init()
+SNAKE_engine::SNAKE_engine():window(nullptr)
+{
+
+}
+
+bool SNAKE_engine::Init(int windowWidth, int windowHeight)
 {
     if (!glfwInit()) 
     {
@@ -84,16 +62,19 @@ bool SNAKE_engine::Init()
     }
 
     glViewport(0, 0, windowWidth, windowHeight);
+    glfwSetWindowUserPointer(window, this);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 
-    engineContext.stateManager = &stateManager;
+    SetEngineContext(windowWidth, windowHeight);
+
     return true;
 }
+
 
 void SNAKE_engine::Run()
 {
-    while (true)
+    while (shouldRun)
     {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             glfwSetWindowShouldClose(window, true);
@@ -113,4 +94,9 @@ void SNAKE_engine::Run()
 void SNAKE_engine::Shutdown()
 {
     glfwTerminate();
+}
+
+void SNAKE_engine::RequestQuit()
+{
+    shouldRun = false;
 }

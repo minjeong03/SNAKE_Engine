@@ -13,16 +13,16 @@ class SNAKE_engine
 private:
     EngineContext engineContext;
     StateManager stateManager;
-    int windowWidth = 800;
-    int windowHeight = 600;
     GLFWwindow* window;
+    bool shouldRun = true;
+    void SetEngineContext(int windowWidth, int windowHeight);
 public:
-    bool Init(int argc, char* argv[]);
-    bool Init();
+    SNAKE_engine();
+    bool Init(int windowWidth, int windowHeight);
     void Run();
     void Shutdown();
+    void RequestQuit();
+    
+    EngineContext& GetEngineContext() { return engineContext; }
 
-    StateManager& GetStateManager() { return stateManager; }
-    int GetWidth() const { return windowWidth; }
-    int GetHeight() const { return windowHeight; }
 };

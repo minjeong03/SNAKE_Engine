@@ -9,9 +9,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Private\includes.h">
-      <Filter>private</Filter>
-    </ClInclude>
     <ClInclude Include="Public\StateManager.h">
       <Filter>public</Filter>
     </ClInclude>
@@ -24,15 +21,27 @@
     <ClInclude Include="Public\EngineContext.h">
       <Filter>public</Filter>
     </ClInclude>
+    <ClInclude Include="Public\Engine.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\InputManager.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\WindowManager.h">
+      <Filter>public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Private\StateManager.cpp">
       <Filter>private</Filter>
     </ClCompile>
-    <ClCompile Include="Private\GameState.cpp">
+    <ClCompile Include="Private\SNAKE_Engine.cpp">
       <Filter>private</Filter>
     </ClCompile>
-    <ClCompile Include="Private\SNAKE_Engine.cpp">
+    <ClCompile Include="Private\InputManager.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\WindowManager.cpp">
       <Filter>private</Filter>
     </ClCompile>
   </ItemGroup>
