@@ -1,5 +1,7 @@
 #pragma once
+#include "InputManager.h"
 #include "StateManager.h"
+#include "WindowManager.h"
 
 struct GLFWwindow;
 class SNAKE_engine;
@@ -13,8 +15,7 @@ class SNAKE_engine;
 struct EngineContext
 {
     StateManager* stateManager = nullptr;
-    GLFWwindow* window = nullptr;
+    WindowManager* windowManager = nullptr;
+    InputManager* inputManager = nullptr;
     SNAKE_engine* engine = nullptr;
-    int windowWidth = 800;
-    int windowHeight = 600;
 };

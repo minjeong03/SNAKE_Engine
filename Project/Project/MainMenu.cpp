@@ -14,8 +14,14 @@ void MainMenu::Init()
 
 void MainMenu::Update(float dt, const EngineContext& engineContext)
 {
-	/*if key pressed*/
-	engineContext.stateManager->ChangeState(std::make_unique<Level1>());
+	if (engineContext.inputManager->IsKeyPressed(KEY_N))
+	{
+		engineContext.stateManager->ChangeState(std::make_unique<Level1>());
+	}
+	if (engineContext.inputManager->IsKeyDown(KEY_ESCAPE))
+	{
+		engineContext.engine->RequestQuit();
+	}
 }
 
 void MainMenu::Draw()

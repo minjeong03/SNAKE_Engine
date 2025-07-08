@@ -10,12 +10,6 @@ struct GLFWwindow;
 
 class SNAKE_engine
 {
-private:
-    EngineContext engineContext;
-    StateManager stateManager;
-    GLFWwindow* window;
-    bool shouldRun = true;
-    void SetEngineContext(int windowWidth, int windowHeight);
 public:
     SNAKE_engine();
     bool Init(int windowWidth, int windowHeight);
@@ -25,4 +19,12 @@ public:
     
     EngineContext& GetEngineContext() { return engineContext; }
 
+private:
+    EngineContext engineContext;
+    StateManager stateManager;
+    WindowManager windowManager;
+    InputManager inputManager;
+
+    bool shouldRun = true;
+    void SetEngineContext(int windowWidth, int windowHeight);
 };

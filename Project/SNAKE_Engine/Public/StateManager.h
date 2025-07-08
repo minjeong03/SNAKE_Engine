@@ -3,19 +3,18 @@
 #include "GameState.h"
 struct EngineContext;
 /**
- * @brief 
+ * @brief
  * @details
  * @author Jinwoo Choi
  * @date 2025-07-08
  */
 class StateManager
 {
-private:
-	std::unique_ptr<GameState> currentState;
-	std::unique_ptr<GameState> nextState;
-
 public:
 	void ChangeState(std::unique_ptr<GameState> newState);
 	void Update(float dt, const EngineContext& engineContext);
 	void Draw();
+private:
+	std::unique_ptr<GameState> currentState;
+	std::unique_ptr<GameState> nextState;
 };
