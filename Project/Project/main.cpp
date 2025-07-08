@@ -1,27 +1,32 @@
 #include <iostream>
-#include "test.h"
+
+#include "MainMenu.h"
+#include "SNAKE_Engine.h"
+#include "StateManager.h"
 
 int main(int argc, char* argv[])
 {
-	Test t = Test();
+	SNAKE_engine snakeEngine;
+
+
 	if (argc == 3)
 	{
-		t.Init(atoi(argv[1]),atoi(argv[2]));
+		snakeEngine.Init(argc, argv);
 	}
 	else if (argc == 1)
 	{
-		t.Init(800, 600);
+		snakeEngine.Init();
 	}
 	else
 	{
-		std::cout << "ERROR: \n\tToo less or much CMD-line arguments \n\t" << __FUNCTION__ << " " << __LINE__ << std::endl;
+		std::cout << "ERROR: \n\tToo less or much CMD-line arguments \n\t" << __FUNCTION__ << " " << __LINE__ << "\n";
 		return -1;
 	}
-	
-	while (1)
-	{
-		t.Update();
-	}
-	std::cout << "main test: "<< t.key << std::endl;
+
+
+	snakeEngine.GetStateManager().ChangeState(std::make_unique<MainMenu>());
+
+	snakeEngine.Run();
+
 	return 0;
 }

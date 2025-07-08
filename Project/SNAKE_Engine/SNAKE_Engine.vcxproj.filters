@@ -9,15 +9,30 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="public\test.h">
-      <Filter>public</Filter>
-    </ClInclude>
     <ClInclude Include="Private\includes.h">
       <Filter>private</Filter>
     </ClInclude>
+    <ClInclude Include="Public\StateManager.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\GameState.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\SNAKE_Engine.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\EngineContext.h">
+      <Filter>public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="private\test.cpp">
+    <ClCompile Include="Private\StateManager.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\GameState.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\SNAKE_Engine.cpp">
       <Filter>private</Filter>
     </ClCompile>
   </ItemGroup>
