@@ -10,8 +10,11 @@ void StateManager::Update(float dt, const EngineContext& engineContext)
 {
 	if (nextState != nullptr)
 	{
-		if (currentState!=nullptr)
+		if (currentState != nullptr)
+		{
 			currentState->Free();
+			currentState->Unload();
+		}
 		currentState = std::move(nextState);
 		currentState->Load();
 		currentState->Init();
