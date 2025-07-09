@@ -11,9 +11,10 @@ struct EngineContext;
 class StateManager
 {
 public:
+	GameState* GetCurrentState() const;
 	void ChangeState(std::unique_ptr<GameState> newState);
 	void Update(float dt, const EngineContext& engineContext);
-	void Draw();
+	void Draw(const EngineContext& engineContext) const;
 private:
 	std::unique_ptr<GameState> currentState;
 	std::unique_ptr<GameState> nextState;

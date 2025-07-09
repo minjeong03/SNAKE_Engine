@@ -51,18 +51,18 @@ bool WindowManager::Init()
     return true;
 }
 
-void WindowManager::SwapBuffers()
+void WindowManager::SwapBuffers() const
 {
     glfwSwapBuffers(window);
 }
 
-void WindowManager::ClearScreen()
+void WindowManager::ClearScreen() const
 {
     glClearColor(0.1f, 0.3f, 0.7f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void WindowManager::PollEvents()
+void WindowManager::PollEvents() const
 {
     glfwPollEvents();
 }

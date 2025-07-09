@@ -49,7 +49,7 @@ void SNAKE_engine::Run()
         windowManager.ClearScreen();
 
         stateManager.Update(dt, engineContext);
-        stateManager.Draw();
+        stateManager.Draw(engineContext);
 
 
  
@@ -57,7 +57,7 @@ void SNAKE_engine::Run()
     }
 }
 
-void SNAKE_engine::Shutdown()
+void SNAKE_engine::Shutdown() const
 {
     glfwTerminate();
 }

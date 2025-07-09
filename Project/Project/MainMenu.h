@@ -1,5 +1,7 @@
 #pragma once
 #include"GameState.h"
+#include "Player.h"
+
 class MainMenu :public GameState
 {
 public:
@@ -9,10 +11,13 @@ public:
 
     void Update(float dt, const EngineContext& engineContext) override;
 
-    void Draw() override;
+    void Draw(const EngineContext& engineContext) override;
 
     void Free() override;
 
     void Unload() override;
+
+private:
+    Player* player;
 };
 

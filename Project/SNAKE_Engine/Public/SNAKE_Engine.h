@@ -14,7 +14,7 @@ public:
     SNAKE_engine();
     bool Init(int windowWidth, int windowHeight);
     void Run();
-    void Shutdown();
+    void Shutdown() const;
     void RequestQuit();
     
     EngineContext& GetEngineContext() { return engineContext; }

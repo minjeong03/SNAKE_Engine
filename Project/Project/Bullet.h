@@ -1,22 +1,16 @@
 #pragma once
-#include"GameState.h"
-#include "Player.h"
+#include "ObjectManager.h"
+#include "Engine.h"
 
-class Level1 :public GameState
+class Bullet : public GameObject
 {
 public:
-    void Load() override;
-
+    Bullet(glm::vec2 _pos);
     void Init() override;
-
     void Update(float dt, const EngineContext& engineContext) override;
-
     void Draw(const EngineContext& engineContext) override;
-
-    void Free() override;
-
-    void Unload() override;
 private:
-    Player* player;
+    glm::vec2 pos;
+    float timer = 0;
 };
 

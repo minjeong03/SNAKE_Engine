@@ -16,11 +16,11 @@ public:
 	GLFWwindow* GetHandle() const { return window; }
 	int GetWidth() const { return windowWidth; }
 	int GetHeight() const { return windowHeight; }
-	void SetWidth(const int& width)  { this->windowWidth = width; }
-	void SetHeight(const int& height)  { this->windowHeight = height; }
-	void SwapBuffers();
-	void ClearScreen();
-	void PollEvents();
+	void SetWidth(int width)  { this->windowWidth = width; }
+	void SetHeight(int height)  { this->windowHeight = height; }
+	void SwapBuffers() const;
+	void ClearScreen() const;
+	void PollEvents() const;
 private:
 	GLFWwindow* window = nullptr;
 	int windowWidth = 800;

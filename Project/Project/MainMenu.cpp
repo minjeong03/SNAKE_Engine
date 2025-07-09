@@ -1,8 +1,7 @@
 #include "MainMenu.h"
-
 #include <iostream>
-
 #include "Level1.h"
+
 #include "Engine.h"
 
 void MainMenu::Load()
@@ -15,10 +14,13 @@ void MainMenu::Init()
 {
 	std::cout << "[mainmenu] init called\n";
 	GameState::Init();
+	player = dynamic_cast<Player*>(objectManager.AddObject(std::make_unique<Player>()));
 }
 
 void MainMenu::Update(float dt, const EngineContext& engineContext)
 {
+	objectManager.UpdateAll(dt,engineContext);
+
 	if (engineContext.inputManager->IsKeyPressed(KEY_N))
 	{
 		std::cout << "[mainmenu] key n pressed , move to level1\n";
@@ -28,23 +30,11 @@ void MainMenu::Update(float dt, const EngineContext& engineContext)
 	{
 		engineContext.engine->RequestQuit();
 	}
-	if (engineContext.inputManager->IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-	{
-		std::cout << "[mainmenu] left mouse button click" << std::endl;
-	}
-	if (engineContext.inputManager->IsMouseButtonDown(MOUSE_BUTTON_LEFT))
-	{
-		std::cout << "[mainmenu] left mouse button down" << std::endl;
-	}
-	if (engineContext.inputManager->IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
-	{
-		std::cout << "[mainmenu] left mouse button released" << std::endl;
-	}
 }
 
-void MainMenu::Draw()
+void MainMenu::Draw(const EngineContext& engineContext)
 {
-	GameState::Draw();
+	GameState::Draw(engineContext);
 }
 
 void MainMenu::Free()

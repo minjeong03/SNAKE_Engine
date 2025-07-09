@@ -30,6 +30,12 @@
     <ClInclude Include="Public\WindowManager.h">
       <Filter>public</Filter>
     </ClInclude>
+    <ClInclude Include="Public\ObjectManager.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\RenderManager.h">
+      <Filter>public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Private\StateManager.cpp">
@@ -42,6 +48,12 @@
       <Filter>private</Filter>
     </ClCompile>
     <ClCompile Include="Private\WindowManager.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\ObjectManager.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\RenderManager.cpp">
       <Filter>private</Filter>
     </ClCompile>
   </ItemGroup>

@@ -6,3 +6,5 @@
 #include "InputManager.h"
 #include "WindowManager.h"
 #include "StateManager.h"
+#include "ObjectManager.h"
+#include "../ThirdParty/glm/glm.hpp"

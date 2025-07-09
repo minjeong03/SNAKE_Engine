@@ -1,11 +1,8 @@
 #include "Level1.h"
-
 #include <iostream>
-
-#include "EngineContext.h"
 #include "MainMenu.h"
-#include "SNAKE_Engine.h"
 
+#include "Engine.h"
 
 void Level1::Load()
 {
@@ -16,10 +13,15 @@ void Level1::Load()
 void Level1::Init()
 {
 	std::cout << "[level1] init called\n";
+
+	player = dynamic_cast<Player*>(objectManager.AddObject(std::make_unique<Player>()));
+
+
 	GameState::Init();
 }
 void Level1::Update(float dt, const EngineContext& engineContext)
 {
+	objectManager.UpdateAll(dt,engineContext);
 	if (engineContext.inputManager->IsKeyPressed(KEY_0))
 	{
 		std::cout << "[level1]0 pressed" << std::endl;
@@ -42,9 +44,9 @@ void Level1::Update(float dt, const EngineContext& engineContext)
 		engineContext.engine->RequestQuit();
 	}
 }
-void Level1::Draw()
+void Level1::Draw(const EngineContext& engineContext)
 {
-	GameState::Draw();
+	GameState::Draw(engineContext);
 }
 
 void Level1::Free()
