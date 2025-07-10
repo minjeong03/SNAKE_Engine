@@ -15,12 +15,15 @@ void Level1::Init()
 	std::cout << "[level1] init called\n";
 
 	objectManager.AddObject(std::make_unique<Player>());
-	GameState::Init();
-
 }
+
+void Level1::LateInit()
+{
+	GameState::LateInit();
+}
+
 void Level1::Update(float dt, const EngineContext& engineContext)
 {
-	objectManager.UpdateAll(dt,engineContext);
 	if (engineContext.inputManager->IsKeyPressed(KEY_0))
 	{
 		std::cout << "[level1]0 pressed" << std::endl;
@@ -42,7 +45,17 @@ void Level1::Update(float dt, const EngineContext& engineContext)
 	{
 		engineContext.engine->RequestQuit();
 	}
+	if (engineContext.inputManager->IsKeyPressed(KEY_R))
+	{
+		Restart();
+	}
 }
+
+void Level1::LateUpdate(float dt, const EngineContext& engineContext)
+{
+	GameState::LateUpdate(dt, engineContext);
+}
+
 void Level1::Draw(const EngineContext& engineContext)
 {
 	GameState::Draw(engineContext);

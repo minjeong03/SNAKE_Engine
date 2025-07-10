@@ -12,6 +12,7 @@ void Player::Init()
 
 void Player::LateInit()
 {
+
 }
 
 void Player::Update(float dt, const EngineContext& engineContext)

@@ -17,21 +17,21 @@ void StateManager::Update(float dt, const EngineContext& engineContext)
 	{
 		if (currentState != nullptr)
 		{
-			currentState->Free();
-			currentState->Unload();
+			currentState->SystemFree();
+			currentState->SystemUnload();
 		}
 		currentState = std::move(nextState);
-		currentState->Load();
-		currentState->Init();
+		currentState->SystemLoad();
+		currentState->SystemInit();
 	}
 	if (currentState != nullptr)
 	{
-		currentState->Update(dt, engineContext);
+		currentState->SystemUpdate(dt, engineContext);
 	}
 }
 
 void StateManager::Draw(const EngineContext& engineContext) const
 {
 	if (currentState != nullptr)
-		currentState->Draw(engineContext);
+		currentState->SystemDraw(engineContext);
 }

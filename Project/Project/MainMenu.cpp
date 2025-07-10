@@ -7,20 +7,21 @@
 void MainMenu::Load()
 {
 	std::cout << "[mainmenu] load called\n";
-	GameState::Load();
 }
 
 void MainMenu::Init()
 {
 	std::cout << "[mainmenu] init called\n";
 	objectManager.AddObject(std::make_unique<Player>());
-	GameState::Init();
+}
+
+void MainMenu::LateInit()
+{
+	GameState::LateInit();
 }
 
 void MainMenu::Update(float dt, const EngineContext& engineContext)
 {
-	objectManager.UpdateAll(dt,engineContext);
-
 	if (engineContext.inputManager->IsKeyPressed(KEY_N))
 	{
 		std::cout << "[mainmenu] key n pressed , move to level1\n";
@@ -30,6 +31,12 @@ void MainMenu::Update(float dt, const EngineContext& engineContext)
 	{
 		engineContext.engine->RequestQuit();
 	}
+
+}
+
+void MainMenu::LateUpdate(float dt, const EngineContext& engineContext)
+{
+	GameState::LateUpdate(dt, engineContext);
 }
 
 void MainMenu::Draw(const EngineContext& engineContext)
