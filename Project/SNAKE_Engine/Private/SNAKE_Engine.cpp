@@ -39,7 +39,7 @@ void SNAKE_Engine::Run()
 {
     float last = static_cast<float>(glfwGetTime());
 
-    while (shouldRun)
+    while (shouldRun && !glfwWindowShouldClose(windowManager.GetHandle()))
     {
         float now = static_cast<float>(glfwGetTime());
         float dt = now - last;
@@ -56,6 +56,8 @@ void SNAKE_Engine::Run()
  
         windowManager.SwapBuffers();
     }
+    stateManager.Free(engineContext);
+
 }
 
 void SNAKE_Engine::Shutdown() const

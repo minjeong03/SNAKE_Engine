@@ -56,7 +56,9 @@ public:
      * @brief Draws the current game state.
      * @param engineContext Rendering context.
      */
-    void Draw(const EngineContext& engineContext) const;
+    void Draw(const EngineContext& engineContext);
+
+    void Free(const EngineContext& engineContext);
 
 private:
     /** The currently active state. */

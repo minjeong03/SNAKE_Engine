@@ -32,12 +32,22 @@ void StateManager::Update(float dt, const EngineContext& engineContext)
 	}
 }
 
-void StateManager::Draw(const EngineContext& engineContext) const
+void StateManager::Draw(const EngineContext& engineContext)
 {
 	if (currentState != nullptr)
 	{
 		engineContext.renderManager->BeginFrame();
 		currentState->SystemDraw(engineContext);
 		engineContext.renderManager->EndFrame();
+	}
+}
+
+void StateManager::Free(const EngineContext& engineContext)
+{
+	if (currentState != nullptr)
+	{
+		currentState->GetObjectManager().FreeAll();
+		currentState->Free(engineContext);
+		currentState->Unload(engineContext);
 	}
 }

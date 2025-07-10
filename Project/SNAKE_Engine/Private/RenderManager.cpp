@@ -30,25 +30,33 @@ void RenderManager::EndFrame()
     }
 }
 
-void RenderManager::RegisterShader(const std::string& tag, Shader* shader)
+void RenderManager::RegisterShader(const std::string& tag, std::unique_ptr<Shader> shader)
 {
     if (shaderMap.find(tag) == shaderMap.end())
-        shaderMap[tag] = shader;
+        shaderMap[tag] = std::move(shader);
     else
         std::cout << "Shader with tag \"" << tag << "\" already registered.\n";
 }
 
-void RenderManager::RegisterTexture(const std::string& tag, Texture* texture)
+void RenderManager::RegisterTexture(const std::string& tag, std::unique_ptr<Texture> texture)
 {
     if (textureMap.find(tag) == textureMap.end())
-		textureMap[tag] = texture;
+		textureMap[tag] = std::move(texture);
     else
         std::cout << "Texture with tag \"" << tag << "\" already registered.\n";
 }
 
+void RenderManager::RegisterMesh(const std::string& tag, std::unique_ptr<Mesh> mesh)
+{
+    if (meshMap.find(tag) == meshMap.end())
+        meshMap[tag] = std::move(mesh);
+    else
+        std::cout << "Mesh with tag \"" << tag << "\" already registered.\n";
+}
+
 std::unique_ptr<Material> RenderManager::CreateMaterial(const std::string& shaderTag, const std::string& textureTag)
 {
-    return std::make_unique<Material>(shaderMap[shaderTag], textureMap[textureTag]);
+    return std::make_unique<Material>(shaderMap[shaderTag].get(), textureMap[textureTag].get());
 }
 
 void RenderManager::LoadTexture(const std::string& path, const std::string& textureTag)
