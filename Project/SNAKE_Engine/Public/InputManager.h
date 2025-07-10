@@ -1,33 +1,82 @@
 #pragma once
 #include <bitset>
+
 struct GLFWwindow;
+
 /**
- * @brief
+ * @brief Handles keyboard and mouse input using GLFW.
+ *
  * @details
+ * InputManager tracks the current and previous frame's input states,
+ * enabling detection of key presses, releases, and mouse actions.
+ *
+ * Usage:
+ * - Use IsKeyDown(), IsKeyPressed(), etc. to query input.
+ *
  * @author Jinwoo Choi
  * @date 2025-07-08
  */
 class InputManager
 {
 public:
+
+    /**
+     * @brief Initializes the input manager with the GLFW window.
+     * @param _window Pointer to the GLFW window.
+     */
     void Init(GLFWwindow* _window);
+
+    /**
+     * @brief Updates the internal input states. Should be called once per frame.
+     */
     void Update();
 
+    /**
+     * @brief Returns true if the specified key is currently being held down.
+     */
     bool IsKeyDown(int key) const;
+
+    /**
+     * @brief Returns true if the specified key was just pressed this frame.
+     */
     bool IsKeyPressed(int key) const;
+
+    /**
+     * @brief Returns true if the specified key was released this frame.
+     */
     bool IsKeyReleased(int key) const;
 
+    /**
+     * @brief Returns true if the specified mouse button is currently being held down.
+     */
     bool IsMouseButtonDown(int button) const;
+
+    /**
+     * @brief Returns true if the specified mouse button was just pressed this frame.
+     */
     bool IsMouseButtonPressed(int button) const;
+
+    /**
+     * @brief Returns true if the specified mouse button was released this frame.
+     */
     bool IsMouseButtonReleased(int button) const;
 
+    /**
+     * @brief Returns the current X position of the mouse.
+     */
     double GetMouseX() const;
+
+    /**
+     * @brief Returns the current Y position of the mouse.
+     */
     double GetMouseY() const;
 
 private:
     GLFWwindow* window = nullptr;
+
     static constexpr int MAX_KEYS = 349;
     static constexpr int MAX_MOUSE_BUTTONS = 9;
+
     std::bitset<MAX_KEYS> currentKeyState;
     std::bitset<MAX_KEYS> previousKeyState;
     std::bitset<MAX_MOUSE_BUTTONS> currentMouseState;
@@ -36,7 +85,8 @@ private:
     double mouseX = 0.0;
     double mouseY = 0.0;
 };
-#pragma once
+
+
 
 enum InputKey
 {

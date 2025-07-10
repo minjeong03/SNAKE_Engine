@@ -2,27 +2,83 @@
 
 struct GLFWwindow;
 struct EngineContext;
+
 /**
- * @brief 
+ * @brief Manages window creation, dimensions, and frame-level operations.
+ *
  * @details
+ * WindowManager is responsible for creating and maintaining the game window using GLFW.
+ * It provides access to the GLFWwindow handle and controls screen clearing, buffer swapping,
+ * and event polling during the game loop.
+ *
+ * This class is intended to be used internally by SNAKE_Engine and exposed through EngineContext.
+ *
  * @author Jinwoo Choi
  * @date 2025-07-08
  */
 class WindowManager
 {
-public:
-	bool Init();
+    friend class SNAKE_Engine;
 
-	GLFWwindow* GetHandle() const { return window; }
-	int GetWidth() const { return windowWidth; }
-	int GetHeight() const { return windowHeight; }
-	void SetWidth(int width)  { this->windowWidth = width; }
-	void SetHeight(int height)  { this->windowHeight = height; }
-	void SwapBuffers() const;
-	void ClearScreen() const;
-	void PollEvents() const;
+public:
+    /**
+     * @brief Initializes the GLFW window.
+     * @return True if window creation was successful.
+     */
+    bool Init();
+
+    /**
+     * @brief Returns a pointer to the GLFW window.
+     * @return Pointer to the internal GLFWwindow instance.
+     */
+    GLFWwindow* GetHandle() const { return window; }
+
+    /**
+     * @brief Returns the current window width.
+     * @return Width in pixels.
+     */
+    int GetWidth() const { return windowWidth; }
+
+    /**
+     * @brief Returns the current window height.
+     * @return Height in pixels.
+     */
+    int GetHeight() const { return windowHeight; }
+
+    /**
+     * @brief Sets the internal window width value (does not resize the actual window).
+     * @param width New width in pixels.
+     */
+    void SetWidth(int width) { this->windowWidth = width; }
+
+    /**
+     * @brief Sets the internal window height value (does not resize the actual window).
+     * @param height New height in pixels.
+     */
+    void SetHeight(int height) { this->windowHeight = height; }
+
 private:
-	GLFWwindow* window = nullptr;
-	int windowWidth = 800;
-	int windowHeight = 600;
+    /**
+     * @brief Swaps the front and back buffers (displays the current frame).
+     */
+    void SwapBuffers() const;
+
+    /**
+     * @brief Clears the screen (typically called at the start of each frame).
+     */
+    void ClearScreen() const;
+
+    /**
+     * @brief Polls window and input events (should be called every frame).
+     */
+    void PollEvents() const;
+
+    /** The GLFW window handle. */
+    GLFWwindow* window = nullptr;
+
+    /** Internal width of the window (in pixels). */
+    int windowWidth = 800;
+
+    /** Internal height of the window (in pixels). */
+    int windowHeight = 600;
 };

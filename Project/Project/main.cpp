@@ -5,7 +5,7 @@
 
 int main(int argc, char* argv[])
 {
-	SNAKE_engine snakeEngine;
+	SNAKE_Engine snakeEngine;
 
 	if (argc == 3)
 	{

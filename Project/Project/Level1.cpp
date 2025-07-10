@@ -14,10 +14,9 @@ void Level1::Init()
 {
 	std::cout << "[level1] init called\n";
 
-	player = dynamic_cast<Player*>(objectManager.AddObject(std::make_unique<Player>()));
-
-
+	objectManager.AddObject(std::make_unique<Player>());
 	GameState::Init();
+
 }
 void Level1::Update(float dt, const EngineContext& engineContext)
 {

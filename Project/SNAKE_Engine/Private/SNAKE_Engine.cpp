@@ -7,7 +7,7 @@
 #include <iostream>
 #include"glm/glm.hpp"
 
-void SNAKE_engine::SetEngineContext(int windowWidth, int windowHeight)
+void SNAKE_Engine::SetEngineContext(int windowWidth, int windowHeight)
 {
     engineContext.stateManager = &stateManager;
     engineContext.windowManager = &windowManager;
@@ -15,12 +15,12 @@ void SNAKE_engine::SetEngineContext(int windowWidth, int windowHeight)
     engineContext.engine = this;
 }
 
-SNAKE_engine::SNAKE_engine()
+SNAKE_Engine::SNAKE_Engine()
 {
 
 }
 
-bool SNAKE_engine::Init(int windowWidth, int windowHeight)
+bool SNAKE_Engine::Init(int windowWidth, int windowHeight)
 {
     if (!windowManager.Init())
     {
@@ -34,7 +34,7 @@ bool SNAKE_engine::Init(int windowWidth, int windowHeight)
 }
 
 
-void SNAKE_engine::Run()
+void SNAKE_Engine::Run()
 {
     float last = static_cast<float>(glfwGetTime());
 
@@ -57,12 +57,12 @@ void SNAKE_engine::Run()
     }
 }
 
-void SNAKE_engine::Shutdown() const
+void SNAKE_Engine::Shutdown() const
 {
     glfwTerminate();
 }
 
-void SNAKE_engine::RequestQuit()
+void SNAKE_Engine::RequestQuit()
 {
     shouldRun = false;
 }

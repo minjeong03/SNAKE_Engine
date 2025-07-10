@@ -10,6 +10,10 @@ void Player::Init()
 	pos = glm::vec2(0, 0);
 }
 
+void Player::LateInit()
+{
+}
+
 void Player::Update(float dt, const EngineContext& engineContext)
 {
 	if (engineContext.inputManager->IsKeyDown(KEY_W))
@@ -41,5 +45,13 @@ void Player::Update(float dt, const EngineContext& engineContext)
 }
 
 void Player::Draw(const EngineContext& engineContext)
+{
+}
+
+void Player::Free()
+{
+}
+
+void Player::LateFree()
 {
 }

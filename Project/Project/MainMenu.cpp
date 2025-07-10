@@ -13,8 +13,8 @@ void MainMenu::Load()
 void MainMenu::Init()
 {
 	std::cout << "[mainmenu] init called\n";
+	objectManager.AddObject(std::make_unique<Player>());
 	GameState::Init();
-	player = dynamic_cast<Player*>(objectManager.AddObject(std::make_unique<Player>()));
 }
 
 void MainMenu::Update(float dt, const EngineContext& engineContext)

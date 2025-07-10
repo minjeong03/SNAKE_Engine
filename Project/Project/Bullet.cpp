@@ -14,6 +14,10 @@ void Bullet::Init()
 	std::cout << "Bullet initialized" << std::endl;
 }
 
+void Bullet::LateInit()
+{
+}
+
 void Bullet::Update(float dt, const EngineContext& engineContext)
 {
 	pos += glm::vec2(1*dt, 1*dt);
@@ -26,5 +30,13 @@ void Bullet::Update(float dt, const EngineContext& engineContext)
 }
 
 void Bullet::Draw(const EngineContext& engineContext)
+{
+}
+
+void Bullet::Free()
+{
+}
+
+void Bullet::LateFree()
 {
 }
