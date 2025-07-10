@@ -1,4 +1,5 @@
 #include "ObjectManager.h"
+#include "EngineContext.h"
 #include <cassert>
 
 
@@ -64,22 +65,27 @@ void ObjectManager::AddAllPendingObjects()
 void ObjectManager::EraseDeadObjects()
 {
 	std::vector<GameObject*> deadObjects;
-	for (const auto& obj : objects) {
-		if (!obj->IsAlive()) {
+	for (const auto& obj : objects)
+	{
+		if (!obj->IsAlive()) 
+		{
 			deadObjects.push_back(obj.get());
 		}
 	}
-	for (auto& obj : deadObjects) {
+	for (auto& obj : deadObjects) 
+	{
 		obj->Free();
 	}
-	for (auto& obj : deadObjects) {
+	for (auto& obj : deadObjects)
+	{
 		obj->LateFree();
 		objectMap.erase(obj->GetID());
 	}
 
 	objects.erase(
 		std::remove_if(objects.begin(), objects.end(),
-			[](const std::unique_ptr<GameObject>& obj) {
+			[](const std::unique_ptr<GameObject>& obj) 
+			{
 				return !obj->IsAlive();
 			}),
 		objects.end());
@@ -89,8 +95,15 @@ void ObjectManager::DrawAll(const EngineContext& engineContext)
 {
 	for (const auto& obj : objects)
 	{
-		if (obj->IsAlive())
-			obj->Draw(engineContext);
+		if (obj->IsAlive() && obj->IsVisible())
+		{
+			GameObject* rawPointer = obj.get();
+			engineContext.renderManager->Submit(
+				[=]()
+				{
+					rawPointer->Draw(engineContext);
+				}, rawPointer->GetRenderLayer());
+		}
 	}
 }
 

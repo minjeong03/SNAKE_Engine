@@ -1,7 +1,5 @@
 #include "Player.h"
-
 #include <iostream>
-
 #include "Bullet.h"
 #include "Engine.h"
 
@@ -47,12 +45,15 @@ void Player::Update(float dt, const EngineContext& engineContext)
 
 void Player::Draw(const EngineContext& engineContext)
 {
+	//std::cout << "Player Draw Test\n";
 }
 
 void Player::Free()
 {
+	std::cout << "Player Free Called\n";
 }
 
 void Player::LateFree()
 {
+	std::cout << "Player LateFree Called\n";
 }

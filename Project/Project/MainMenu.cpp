@@ -4,20 +4,19 @@
 
 #include "Engine.h"
 
-void MainMenu::Load()
+void MainMenu::Load(const EngineContext& engineContext)
 {
 	std::cout << "[mainmenu] load called\n";
 }
 
-void MainMenu::Init()
+void MainMenu::Init(const EngineContext& engineContext)
 {
 	std::cout << "[mainmenu] init called\n";
 	objectManager.AddObject(std::make_unique<Player>());
 }
 
-void MainMenu::LateInit()
+void MainMenu::LateInit(const EngineContext& engineContext)
 {
-	GameState::LateInit();
 }
 
 void MainMenu::Update(float dt, const EngineContext& engineContext)
@@ -44,14 +43,12 @@ void MainMenu::Draw(const EngineContext& engineContext)
 	GameState::Draw(engineContext);
 }
 
-void MainMenu::Free()
+void MainMenu::Free(const EngineContext& engineContext)
 {
 	std::cout << "[mainmenu] free called\n";
-	GameState::Free();
 }
 
-void MainMenu::Unload()
+void MainMenu::Unload(const EngineContext& engineContext)
 {
 	std::cout << "[mainmenu] unload called\n";
-	GameState::Unload();
 }

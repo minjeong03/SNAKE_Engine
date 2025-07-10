@@ -5,11 +5,11 @@
 class MainMenu :public GameState
 {
 public:
-    void Load() override;
+    void Load(const EngineContext& engineContext) override;
 
-    void Init() override;
+    void Init(const EngineContext& engineContext) override;
 
-    void LateInit() override;
+    void LateInit(const EngineContext& engineContext) override;
 
     void Update(float dt, const EngineContext& engineContext) override;
 
@@ -17,9 +17,9 @@ public:
 
     void Draw(const EngineContext& engineContext) override;
 
-    void Free() override;
+    void Free(const EngineContext& engineContext) override;
 
-    void Unload() override;
+    void Unload(const EngineContext& engineContext) override;
 
 private:
     Player* player;

@@ -12,6 +12,7 @@ void SNAKE_Engine::SetEngineContext(int windowWidth, int windowHeight)
     engineContext.stateManager = &stateManager;
     engineContext.windowManager = &windowManager;
     engineContext.inputManager = &inputManager;
+    engineContext.renderManager = &renderManager;
     engineContext.engine = this;
 }
 

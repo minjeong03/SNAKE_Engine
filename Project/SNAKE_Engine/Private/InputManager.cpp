@@ -14,10 +14,12 @@ void InputManager::Update()
     previousKeyState = currentKeyState;
     previousMouseState = currentMouseState;
 
-    for (int key = 0; key <= GLFW_KEY_LAST; ++key) {
+    for (int key = 0; key <= GLFW_KEY_LAST; ++key)
+    {
         currentKeyState.set(key, glfwGetKey(window, key) == GLFW_PRESS);
     }
-    for (int button = 0; button <= GLFW_MOUSE_BUTTON_LAST; ++button) {
+    for (int button = 0; button <= GLFW_MOUSE_BUTTON_LAST; ++button) 
+    {
         currentMouseState.set(button, glfwGetMouseButton(window, button) == GLFW_PRESS);
     }
     glfwGetCursorPos(window, &mouseX, &mouseY);

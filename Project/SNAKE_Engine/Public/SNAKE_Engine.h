@@ -34,6 +34,7 @@ public:
      * Internally initializes GLFW, creates the window, sets up input handling,
      * and binds subsystems to EngineContext.
      */
+    [[nodiscard]]
     bool Init(int windowWidth, int windowHeight);
 
     /**
@@ -68,6 +69,7 @@ public:
      * @brief Returns a reference to the engine's context.
      * @return Reference to EngineContext containing pointers to core systems.
      */
+    [[nodiscard]]
     EngineContext& GetEngineContext() { return engineContext; }
 
 private:
@@ -90,6 +92,7 @@ private:
     /** Polls and tracks keyboard and mouse input states. */
     InputManager inputManager;
 
+    RenderManager renderManager;
     /** Controls whether the main loop is running. */
     bool shouldRun = true;
 };

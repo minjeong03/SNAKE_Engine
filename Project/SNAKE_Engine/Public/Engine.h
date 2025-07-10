@@ -16,6 +16,7 @@
  * @date 2025-07-08
  */
 
+
 #include "SNAKE_Engine.h"
 #include "GameState.h"
 #include "EngineContext.h"
@@ -23,4 +24,6 @@
 #include "WindowManager.h"
 #include "StateManager.h"
 #include "ObjectManager.h"
+#include "RenderManager.h"
+
 #include "../ThirdParty/glm/glm.hpp"

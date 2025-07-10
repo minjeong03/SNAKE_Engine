@@ -31,18 +31,21 @@ public:
      * @brief Returns a pointer to the GLFW window.
      * @return Pointer to the internal GLFWwindow instance.
      */
+    [[nodiscard]]
     GLFWwindow* GetHandle() const { return window; }
 
     /**
      * @brief Returns the current window width.
      * @return Width in pixels.
      */
+    [[nodiscard]]
     int GetWidth() const { return windowWidth; }
 
     /**
      * @brief Returns the current window height.
      * @return Height in pixels.
      */
+    [[nodiscard]]
     int GetHeight() const { return windowHeight; }
 
     /**

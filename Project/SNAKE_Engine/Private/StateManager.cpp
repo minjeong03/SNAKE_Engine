@@ -1,6 +1,8 @@
 
 #include "StateManager.h"
 
+#include "EngineContext.h"
+
 GameState* StateManager::GetCurrentState() const
 {
 	return currentState ? currentState.get() : nullptr;
@@ -17,12 +19,12 @@ void StateManager::Update(float dt, const EngineContext& engineContext)
 	{
 		if (currentState != nullptr)
 		{
-			currentState->SystemFree();
-			currentState->SystemUnload();
+			currentState->SystemFree(engineContext);
+			currentState->SystemUnload(engineContext);
 		}
 		currentState = std::move(nextState);
-		currentState->SystemLoad();
-		currentState->SystemInit();
+		currentState->SystemLoad(engineContext);
+		currentState->SystemInit(engineContext);
 	}
 	if (currentState != nullptr)
 	{
@@ -33,5 +35,9 @@ void StateManager::Update(float dt, const EngineContext& engineContext)
 void StateManager::Draw(const EngineContext& engineContext) const
 {
 	if (currentState != nullptr)
+	{
+		engineContext.renderManager->BeginFrame();
 		currentState->SystemDraw(engineContext);
+		engineContext.renderManager->EndFrame();
+	}
 }

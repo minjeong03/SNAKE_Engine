@@ -1,5 +1,6 @@
 #pragma once
 #include "InputManager.h"
+#include "RenderManager.h"
 #include "StateManager.h"
 #include "WindowManager.h"
 
@@ -26,5 +27,6 @@ struct EngineContext
     StateManager* stateManager = nullptr;
     WindowManager* windowManager = nullptr;
     InputManager* inputManager = nullptr;
+    RenderManager* renderManager = nullptr;
     SNAKE_Engine* engine = nullptr;
 };

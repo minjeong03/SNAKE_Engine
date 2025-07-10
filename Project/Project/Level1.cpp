@@ -4,22 +4,20 @@
 
 #include "Engine.h"
 
-void Level1::Load()
+void Level1::Load(const EngineContext& engineContext)
 {
 	std::cout << "[level1] load called\n";
-	GameState::Load();
 }
 
-void Level1::Init()
+void Level1::Init(const EngineContext& engineContext)
 {
 	std::cout << "[level1] init called\n";
 
 	objectManager.AddObject(std::make_unique<Player>());
 }
 
-void Level1::LateInit()
+void Level1::LateInit(const EngineContext& engineContext)
 {
-	GameState::LateInit();
 }
 
 void Level1::Update(float dt, const EngineContext& engineContext)
@@ -47,7 +45,7 @@ void Level1::Update(float dt, const EngineContext& engineContext)
 	}
 	if (engineContext.inputManager->IsKeyPressed(KEY_R))
 	{
-		Restart();
+		Restart(engineContext);
 	}
 }
 
@@ -61,14 +59,12 @@ void Level1::Draw(const EngineContext& engineContext)
 	GameState::Draw(engineContext);
 }
 
-void Level1::Free()
+void Level1::Free(const EngineContext& engineContext)
 {
 	std::cout << "[level1] free called\n";
-	GameState::Free();
 }
 
-void Level1::Unload()
+void Level1::Unload(const EngineContext& engineContext)
 {
 	std::cout << "[level1] unload called\n";
-	GameState::Unload();
 }

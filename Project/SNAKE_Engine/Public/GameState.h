@@ -42,62 +42,63 @@ public:
      * @brief Access the state's internal ObjectManager.
      * @return Reference to the ObjectManager instance used by this state.
      */
+    [[nodiscard]]
     virtual ObjectManager& GetObjectManager() { return objectManager; }
 
 protected:
     /**
      * @brief User-defined initialization logic. Override this to add game objects or initialize variables.
      */
-    virtual void Init() {}
+    virtual void Init([[maybe_unused]] const EngineContext& engineContext) {}
 
     /**
      * @brief Called after Init() and all objects have been added. Override for late-stage setup.
      */
-    virtual void LateInit() {}
+    virtual void LateInit([[maybe_unused]] const EngineContext& engineContext) {}
 
     /**
      * @brief User-defined per-frame update logic. Called before ObjectManager updates.
      * @param dt Delta time since last frame.
      * @param engineContext Shared access to engine systems.
      */
-    virtual void Update(float dt, const EngineContext& engineContext) {}
+    virtual void Update(float dt, [[maybe_unused]] const EngineContext& engineContext) {}
 
     /**
      * @brief Called after ObjectManager updates. Use for post-update cleanup or deferred logic.
      * @param dt Delta time.
      * @param engineContext Engine context.
      */
-    virtual void LateUpdate(float dt, const EngineContext& engineContext) {}
+    virtual void LateUpdate([[maybe_unused]] float dt, [[maybe_unused]] const EngineContext& engineContext) {}
 
     /**
      * @brief Load persistent assets before Init(). Override to load textures, sounds, etc.
      */
-    virtual void Load() {}
+    virtual void Load([[maybe_unused]] const EngineContext& engineContext) {}
 
     /**
      * @brief User-defined rendering logic. Called after ObjectManager draws all objects.
      * @param engineContext Rendering context.
      */
-    virtual void Draw(const EngineContext& engineContext) {}
+    virtual void Draw([[maybe_unused]] const EngineContext& engineContext) {}
 
     /**
      * @brief Cleanup for any custom objects or systems created in Init().
      */
-    virtual void Free() {}
+    virtual void Free([[maybe_unused]] const EngineContext& engineContext) {}
 
     /**
      * @brief Unload heavy or persistent resources loaded in Load().
      */
-    virtual void Unload() {}
+    virtual void Unload([[maybe_unused]] const EngineContext& engineContext) {}
 
     /**
      * @brief Re-initializes the state by calling SystemFree() and SystemInit().
      * @note Can be used to restart the state without reloading assets.
      */
-    void Restart()
+    void Restart(const EngineContext& engineContext)
     {
-        SystemFree();
-        SystemInit();
+        SystemFree(engineContext);
+        SystemInit(engineContext);
     }
 
     /**
@@ -109,20 +110,20 @@ private:
     /**
      * @brief Internal engine call to load persistent assets.
      */
-    virtual void SystemLoad()
+    virtual void SystemLoad(const EngineContext& engineContext)
     {
-        Load();
+        Load(engineContext);
     }
 
     /**
      * @brief Internal engine call to initialize the state.
      * Calls Init(), then initializes objects, then LateInit().
      */
-    virtual void SystemInit()
+    virtual void SystemInit(const EngineContext& engineContext)
     {
-        Init();
+        Init(engineContext);
         objectManager.InitAll();
-        LateInit();
+        LateInit(engineContext);
     }
 
     /**
@@ -154,17 +155,17 @@ private:
     /**
      * @brief Internal engine call to clean up all game objects and user-defined systems.
      */
-    virtual void SystemFree()
+    virtual void SystemFree(const EngineContext& engineContext)
     {
-        Free();
+        Free(engineContext);
         objectManager.FreeAll();
     }
 
     /**
      * @brief Internal engine call to unload persistent assets.
      */
-    virtual void SystemUnload()
+    virtual void SystemUnload(const EngineContext& engineContext)
     {
-        Unload();
+        Unload(engineContext);
     }
 };

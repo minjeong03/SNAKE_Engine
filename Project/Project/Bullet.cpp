@@ -31,12 +31,15 @@ void Bullet::Update(float dt, const EngineContext& engineContext)
 
 void Bullet::Draw(const EngineContext& engineContext)
 {
+	//std::cout << "Bullet draw\n";
 }
 
 void Bullet::Free()
 {
+	std::cout << "Bullet Free Called\n";
 }
 
 void Bullet::LateFree()
 {
+	std::cout << "Bullet LateFree Called\n";
 }

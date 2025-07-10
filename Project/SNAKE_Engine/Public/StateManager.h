@@ -32,6 +32,7 @@ public:
      * @brief Returns the currently active game state.
      * @return Pointer to the current GameState.
      */
+    [[nodiscard]]
     GameState* GetCurrentState() const;
 
     /**
