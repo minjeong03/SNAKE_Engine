@@ -1,17 +1,20 @@
 #include "Level1.h"
 #include <iostream>
+
+#include "Debug.h"
 #include "MainMenu.h"
 
 #include "Engine.h"
 
 void Level1::Load(const EngineContext& engineContext)
 {
-	std::cout << "[level1] load called\n";
+	SNAKE_LOG("[level1] load called");
+	engineContext.renderManager->RegisterShader("default", { {ShaderStage::Vertex,"Shaders/Default.vert"},{ShaderStage::Fragment,"Shaders/Default.frag"} });
 }
 
 void Level1::Init(const EngineContext& engineContext)
 {
-	std::cout << "[level1] init called\n";
+	SNAKE_LOG("[level1] init called");
 
 	objectManager.AddObject(std::make_unique<Player>());
 }
@@ -24,19 +27,19 @@ void Level1::Update(float dt, const EngineContext& engineContext)
 {
 	if (engineContext.inputManager->IsKeyPressed(KEY_0))
 	{
-		std::cout << "[level1]0 pressed" << std::endl;
+		SNAKE_LOG("[level1] 0 pressed");
 	}
 	if (engineContext.inputManager->IsKeyReleased(KEY_0))
 	{
-		std::cout << "[level1]0 released" << std::endl;
+		SNAKE_LOG("[level1] 0 released");
 	}
 	if (engineContext.inputManager->IsKeyDown(KEY_0))
 	{
-		std::cout << "[level1]0 down" << std::endl;
+		SNAKE_LOG("[level1] 0 down");
 	}
 	if (engineContext.inputManager->IsKeyPressed(KEY_N))
 	{
-		std::cout << "[level1] key n pressed , move to mainmenu\n";
+		SNAKE_LOG("[level1] key n pressed , move to mainmenu");
 		engineContext.stateManager->ChangeState(std::make_unique<MainMenu>());
 	}
 	if (engineContext.inputManager->IsKeyPressed(KEY_ESCAPE))
@@ -61,10 +64,10 @@ void Level1::Draw(const EngineContext& engineContext)
 
 void Level1::Free(const EngineContext& engineContext)
 {
-	std::cout << "[level1] free called\n";
+	SNAKE_LOG("[level1] free called");
 }
 
 void Level1::Unload(const EngineContext& engineContext)
 {
-	std::cout << "[level1] unload called\n";
+	SNAKE_LOG("[level1] unload called");
 }

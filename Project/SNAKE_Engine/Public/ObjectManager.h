@@ -34,7 +34,7 @@ public:
     void AddObject(std::unique_ptr<GameObject> obj, std::string ID = "");
 
     /** Initializes all currently registered objects. */
-    void InitAll();
+    void InitAll(const EngineContext& engineContext);
 
     /**
      * @brief Updates all active objects and processes pending additions and removals.
@@ -44,10 +44,10 @@ public:
     void UpdateAll(float dt, const EngineContext& engineContext);
 
     /** Moves all pending objects into the active list and calls their Init/LateInit. */
-    void AddAllPendingObjects();
+    void AddAllPendingObjects(const EngineContext& engineContext);
 
     /** Removes all dead objects (IsAlive() == false) after calling their Free/LateFree. */
-    void EraseDeadObjects();
+    void EraseDeadObjects(const EngineContext& engineContext);
 
     /**
      * @brief Draws all alive objects.
@@ -56,7 +56,7 @@ public:
     void DrawAll(const EngineContext& engineContext);
 
     /** Frees and clears all objects. Called when state ends. */
-    void FreeAll();
+    void FreeAll(const EngineContext& engineContext);
 
     /**
      * @brief Finds an object by its ID.

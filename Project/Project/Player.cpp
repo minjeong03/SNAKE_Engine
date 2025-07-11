@@ -1,14 +1,17 @@
 #include "Player.h"
 #include <iostream>
 #include "Bullet.h"
+#include "Debug.h"
 #include "Engine.h"
 
-void Player::Init()
+void Player::Init(const EngineContext& engineContext)
 {
 	pos = glm::vec2(0, 0);
+//	SetMaterial(engineContext.renderManager->CreateMaterial("default", {}));
+//	GetMaterial()->SetUniform("u_Model", glm::mat4(0));
 }
 
-void Player::LateInit()
+void Player::LateInit(const EngineContext& engineContext)
 {
 
 }
@@ -18,42 +21,41 @@ void Player::Update(float dt, const EngineContext& engineContext)
 	if (engineContext.inputManager->IsKeyDown(KEY_W))
 	{
 		pos += glm::vec2(0, 1 * dt);
-		std::cout << "player pos: " << pos.x << " " << pos.y << std::endl;
+		SNAKE_LOG("player pos: " << pos.x << " " << pos.y);
 	}
 	if (engineContext.inputManager->IsKeyDown(KEY_A))
 	{
 		pos += glm::vec2(-1 * dt, 0);
-		std::cout << "player pos: " << pos.x << " " << pos.y << std::endl;
+		SNAKE_LOG("player pos: " << pos.x << " " << pos.y);
 	}
 	if (engineContext.inputManager->IsKeyDown(KEY_S))
 	{
 		pos += glm::vec2(0, -1 * dt);
-		std::cout << "player pos: " << pos.x << " " << pos.y << std::endl;
+		SNAKE_LOG("player pos: " << pos.x << " " << pos.y);
 	}
 	if (engineContext.inputManager->IsKeyDown(KEY_D))
 	{
 		pos += glm::vec2(1 * dt, 0);
-		std::cout << "player pos: " << pos.x << " " << pos.y << std::endl;
+		SNAKE_LOG("player pos: " << pos.x << " " << pos.y);
 	}
 
 	if (engineContext.inputManager->IsKeyPressed(KEY_SPACE))
 	{
-		std::cout << "player shot the bullet" << std::endl;
+		SNAKE_LOG("player shot the bullet");
 		engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::make_unique<Bullet>(pos));
 	}
 }
 
 void Player::Draw(const EngineContext& engineContext)
 {
-	//std::cout << "Player Draw Test\n";
 }
 
-void Player::Free()
+void Player::Free(const EngineContext& engineContext)
 {
-	std::cout << "Player Free Called\n";
+	SNAKE_LOG("Player Free Called");
 }
 
-void Player::LateFree()
+void Player::LateFree(const EngineContext& engineContext)
 {
-	std::cout << "Player LateFree Called\n";
+	SNAKE_LOG("Player LateFree Called");
 }

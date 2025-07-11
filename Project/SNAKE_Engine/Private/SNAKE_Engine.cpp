@@ -5,6 +5,8 @@
 
 #include "SNAKE_Engine.h"
 #include <iostream>
+
+#include "Debug.h"
 #include"glm/glm.hpp"
 
 void SNAKE_Engine::SetEngineContext(int windowWidth, int windowHeight)
@@ -25,7 +27,7 @@ bool SNAKE_Engine::Init(int windowWidth, int windowHeight)
 {
     if (!windowManager.Init())
     {
-        std::cerr << "Window Initialization failed." << std::endl;
+        SNAKE_ERR("Window Initialization failed.");
         return false;
     }
     inputManager.Init(windowManager.GetHandle());

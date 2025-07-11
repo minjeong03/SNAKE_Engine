@@ -122,7 +122,7 @@ private:
     virtual void SystemInit(const EngineContext& engineContext)
     {
         Init(engineContext);
-        objectManager.InitAll();
+        objectManager.InitAll(engineContext);
         LateInit(engineContext);
     }
 
@@ -158,7 +158,7 @@ private:
     virtual void SystemFree(const EngineContext& engineContext)
     {
         Free(engineContext);
-        objectManager.FreeAll();
+        objectManager.FreeAll(engineContext);
     }
 
     /**

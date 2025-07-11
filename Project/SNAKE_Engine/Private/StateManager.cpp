@@ -46,7 +46,7 @@ void StateManager::Free(const EngineContext& engineContext)
 {
 	if (currentState != nullptr)
 	{
-		currentState->GetObjectManager().FreeAll();
+		currentState->GetObjectManager().FreeAll(engineContext);
 		currentState->Free(engineContext);
 		currentState->Unload(engineContext);
 	}

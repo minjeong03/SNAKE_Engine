@@ -26,4 +26,7 @@
 #include "ObjectManager.h"
 #include "RenderManager.h"
 
+#include "Texture.h"
+#include "Shader.h"
+
 #include "../ThirdParty/glm/glm.hpp"

@@ -1,10 +1,8 @@
 #include "RenderManager.h"
 #include <algorithm>
 #include <iostream>
+#include "Debug.h"
 
-Material::Material(Shader* _shader, Texture* _texture):shader(_shader),texture(_texture)
-{
-}
 
 void RenderManager::BeginFrame()
 {
@@ -35,30 +33,56 @@ void RenderManager::RegisterShader(const std::string& tag, std::unique_ptr<Shade
     if (shaderMap.find(tag) == shaderMap.end())
         shaderMap[tag] = std::move(shader);
     else
-        std::cout << "Shader with tag \"" << tag << "\" already registered.\n";
+        SNAKE_LOG("Shader with tag \"" << tag << "\" already registered.");
 }
 
-void RenderManager::RegisterTexture(const std::string& tag, std::unique_ptr<Texture> texture)
+/*
+ * Usage: 
+ * renderManager.RegisterShader("basic", {
+ * { ShaderStage::Vertex, "shaders/basic.vert" },
+ * { ShaderStage::Fragment, "shaders/basic.frag" }
+ * });
+ */ 
+void RenderManager::RegisterShader(const std::string& tag, const std::vector<std::pair<ShaderStage, std::string>>& sources)
+{
+    auto shader = std::make_unique<Shader>();
+
+    for (const auto& [stage, path] : sources)
+        shader->AttachFromFile(stage, path);
+
+    shader->Link();
+    shaderMap[tag] = std::move(shader);
+}
+
+void RenderManager::LoadAndRegisterTexture(const std::string& tag, const std::string& path, const TextureSettings& settings)
 {
     if (textureMap.find(tag) == textureMap.end())
-		textureMap[tag] = std::move(texture);
+        textureMap[tag] = std::make_unique<Texture>(path, settings);
     else
-        std::cout << "Texture with tag \"" << tag << "\" already registered.\n";
+        SNAKE_LOG("Texture with tag \"" << tag << "\" already registered.");
 }
 
 void RenderManager::RegisterMesh(const std::string& tag, std::unique_ptr<Mesh> mesh)
 {
     if (meshMap.find(tag) == meshMap.end())
         meshMap[tag] = std::move(mesh);
-    else
-        std::cout << "Mesh with tag \"" << tag << "\" already registered.\n";
+    else  
+        SNAKE_LOG("Mesh with tag \"" << tag << "\" already registered.");
 }
 
-std::unique_ptr<Material> RenderManager::CreateMaterial(const std::string& shaderTag, const std::string& textureTag)
+std::unique_ptr<Material> RenderManager::CreateMaterial(const std::string& shaderTag, const std::unordered_map<std::string, std::string>& textureBindings)
 {
-    return std::make_unique<Material>(shaderMap[shaderTag].get(), textureMap[textureTag].get());
-}
+    Shader* shader = shaderMap[shaderTag].get();
+    auto material = std::make_unique<Material>(shader);
 
-void RenderManager::LoadTexture(const std::string& path, const std::string& textureTag)
-{
+    for (const auto& [uniformName, textureTag] : textureBindings)
+    {
+        auto it = textureMap.find(textureTag);
+        if (it != textureMap.end())
+            material->SetTexture(uniformName, it->second.get());
+        else
+            SNAKE_ERR("Texture not found: " << textureTag);
+    }
+
+    return material;
 }

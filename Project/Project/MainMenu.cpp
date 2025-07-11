@@ -1,17 +1,19 @@
 #include "MainMenu.h"
 #include <iostream>
+
+#include "Debug.h"
 #include "Level1.h"
 
 #include "Engine.h"
 
 void MainMenu::Load(const EngineContext& engineContext)
 {
-	std::cout << "[mainmenu] load called\n";
+	SNAKE_LOG("[MainMenu] load called");
 }
 
 void MainMenu::Init(const EngineContext& engineContext)
 {
-	std::cout << "[mainmenu] init called\n";
+	SNAKE_LOG("[MainMenu] init called");
 	objectManager.AddObject(std::make_unique<Player>());
 }
 
@@ -23,7 +25,7 @@ void MainMenu::Update(float dt, const EngineContext& engineContext)
 {
 	if (engineContext.inputManager->IsKeyPressed(KEY_N))
 	{
-		std::cout << "[mainmenu] key n pressed , move to level1\n";
+		SNAKE_LOG("[MainMenu] key n pressed , move to mainmenu");
 		engineContext.stateManager->ChangeState(std::make_unique<Level1>());
 	}
 	if (engineContext.inputManager->IsKeyPressed(KEY_ESCAPE))
@@ -45,10 +47,10 @@ void MainMenu::Draw(const EngineContext& engineContext)
 
 void MainMenu::Free(const EngineContext& engineContext)
 {
-	std::cout << "[mainmenu] free called\n";
+	SNAKE_LOG("[MainMenu] free called");
 }
 
 void MainMenu::Unload(const EngineContext& engineContext)
 {
-	std::cout << "[mainmenu] unload called\n";
+	SNAKE_LOG("[MainMenu] unload called");
 }

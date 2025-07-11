@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "Debug.h"
 #include "MainMenu.h"
 #include "Engine.h"
 
@@ -17,7 +18,7 @@ int main(int argc, char* argv[])
 	}
 	else
 	{
-		std::cout << "ERROR: \n\tToo less or much CMD-line arguments \n\t" << __FUNCTION__ << " " << __LINE__ << "\n";
+		SNAKE_ERR("Too many arguments for input");
 		return -1;
 	}
 

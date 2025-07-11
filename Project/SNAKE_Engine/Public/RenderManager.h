@@ -5,7 +5,10 @@
 #include <unordered_map>
 #include <vector>
 
-struct EngineContext;
+#include "Material.h"
+#include "Shader.h"
+#include "Texture.h"
+
 /**
  * @brief
  * @details
@@ -13,32 +16,10 @@ struct EngineContext;
  * @date 2025-07-10
  */
 
-class Texture
-{
-};
-
-class Shader
-{
-};
-
 class Mesh
 {
+	
 };
-
-class Material
-{
-public:
-    Material(Shader* _shader, Texture* _texture);
-    [[nodiscard]]
-    Shader* GetShader() const { return shader; }
-    [[nodiscard]]
-    Texture* GetTexture() const { return texture; }
-
-private:
-    Shader* shader;
-    Texture* texture;
-};
-
 
 class RenderManager
 {
@@ -47,14 +28,16 @@ public:
     void Submit(std::function<void()>&& drawFunc, unsigned int layer = 0);
     void EndFrame();
     void RegisterShader(const std::string& tag, std::unique_ptr<Shader> shader);
-    void RegisterTexture(const std::string& tag, std::unique_ptr<Texture> texture);
+    void RegisterShader(const std::string& tag, const std::vector<std::pair<ShaderStage, std::string>>& sources);
+    void LoadAndRegisterTexture(const std::string& tag, const std::string& path, const TextureSettings& settings);
     void RegisterMesh(const std::string& tag, std::unique_ptr<Mesh> mesh);
     [[nodiscard]]
-    std::unique_ptr<Material> CreateMaterial(const std::string& shaderTag, const std::string& textureTag);
-    void LoadTexture(const std::string& path, const std::string& textureTag);
+    std::unique_ptr<Material> CreateMaterial(const std::string& shaderTag, const std::unordered_map<std::string, std::string>& textureBindings // uniformName ¡æ textureTag
+    );
 
 private:
-    struct RenderCommand {
+    struct RenderCommand
+	{
         std::function<void()> drawFunc;
         unsigned int renderLayer;
     };

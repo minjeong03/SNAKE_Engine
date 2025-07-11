@@ -22,15 +22,15 @@ void ObjectManager::AddObject(std::unique_ptr<GameObject> obj, std::string ID)
 
 
 
-void ObjectManager::InitAll()
+void ObjectManager::InitAll(const EngineContext& engineContext)
 {
 	for (const auto& obj: objects)
 	{
-		obj->Init();
+		obj->Init(engineContext);
 	}
 	for (const auto& obj : objects)
 	{
-		obj->LateInit();
+		obj->LateInit(engineContext);
 	}
 }
 
@@ -43,26 +43,26 @@ void ObjectManager::UpdateAll(float dt, const EngineContext& engineContext)
 			obj->Update(dt,engineContext);
 	}
 
-	EraseDeadObjects();
-	AddAllPendingObjects();
+	EraseDeadObjects(engineContext);
+	AddAllPendingObjects(engineContext);
 }
 
-void ObjectManager::AddAllPendingObjects()
+void ObjectManager::AddAllPendingObjects(const EngineContext& engineContext)
 {
 	std::vector<std::unique_ptr<GameObject>> tmp;
 	std::swap(tmp, pendingObjects);
 	for (auto& obj : tmp)
 	{
-		obj->Init();
+		obj->Init(engineContext);
 	}
 	for (auto& obj : tmp)
 	{
-		obj->LateInit();
+		obj->LateInit(engineContext);
 		objects.push_back(std::move(obj));
 	}
 }
 
-void ObjectManager::EraseDeadObjects()
+void ObjectManager::EraseDeadObjects(const EngineContext& engineContext)
 {
 	std::vector<GameObject*> deadObjects;
 	for (const auto& obj : objects)
@@ -74,11 +74,11 @@ void ObjectManager::EraseDeadObjects()
 	}
 	for (auto& obj : deadObjects) 
 	{
-		obj->Free();
+		obj->Free(engineContext);
 	}
 	for (auto& obj : deadObjects)
 	{
-		obj->LateFree();
+		obj->LateFree(engineContext);
 		objectMap.erase(obj->GetID());
 	}
 
@@ -107,15 +107,15 @@ void ObjectManager::DrawAll(const EngineContext& engineContext)
 	}
 }
 
-void ObjectManager::FreeAll()
+void ObjectManager::FreeAll(const EngineContext& engineContext)
 {
 	for (const auto& obj : objects)
 	{
-		obj->Free();
+		obj->Free(engineContext);
 	}
 	for (const auto& obj : objects)
 	{
-		obj->LateFree();
+		obj->LateFree(engineContext);
 	}
 	objects.clear();
 	objectMap.clear();

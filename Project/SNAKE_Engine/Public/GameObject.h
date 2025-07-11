@@ -2,8 +2,7 @@
 
 #include <memory>
 #include <string>
-#include <unordered_map>
-#include <vector>
+#include "Material.h"
 
 struct EngineContext;
 
@@ -30,10 +29,10 @@ class GameObject
 {
 public:
     /** Called once when the object is added (for initial setup). */
-    virtual void Init() = 0;
+    virtual void Init(const EngineContext& engineContext) = 0;
 
     /** Called after Init(), once all objects are registered (cross-object setup). */
-    virtual void LateInit() = 0;
+    virtual void LateInit(const EngineContext& engineContext) = 0;
 
     /** Called every frame for game logic. */
     virtual void Update(float dt, const EngineContext& engineContext) = 0;
@@ -42,10 +41,10 @@ public:
     virtual void Draw(const EngineContext& engineContext) = 0;
 
     /** Called when the object is about to be destroyed (unlink dependencies). */
-    virtual void Free() = 0;
+    virtual void Free(const EngineContext& engineContext) = 0;
 
     /** Called after Free(), used to release resources. */
-    virtual void LateFree() = 0;
+    virtual void LateFree(const EngineContext& engineContext) = 0;
 
     /** Virtual destructor. */
     virtual ~GameObject() = default;
@@ -72,9 +71,14 @@ public:
 
     [[nodiscard]]
     const unsigned int& GetRenderLayer() const { return renderLayer; }
+
+    void SetMaterial(std::unique_ptr<Material> _material) { material = std::move(_material); }
+
+    Material* GetMaterial() { return material.get(); }
 private:
     bool isAlive = true;
     bool isVisible = true;
     std::string objectID;
     unsigned int renderLayer = 0;
+    std::unique_ptr<Material> material;
 };

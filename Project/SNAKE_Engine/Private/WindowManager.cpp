@@ -1,5 +1,7 @@
 #include "WindowManager.h"
 #include <iostream>
+
+#include "Debug.h"
 #include "glad/gl.h"
 #include "glfw3/glfw3.h"
 #include "SNAKE_Engine.h"
@@ -12,7 +14,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     {
         windowManager->SetWidth(width);
         windowManager->SetHeight(height);
-        std::cout << "changed: " << windowManager ->GetWidth()<< " "<< windowManager->GetHeight()<< std::endl;
+        SNAKE_LOG("changed: " << windowManager->GetWidth() << " " << windowManager->GetHeight());
     }
 
 }
@@ -20,7 +22,7 @@ bool WindowManager::Init()
 {
     if (!glfwInit())
     {
-        std::cerr << "Failed to initialize GLFW" << std::endl;
+        SNAKE_ERR("Failed to initialize GLFW");
         return false;
     }
 
@@ -31,7 +33,7 @@ bool WindowManager::Init()
     window = glfwCreateWindow(windowWidth, windowHeight, "SNAKE ENGINE", nullptr, nullptr);
     if (!window)
     {
-        std::cerr << "Failed to create GLFW window" << std::endl;
+        SNAKE_ERR("Failed to create GLFW window");
         glfwTerminate();
         return false;
     }
@@ -40,7 +42,7 @@ bool WindowManager::Init()
 
     if (!gladLoadGL(glfwGetProcAddress))
     {
-        std::cerr << "Failed to initialize GLAD" << std::endl;
+        SNAKE_ERR("Failed to initialize GLAD");
         return false;
     }
 

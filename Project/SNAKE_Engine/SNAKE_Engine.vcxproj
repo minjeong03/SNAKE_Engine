@@ -27,23 +27,30 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Public\Debug.h" />
     <ClInclude Include="Public\Engine.h" />
     <ClInclude Include="Public\EngineContext.h" />
     <ClInclude Include="Public\GameObject.h" />
     <ClInclude Include="Public\GameState.h" />
     <ClInclude Include="Public\InputManager.h" />
+    <ClInclude Include="Public\Material.h" />
     <ClInclude Include="Public\ObjectManager.h" />
     <ClInclude Include="Public\RenderManager.h" />
+    <ClInclude Include="Public\Shader.h" />
     <ClInclude Include="Public\SNAKE_Engine.h" />
     <ClInclude Include="Public\StateManager.h" />
+    <ClInclude Include="Public\Texture.h" />
     <ClInclude Include="Public\WindowManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Private\InputManager.cpp" />
+    <ClCompile Include="Private\Material.cpp" />
     <ClCompile Include="Private\ObjectManager.cpp" />
     <ClCompile Include="Private\RenderManager.cpp" />
+    <ClCompile Include="Private\Shader.cpp" />
     <ClCompile Include="Private\SNAKE_Engine.cpp" />
     <ClCompile Include="Private\StateManager.cpp" />
+    <ClCompile Include="Private\Texture.cpp" />
     <ClCompile Include="Private\WindowManager.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

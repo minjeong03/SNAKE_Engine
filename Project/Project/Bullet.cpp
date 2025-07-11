@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include "Debug.h"
 #include "Engine.h"
 
 Bullet::Bullet(glm::vec2 _pos):pos(_pos)
@@ -9,19 +10,19 @@ Bullet::Bullet(glm::vec2 _pos):pos(_pos)
 
 }
 
-void Bullet::Init()
+void Bullet::Init(const EngineContext& engineContext)
 {
-	std::cout << "Bullet initialized" << std::endl;
+	SNAKE_LOG("Bullet initialized");
 }
 
-void Bullet::LateInit()
+void Bullet::LateInit(const EngineContext& engineContext)
 {
 }
 
 void Bullet::Update(float dt, const EngineContext& engineContext)
 {
 	pos += glm::vec2(1*dt, 1*dt);
-	std::cout << "Bullet pos: " << pos.x << " " << pos.y << std::endl;
+	SNAKE_LOG("Bullet pos: " << pos.x << " " << pos.y );
 	timer += dt;
 	if (timer>2.f)
 	{
@@ -31,15 +32,15 @@ void Bullet::Update(float dt, const EngineContext& engineContext)
 
 void Bullet::Draw(const EngineContext& engineContext)
 {
-	//std::cout << "Bullet draw\n";
+
 }
 
-void Bullet::Free()
+void Bullet::Free(const EngineContext& engineContext)
 {
-	std::cout << "Bullet Free Called\n";
+	SNAKE_LOG("Bullet Free Called");
 }
 
-void Bullet::LateFree()
+void Bullet::LateFree(const EngineContext& engineContext)
 {
-	std::cout << "Bullet LateFree Called\n";
+	SNAKE_LOG("Bullet LateFree Called");
 }
