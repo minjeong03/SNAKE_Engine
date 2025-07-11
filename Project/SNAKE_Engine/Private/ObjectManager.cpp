@@ -102,6 +102,7 @@ void ObjectManager::DrawAll(const EngineContext& engineContext)
 				[=]()
 				{
 					rawPointer->Draw(engineContext);
+					rawPointer->GetMaterial()->Bind();
 				}, rawPointer->GetRenderLayer());
 		}
 	}

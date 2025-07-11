@@ -34,6 +34,7 @@
     <ClInclude Include="Public\GameState.h" />
     <ClInclude Include="Public\InputManager.h" />
     <ClInclude Include="Public\Material.h" />
+    <ClInclude Include="Public\Mesh.h" />
     <ClInclude Include="Public\ObjectManager.h" />
     <ClInclude Include="Public\RenderManager.h" />
     <ClInclude Include="Public\Shader.h" />
@@ -45,6 +46,7 @@
   <ItemGroup>
     <ClCompile Include="Private\InputManager.cpp" />
     <ClCompile Include="Private\Material.cpp" />
+    <ClCompile Include="Private\Mesh.cpp" />
     <ClCompile Include="Private\ObjectManager.cpp" />
     <ClCompile Include="Private\RenderManager.cpp" />
     <ClCompile Include="Private\Shader.cpp" />
