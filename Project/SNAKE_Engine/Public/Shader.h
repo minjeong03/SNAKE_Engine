@@ -35,7 +35,7 @@ public:
     void SendUniform(const std::string& name, float value);
     void SendUniform(const std::string& name, const glm::vec2& value);
     void SendUniform(const std::string& name, const glm::vec3& value);
-	void SendUniform(const std::string& name, const glm::vec4& value);
+    void SendUniform(const std::string& name, const glm::vec4& value);
     void SendUniform(const std::string& name, const glm::mat4& value);
 
     GLuint GetProgramID() const { return programID; }

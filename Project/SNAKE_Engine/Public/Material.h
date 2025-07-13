@@ -39,6 +39,8 @@ public:
 
     void Bind() const;
 
+    void UnBind() const;
+
 private:
     Shader* m_shader;
     std::unordered_map<std::string, Texture*> m_textures;

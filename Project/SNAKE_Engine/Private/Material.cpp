@@ -20,3 +20,8 @@ void Material::Bind() const
             }, value);
     }
 }
+
+void Material::UnBind() const
+{
+    m_shader->Unuse();
+}

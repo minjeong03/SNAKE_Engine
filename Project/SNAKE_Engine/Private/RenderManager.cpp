@@ -16,33 +16,25 @@ void RenderManager::Submit(std::function<void()>&& drawFunc, unsigned int layer)
 
 void RenderManager::EndFrame()
 {
-    std::sort(renderQueue.begin(), renderQueue.end(), 
-        [](const RenderCommand& a, const RenderCommand& b) 
+    std::sort(renderQueue.begin(), renderQueue.end(),
+        [](const RenderCommand& a, const RenderCommand& b)
         {
-			return a.renderLayer > b.renderLayer;
+            return a.renderLayer > b.renderLayer;
         });
 
-    for (const auto& cmd : renderQueue) 
+    for (const auto& cmd : renderQueue)
     {
         cmd.drawFunc();
     }
 }
 
-void RenderManager::RegisterShader(const std::string& tag, std::unique_ptr<Shader> shader)
-{
-    if (shaderMap.find(tag) == shaderMap.end())
-        shaderMap[tag] = std::move(shader);
-    else
-        SNAKE_LOG("Shader with tag \"" << tag << "\" already registered.");
-}
-
 /*
- * Usage: 
+ * Usage:
  * renderManager.RegisterShader("basic", {
  * { ShaderStage::Vertex, "shaders/basic.vert" },
  * { ShaderStage::Fragment, "shaders/basic.frag" }
  * });
- */ 
+ */
 void RenderManager::RegisterShader(const std::string& tag, const std::vector<std::pair<ShaderStage, std::string>>& sources)
 {
     auto shader = std::make_unique<Shader>();
@@ -66,13 +58,18 @@ void RenderManager::RegisterMesh(const std::string& tag, std::unique_ptr<Mesh> m
 {
     if (meshMap.find(tag) == meshMap.end())
         meshMap[tag] = std::move(mesh);
-    else  
+    else
         SNAKE_LOG("Mesh with tag \"" << tag << "\" already registered.");
 }
 
 std::unique_ptr<Material> RenderManager::CreateMaterial(const std::string& shaderTag, const std::unordered_map<std::string, std::string>& textureBindings)
 {
     Shader* shader = shaderMap[shaderTag].get();
+    if (!shader)
+    {
+        SNAKE_ERR("Shader not found: " << shaderTag);
+        return nullptr;
+    }
     auto material = std::make_unique<Material>(shader);
 
     for (const auto& [uniformName, textureTag] : textureBindings)

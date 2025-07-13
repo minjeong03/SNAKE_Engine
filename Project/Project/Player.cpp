@@ -1,14 +1,16 @@
 #include "Player.h"
 #include <iostream>
+#include <random>
+
 #include "Bullet.h"
 #include "Debug.h"
 #include "Engine.h"
 
 void Player::Init(const EngineContext& engineContext)
 {
-	pos = glm::vec2(0, 0);
-//	SetMaterial(engineContext.renderManager->CreateMaterial("default", {}));
-//	GetMaterial()->SetUniform("u_Model", glm::mat4(0));
+    pos = glm::vec2(0, 0);
+    material = engineContext.renderManager->CreateMaterial("default", {});
+    mesh = engineContext.renderManager->GetMeshByTag("default");
 }
 
 void Player::LateInit(const EngineContext& engineContext)
@@ -18,44 +20,53 @@ void Player::LateInit(const EngineContext& engineContext)
 
 void Player::Update(float dt, const EngineContext& engineContext)
 {
-	if (engineContext.inputManager->IsKeyDown(KEY_W))
-	{
-		pos += glm::vec2(0, 1 * dt);
-		SNAKE_LOG("player pos: " << pos.x << " " << pos.y);
-	}
-	if (engineContext.inputManager->IsKeyDown(KEY_A))
-	{
-		pos += glm::vec2(-1 * dt, 0);
-		SNAKE_LOG("player pos: " << pos.x << " " << pos.y);
-	}
-	if (engineContext.inputManager->IsKeyDown(KEY_S))
-	{
-		pos += glm::vec2(0, -1 * dt);
-		SNAKE_LOG("player pos: " << pos.x << " " << pos.y);
-	}
-	if (engineContext.inputManager->IsKeyDown(KEY_D))
-	{
-		pos += glm::vec2(1 * dt, 0);
-		SNAKE_LOG("player pos: " << pos.x << " " << pos.y);
-	}
+    if (engineContext.inputManager->IsKeyDown(KEY_W))
+    {
+	pos += glm::vec2(0, 150 * dt);
+    }
+    if (engineContext.inputManager->IsKeyDown(KEY_A))
+    {
+	pos += glm::vec2(-150 * dt, 0);
+    }
+    if (engineContext.inputManager->IsKeyDown(KEY_S))
+    {
+	pos += glm::vec2(0, -150 * dt);
+    }
+    if (engineContext.inputManager->IsKeyDown(KEY_D))
+    {
+	pos += glm::vec2(150 * dt, 0);
+    }
 
-	if (engineContext.inputManager->IsKeyPressed(KEY_SPACE))
-	{
-		SNAKE_LOG("player shot the bullet");
-		engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::make_unique<Bullet>(pos));
-	}
+    if (engineContext.inputManager->IsKeyPressed(KEY_SPACE))
+    {
+	SNAKE_LOG("player shot the bullet");
+
+	static std::random_device rd;
+	static std::mt19937 gen(rd());
+	static std::uniform_real_distribution<float> angleDist(0.0f, 2.0f * glm::pi<float>());
+
+	float angle = angleDist(gen);
+	;
+	engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::make_unique<Bullet>(pos, glm::vec2(std::cos(angle), std::sin(angle))));
+    }
 }
 
 void Player::Draw(const EngineContext& engineContext)
 {
+    material->SetUniform("u_Color", glm::vec4(0, 1.0, 0, 1.0));
+    material->SetUniform("u_Model", glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(pos, 0.0f)), glm::vec3(50)));
+    material->SetUniform("u_Projection", glm::ortho(
+	-engineContext.windowManager->GetWidth() / 2.0f, engineContext.windowManager->GetWidth() / 2.0f,
+	-engineContext.windowManager->GetHeight() / 2.0f, engineContext.windowManager->GetHeight() / 2.0f
+    ));
 }
 
 void Player::Free(const EngineContext& engineContext)
 {
-	SNAKE_LOG("Player Free Called");
+    SNAKE_LOG("Player Free Called");
 }
 
 void Player::LateFree(const EngineContext& engineContext)
 {
-	SNAKE_LOG("Player LateFree Called");
+    SNAKE_LOG("Player LateFree Called");
 }

@@ -9,7 +9,7 @@ public:
 
     void Init(const EngineContext& engineContext) override;
 
-	void LateInit(const EngineContext& engineContext) override;
+    void LateInit(const EngineContext& engineContext) override;
 
     void Update(float dt, const EngineContext& engineContext) override;
 

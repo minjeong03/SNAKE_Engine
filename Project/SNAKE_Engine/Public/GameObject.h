@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 #include "Material.h"
+#include "Mesh.h"
 
 struct EngineContext;
 
@@ -54,7 +55,7 @@ public:
     const bool& IsAlive() const { return isAlive; }
 
     [[nodiscard]]
-	const bool& IsVisible() const { return isVisible; }
+    const bool& IsVisible() const { return isVisible; }
 
     void SetVisibility(bool _isVisible) { isVisible = _isVisible; }
     /**
@@ -74,11 +75,16 @@ public:
 
     void SetMaterial(std::unique_ptr<Material> _material) { material = std::move(_material); }
 
-    Material* GetMaterial() { return material.get(); }
-private:
+    Material* GetMaterial() const { return material.get(); }
+
+    void SetMesh(Mesh* _mesh) { mesh = _mesh; }
+
+    Mesh* GetMesh() const { return mesh; }
+protected:
     bool isAlive = true;
     bool isVisible = true;
     std::string objectID;
     unsigned int renderLayer = 0;
     std::unique_ptr<Material> material;
+    Mesh* mesh = nullptr;
 };

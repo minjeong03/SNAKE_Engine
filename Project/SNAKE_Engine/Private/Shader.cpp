@@ -11,9 +11,9 @@
 namespace
 {
     GLenum ConvertShaderStageToGLenum(ShaderStage stage)
-	{
+    {
         switch (stage)
-    	{
+        {
         case ShaderStage::Vertex:      return GL_VERTEX_SHADER;
         case ShaderStage::Fragment:    return GL_FRAGMENT_SHADER;
         case ShaderStage::Geometry:    return GL_GEOMETRY_SHADER;
@@ -24,9 +24,9 @@ namespace
         return 0; // invalid
     }
     std::string ShaderStageToString(ShaderStage stage)
-	{
+    {
         switch (stage)
-    	{
+        {
         case ShaderStage::Vertex:      return "Vertex";
         case ShaderStage::Fragment:    return "Fragment";
         case ShaderStage::Geometry:    return "Geometry";
@@ -64,13 +64,13 @@ void Shader::Link()
     bool hasTCS = false;
     bool hasTES = false;
 
-    for (ShaderStage stage : attachedStages) 
+    for (ShaderStage stage : attachedStages)
     {
         if (stage == ShaderStage::TessControl)  hasTCS = true;
         if (stage == ShaderStage::TessEval)     hasTES = true;
     }
 
-    if (hasTCS != hasTES) 
+    if (hasTCS != hasTES)
     {
         SNAKE_ERR("[Shader] Tessellation shaders must come in pairs (TCS + TES).");
         return;
@@ -79,7 +79,7 @@ void Shader::Link()
 
     GLint success;
     glGetProgramiv(programID, GL_LINK_STATUS, &success);
-    if (!success) 
+    if (!success)
     {
         char infoLog[1024];
         glGetProgramInfoLog(programID, 1024, nullptr, infoLog);
@@ -176,7 +176,7 @@ void Shader::SendUniform(const std::string& name, const glm::mat4& value)
 std::string Shader::LoadShaderSource(const std::string& filepath)
 {
     std::ifstream file(filepath);
-    if (!file.is_open()) 
+    if (!file.is_open())
     {
         SNAKE_ERR("[Shader] Failed to open shader file: " << filepath);
         return "";
