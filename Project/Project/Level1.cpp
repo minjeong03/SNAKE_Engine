@@ -9,13 +9,13 @@
 void Level1::Load(const EngineContext& engineContext)
 {
     SNAKE_LOG("[level1] load called");
-    engineContext.renderManager->RegisterMesh("default", std::make_unique<Mesh>(std::vector<float>{
+    engineContext.renderManager->RegisterMesh("default", std::vector<float>{
         -0.5f, -0.5f, 0.f, 0.f, 0.f, // vertex 0
             0.5f, -0.5f, 0.f, 1.f, 0.f, // vertex 1
             0.5f, 0.5f, 0.f, 1.f, 1.f, // vertex 2
             -0.5f, 0.5f, 0.f, 0.f, 1.f  // vertex 3
     }, std::vector<unsigned int>{0, 1, 2,
-	2, 3, 0}));
+        2, 3, 0});
     static std::vector<float> starVertices = {
         // pos         // uv (mapped to [0, 1])
          0.0f,  0.5f, 0.0f,   0.5f, 1.0f,  // top
@@ -40,8 +40,7 @@ void Level1::Load(const EngineContext& engineContext)
         7, 8, 9,
         9, 0, 1
     };
-	auto starMesh = std::make_unique<Mesh>(starVertices, starIndices);
-    engineContext.renderManager->RegisterMesh("star", std::move(starMesh));
+    engineContext.renderManager->RegisterMesh("star", starVertices, starIndices);
 
     TextureSettings ts;
     engineContext.renderManager->RegisterTexture("default", "Textures/Default.jpg", ts);
@@ -49,7 +48,7 @@ void Level1::Load(const EngineContext& engineContext)
     engineContext.renderManager->RegisterShader("s_default", { {ShaderStage::Vertex,"Shaders/Default.vert"},{ShaderStage::Fragment,"Shaders/Default.frag"} });
     engineContext.renderManager->RegisterShader("s_instancing", { {ShaderStage::Vertex,"Shaders/Instancing.vert"},{ShaderStage::Fragment,"Shaders/Instancing.frag"} });
     engineContext.renderManager->RegisterMaterial("m_default", "s_default", { std::pair<std::string, std::string>("u_Texture","uvchecker") });
-	engineContext.renderManager->RegisterMaterial("m_instancing", "s_instancing", { std::pair<std::string, std::string>("u_Texture","default") });
+    engineContext.renderManager->RegisterMaterial("m_instancing", "s_instancing", { std::pair<std::string, std::string>("u_Texture","default") });
 }
 
 void Level1::Init(const EngineContext& engineContext)
@@ -66,28 +65,28 @@ void Level1::Update(float dt, const EngineContext& engineContext)
 {
     if (engineContext.inputManager->IsKeyPressed(KEY_0))
     {
-	SNAKE_LOG("[level1] 0 pressed");
+        SNAKE_LOG("[level1] 0 pressed");
     }
     if (engineContext.inputManager->IsKeyReleased(KEY_0))
     {
-	SNAKE_LOG("[level1] 0 released");
+        SNAKE_LOG("[level1] 0 released");
     }
     if (engineContext.inputManager->IsKeyDown(KEY_0))
     {
-	SNAKE_LOG("[level1] 0 down");
+        SNAKE_LOG("[level1] 0 down");
     }
     if (engineContext.inputManager->IsKeyPressed(KEY_N))
     {
-	SNAKE_LOG("[level1] key n pressed , move to mainmenu");
-	engineContext.stateManager->ChangeState(std::make_unique<MainMenu>());
+        SNAKE_LOG("[level1] key n pressed , move to mainmenu");
+        engineContext.stateManager->ChangeState(std::make_unique<MainMenu>());
     }
     if (engineContext.inputManager->IsKeyPressed(KEY_ESCAPE))
     {
-	engineContext.engine->RequestQuit();
+        engineContext.engine->RequestQuit();
     }
     if (engineContext.inputManager->IsKeyPressed(KEY_R))
     {
-	Restart(engineContext);
+        Restart(engineContext);
     }
 }
 

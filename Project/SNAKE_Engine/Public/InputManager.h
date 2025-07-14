@@ -20,6 +20,8 @@ class InputManager
 {
 public:
 
+    InputManager():window(nullptr),mouseX(0.0),mouseY(0.0) {}
+
     /**
      * @brief Initializes the input manager with the GLFW window.
      * @param _window Pointer to the GLFW window.
@@ -34,53 +36,53 @@ public:
     /**
      * @brief Returns true if the specified key is currently being held down.
      */
-    [[nodiscard]]
-    bool IsKeyDown(int key) const;
+ 
+    [[nodiscard]] bool IsKeyDown(int key) const;
 
     /**
      * @brief Returns true if the specified key was just pressed this frame.
      */
-    [[nodiscard]]
-    bool IsKeyPressed(int key) const;
+
+    [[nodiscard]] bool IsKeyPressed(int key) const;
 
     /**
      * @brief Returns true if the specified key was released this frame.
      */
-    [[nodiscard]]
-    bool IsKeyReleased(int key) const;
+
+    [[nodiscard]] bool IsKeyReleased(int key) const;
 
     /**
      * @brief Returns true if the specified mouse button is currently being held down.
      */
-    [[nodiscard]]
-    bool IsMouseButtonDown(int button) const;
+
+    [[nodiscard]] bool IsMouseButtonDown(int button) const;
 
     /**
      * @brief Returns true if the specified mouse button was just pressed this frame.
      */
-    [[nodiscard]]
-    bool IsMouseButtonPressed(int button) const;
+
+    [[nodiscard]] bool IsMouseButtonPressed(int button) const;
 
     /**
      * @brief Returns true if the specified mouse button was released this frame.
      */
-    [[nodiscard]]
-    bool IsMouseButtonReleased(int button) const;
+
+    [[nodiscard]] bool IsMouseButtonReleased(int button) const;
 
     /**
      * @brief Returns the current X position of the mouse.
      */
-    [[nodiscard]]
-    double GetMouseX() const;
+
+    [[nodiscard]] double GetMouseX() const;
 
     /**
      * @brief Returns the current Y position of the mouse.
      */
-    [[nodiscard]]
-    double GetMouseY() const;
+ 
+    [[nodiscard]] double GetMouseY() const;
 
 private:
-    GLFWwindow* window = nullptr;
+    GLFWwindow* window;
 
     static constexpr int MAX_KEYS = 349;
     static constexpr int MAX_MOUSE_BUTTONS = 9;
@@ -90,8 +92,8 @@ private:
     std::bitset<MAX_MOUSE_BUTTONS> currentMouseState;
     std::bitset<MAX_MOUSE_BUTTONS> previousMouseState;
 
-    double mouseX = 0.0;
-    double mouseY = 0.0;
+    double mouseX;
+    double mouseY;
 };
 
 

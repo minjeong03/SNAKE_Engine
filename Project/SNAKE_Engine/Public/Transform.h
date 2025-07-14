@@ -3,9 +3,10 @@
 class Transform2D
 {
 public:
-    glm::vec2 position{ 0.0f };
-    float rotation = 0.0f; // radians
-    glm::vec2 scale{ 1.0f };
+    Transform2D() :position(0.f), rotation(0.f), scale(0.f) {}
+    glm::vec2 position;
+    float rotation; // radians
+    glm::vec2 scale;
 
     glm::mat4 GetMatrix() const;
 };

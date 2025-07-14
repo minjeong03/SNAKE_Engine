@@ -63,8 +63,7 @@ public:
      * @param id String ID to search.
      * @return Pointer to the object, or nullptr if not found.
      */
-    [[nodiscard]]
-    GameObject* FindByID(const std::string& id) const;
+    [[nodiscard]] GameObject* FindByID(const std::string& id) const;
 
 private:
     /** All currently active objects. */

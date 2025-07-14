@@ -10,13 +10,13 @@ void MainMenu::Load(const EngineContext& engineContext)
 {
     SNAKE_LOG("[MainMenu] load called");
 
-    engineContext.renderManager->RegisterMesh("default", std::make_unique<Mesh>(std::vector<float>{
+    engineContext.renderManager->RegisterMesh("default", std::vector<float>{
         -0.5f, -0.5f, 0.f, 0.f, 0.f, // vertex 0
             0.5f, -0.5f, 0.f, 1.f, 0.f, // vertex 1
             0.5f, 0.5f, 0.f, 1.f, 1.f, // vertex 2
             -0.5f, 0.5f, 0.f, 0.f, 1.f  // vertex 3
     }, std::vector<unsigned int>{0, 1, 2,
-        2, 3, 0}));
+        2, 3, 0});
     static std::vector<float> starVertices = {
         // pos         // uv (mapped to [0, 1])
          0.0f,  0.5f, 0.0f,   0.5f, 1.0f,  // top
@@ -41,8 +41,7 @@ void MainMenu::Load(const EngineContext& engineContext)
         7, 8, 9,
         9, 0, 1
     };
-    auto starMesh = std::make_unique<Mesh>(starVertices, starIndices);
-    engineContext.renderManager->RegisterMesh("star", std::move(starMesh));
+    engineContext.renderManager->RegisterMesh("star", starVertices, starIndices);
 
     TextureSettings ts;
     engineContext.renderManager->RegisterTexture("default", "Textures/Default.jpg", ts);
@@ -56,7 +55,7 @@ void MainMenu::Load(const EngineContext& engineContext)
 void MainMenu::Init(const EngineContext& engineContext)
 {
     SNAKE_LOG("[MainMenu] init called");
-    //objectManager.AddObject(std::make_unique<Player>(), "mainmenu player");
+    objectManager.AddObject(std::make_unique<Player>(), "mainmenu player");
 }
 
 void MainMenu::LateInit(const EngineContext& engineContext)

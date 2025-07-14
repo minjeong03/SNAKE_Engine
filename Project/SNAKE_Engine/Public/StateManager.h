@@ -32,8 +32,7 @@ public:
      * @brief Returns the currently active game state.
      * @return Pointer to the current GameState.
      */
-    [[nodiscard]]
-    GameState* GetCurrentState() const;
+    [[nodiscard]] GameState* GetCurrentState() const;
 
     /**
      * @brief Queues a new game state to replace the current one.

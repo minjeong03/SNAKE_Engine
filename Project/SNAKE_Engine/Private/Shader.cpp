@@ -37,7 +37,7 @@ namespace
         return "Unknown";
     }
 }
-Shader::Shader()
+Shader::Shader() : programID(0), isSupportInstancing(false)
 {
     programID = glCreateProgram();
 }
@@ -94,17 +94,17 @@ void Shader::Link()
     }
 }
 
-void Shader::Use()
+void Shader::Use() const
 {
     glUseProgram(programID);
 }
 
-void Shader::Unuse()
+void Shader::Unuse() const
 {
     glUseProgram(0);
 }
 
-void Shader::SendUniform(const std::string& name, int value)
+void Shader::SendUniform(const std::string& name, int value) const
 {
     GLint location = glGetUniformLocation(programID, name.c_str());
     if (location == -1)
@@ -115,7 +115,7 @@ void Shader::SendUniform(const std::string& name, int value)
     glUniform1i(location, value);
 }
 
-void Shader::SendUniform(const std::string& name, float value)
+void Shader::SendUniform(const std::string& name, float value) const
 {
     GLint location = glGetUniformLocation(programID, name.c_str());
     if (location == -1)
@@ -126,7 +126,7 @@ void Shader::SendUniform(const std::string& name, float value)
     glUniform1f(location, value);
 }
 
-void Shader::SendUniform(const std::string& name, const glm::vec2& value)
+void Shader::SendUniform(const std::string& name, const glm::vec2& value) const
 {
     GLint location = glGetUniformLocation(programID, name.c_str());
     if (location == -1)
@@ -138,7 +138,7 @@ void Shader::SendUniform(const std::string& name, const glm::vec2& value)
     glUniform2fv(location, 1, &value[0]);
 }
 
-void Shader::SendUniform(const std::string& name, const glm::vec3& value)
+void Shader::SendUniform(const std::string& name, const glm::vec3& value) const
 {
     GLint location = glGetUniformLocation(programID, name.c_str());
     if (location == -1)
@@ -150,7 +150,7 @@ void Shader::SendUniform(const std::string& name, const glm::vec3& value)
     glUniform3fv(location, 1, &value[0]);
 }
 
-void Shader::SendUniform(const std::string& name, const glm::vec4& value)
+void Shader::SendUniform(const std::string& name, const glm::vec4& value) const
 {
     GLint location = glGetUniformLocation(programID, name.c_str());
     if (location == -1)
@@ -162,7 +162,7 @@ void Shader::SendUniform(const std::string& name, const glm::vec4& value)
     glUniform4fv(location, 1, &value[0]);
 }
 
-void Shader::SendUniform(const std::string& name, const glm::mat4& value)
+void Shader::SendUniform(const std::string& name, const glm::mat4& value) const
 {
     GLint location = glGetUniformLocation(programID, name.c_str());
     if (location == -1)
@@ -176,14 +176,14 @@ void Shader::SendUniform(const std::string& name, const glm::mat4& value)
 
 bool Shader::SupportsInstancing() const
 {
-    return IsSupportInstancing;
+    return isSupportInstancing;
 }
 
 
 void Shader::CheckSupportsInstancing()
 {
     GLint loc = glGetAttribLocation(programID, "i_Model");
-    IsSupportInstancing = loc != -1;
+    isSupportInstancing = loc != -1;
 }
 
 std::string Shader::LoadShaderSource(const std::string& filepath)

@@ -4,7 +4,6 @@
 
 
 class ObjectManager;
-
 typedef unsigned int GLuint;
 typedef int GLsizei;
 /**
@@ -21,23 +20,18 @@ public:
     Mesh(const std::vector<float>& vertices,
         const std::vector<unsigned int>& indices = {});
 
-    void Draw() const;
-
-    void DrawInstanced(GLsizei instanceCount) const;
-
-    void BindVAO() const;
-
     ~Mesh();
-
 protected:
+    void BindVAO() const;
     void SetupInstanceAttributes(GLuint instanceVBO) const;
-
+    void Draw() const;
+    void DrawInstanced(GLsizei instanceCount) const;
 private:
-    GLuint vao = 0;
-    GLuint vbo = 0;
-    GLuint ebo = 0;
-    GLsizei indexCount = 0;
-    bool useIndex = false;
+    GLuint vao;
+    GLuint vbo;
+    GLuint ebo;
+    GLsizei indexCount;
+    bool useIndex;
 
     void SetupMesh(const std::vector<float>& vertices,
         const std::vector<unsigned int>& indices);

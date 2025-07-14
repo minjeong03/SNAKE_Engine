@@ -53,6 +53,11 @@ bool WindowManager::Init()
     return true;
 }
 
+void WindowManager::SetTitle(const std::string& title)
+{
+    glfwSetWindowTitle(window, title.c_str());
+}
+
 void WindowManager::Free()
 {
     glfwDestroyWindow(window);

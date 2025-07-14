@@ -31,6 +31,7 @@
     <ClInclude Include="Public\Debug.h" />
     <ClInclude Include="Public\Engine.h" />
     <ClInclude Include="Public\EngineContext.h" />
+    <ClInclude Include="Public\EngineTimer.h" />
     <ClInclude Include="Public\GameObject.h" />
     <ClInclude Include="Public\GameState.h" />
     <ClInclude Include="Public\InputManager.h" />
@@ -46,6 +47,7 @@
     <ClInclude Include="Public\WindowManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Private\EngineTimer.cpp" />
     <ClCompile Include="Private\InputManager.cpp" />
     <ClCompile Include="Private\Material.cpp" />
     <ClCompile Include="Private\Mesh.cpp" />

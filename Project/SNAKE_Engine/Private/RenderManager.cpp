@@ -61,14 +61,15 @@ void RenderManager::RegisterTexture(const std::string& tag, const std::string& p
 	textureMap[tag] = std::make_unique<Texture>(path, settings);
 }
 
-void RenderManager::RegisterMesh(const std::string& tag, std::unique_ptr<Mesh> mesh)
+void RenderManager::RegisterMesh(const std::string& tag, const std::vector<float>& vertices,
+    const std::vector<unsigned int>& indices)
 {
     if (meshMap.find(tag) != meshMap.end())
     {
         SNAKE_WRN("Mesh with tag \"" << tag << "\" already registered.");
         return;
     }
-    meshMap[tag] = std::move(mesh);
+    meshMap[tag] = std::make_unique<Mesh>(vertices, indices);
 }
 
 void RenderManager::RegisterMaterial(const std::string& tag, const std::string& shaderTag,

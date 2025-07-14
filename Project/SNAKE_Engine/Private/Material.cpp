@@ -24,7 +24,7 @@ void Material::UnBind() const
     shader->Unuse();
 }
 
-void Material::UpdateInstanceBuffer(const std::vector<glm::mat4>& transforms)
+void Material::UpdateInstanceBuffer(const std::vector<glm::mat4>& transforms) const
 {
     glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
     glBufferData(GL_ARRAY_BUFFER, transforms.size() * sizeof(glm::mat4), transforms.data(), GL_DYNAMIC_DRAW);

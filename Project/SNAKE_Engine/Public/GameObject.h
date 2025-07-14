@@ -1,6 +1,4 @@
 #pragma once
-
-#include <memory>
 #include <string>
 #include "Material.h"
 #include "Mesh.h"
@@ -52,11 +50,9 @@ public:
     virtual ~GameObject() = default;
 
     /** Returns whether this object is still alive. */
-    [[nodiscard]]
-    const bool& IsAlive() const { return isAlive; }
+    [[nodiscard]] const bool& IsAlive() const { return isAlive; }
 
-    [[nodiscard]]
-    const bool& IsVisible() const { return isVisible; }
+    [[nodiscard]] const bool& IsVisible() const { return isVisible; }
 
     void SetVisibility(bool _isVisible) { isVisible = _isVisible; }
     /**
@@ -68,30 +64,21 @@ public:
     void SetID(const std::string& id) { objectID = id; }
 
     /** Returns the string ID of this object. */
-    [[nodiscard]]
-    const std::string& GetID() const { return objectID; }
+    [[nodiscard]] const std::string& GetID() const { return objectID; }
 
-    [[nodiscard]]
-    const unsigned int& GetRenderLayer() const { return renderLayer; }
+    [[nodiscard]] const unsigned int& GetRenderLayer() const { return renderLayer; }
 
     void SetMaterial(Material* _material) { material = _material; }
 
-    Material* GetMaterial() const { return material; }
+    [[nodiscard]] Material* GetMaterial() const { return material; }
 
     void SetMesh(Mesh* _mesh) { mesh = _mesh; }
 
-    Mesh* GetMesh() const { return mesh; }
+    [[nodiscard]] Mesh* GetMesh() const { return mesh; }
 
-    bool CanBeInstanced() const
-	{
-        if (!mesh || !material) return false;
+    [[nodiscard]] bool CanBeInstanced() const;
 
-        if (!material->IsInstancingSupported()) return false;
-
-        return true;
-    }
-
-    glm::mat4 GetTransformMatrix() const { return transform2D.GetMatrix(); }
+    [[nodiscard]] glm::mat4 GetTransformMatrix() const { return transform2D.GetMatrix(); }
 
 protected: //to give direct access for inherited gameobject classes
     bool isAlive = true;
@@ -104,3 +91,12 @@ protected: //to give direct access for inherited gameobject classes
     Mesh* mesh = nullptr;
     Transform2D transform2D;
 };
+
+inline bool GameObject::CanBeInstanced() const
+{
+    if (!mesh || !material) return false;
+
+    if (!material->IsInstancingSupported()) return false;
+
+    return true;
+}

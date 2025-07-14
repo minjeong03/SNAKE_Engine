@@ -42,8 +42,7 @@ public:
      * @brief Access the state's internal ObjectManager.
      * @return Reference to the ObjectManager instance used by this state.
      */
-    [[nodiscard]]
-    virtual ObjectManager& GetObjectManager() { return objectManager; }
+    [[nodiscard]] virtual ObjectManager& GetObjectManager() { return objectManager; }
 
 protected:
     /**

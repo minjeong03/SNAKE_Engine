@@ -8,6 +8,7 @@
 
 
 #include "Debug.h"
+#include "EngineTimer.h"
 
 
 void SNAKE_Engine::SetEngineContext(int windowWidth, int windowHeight)
@@ -19,10 +20,6 @@ void SNAKE_Engine::SetEngineContext(int windowWidth, int windowHeight)
     engineContext.engine = this;
 }
 
-SNAKE_Engine::SNAKE_Engine()
-{
-
-}
 
 bool SNAKE_Engine::Init(int windowWidth, int windowHeight)
 {
@@ -40,15 +37,21 @@ bool SNAKE_Engine::Init(int windowWidth, int windowHeight)
 
 void SNAKE_Engine::Run()
 {
-    float last = static_cast<float>(glfwGetTime());
+    EngineTimer timer;
+    timer.Start();
+
     while (shouldRun && !glfwWindowShouldClose(windowManager.GetHandle()))
     {
-        float now = static_cast<float>(glfwGetTime());
-        float dt = now - last;
-        last = now;
+        float dt = timer.Tick();
+
+        float fps = 0.0f;
+        if (timer.ShouldUpdateFPS(fps))
+        {
+            windowManager.SetTitle("SNAKE_Engine - FPS: " + std::to_string(static_cast<int>(fps)));
+        }
+
         windowManager.PollEvents();
         inputManager.Update();
-
         windowManager.ClearScreen();
 
         stateManager.Update(dt, engineContext);
@@ -56,6 +59,7 @@ void SNAKE_Engine::Run()
 
         windowManager.SwapBuffers();
     }
+
     stateManager.Free(engineContext);
     windowManager.Free();
     Free();

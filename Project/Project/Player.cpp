@@ -39,7 +39,7 @@ void Player::Update(float dt, const EngineContext& engineContext)
         transform2D.position += glm::vec2(150 * dt, 0);
     }
 
-    if (engineContext.inputManager->IsKeyPressed(KEY_SPACE))
+    if (engineContext.inputManager->IsKeyDown(KEY_SPACE))
     {
 	SNAKE_LOG("player shot the bullet");
 
@@ -50,7 +50,18 @@ void Player::Update(float dt, const EngineContext& engineContext)
 	float angle = angleDist(gen);
 
 
-        engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::make_unique<Bullet>(transform2D.position, glm::vec2(std::cos(angle), std::sin(angle))));
+    engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::make_unique<Bullet>(transform2D.position, glm::vec2(std::cos(angle), std::sin(angle))));
+    engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::make_unique<Bullet>(transform2D.position, glm::vec2(std::cos(angle), std::sin(angle))));
+    engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::make_unique<Bullet>(transform2D.position, glm::vec2(std::cos(angle), std::sin(angle))));
+    engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::make_unique<Bullet>(transform2D.position, glm::vec2(std::cos(angle), std::sin(angle))));
+    engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::make_unique<Bullet>(transform2D.position, glm::vec2(std::cos(angle), std::sin(angle)))); engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::make_unique<Bullet>(transform2D.position, glm::vec2(std::cos(angle), std::sin(angle))));
+    engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::make_unique<Bullet>(transform2D.position, glm::vec2(std::cos(angle), std::sin(angle))));
+    engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::make_unique<Bullet>(transform2D.position, glm::vec2(std::cos(angle), std::sin(angle))));
+    engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::make_unique<Bullet>(transform2D.position, glm::vec2(std::cos(angle), std::sin(angle))));
+    engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::make_unique<Bullet>(transform2D.position, glm::vec2(std::cos(angle), std::sin(angle))));
+    engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::make_unique<Bullet>(transform2D.position, glm::vec2(std::cos(angle), std::sin(angle))));
+    engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::make_unique<Bullet>(transform2D.position, glm::vec2(std::cos(angle), std::sin(angle))));
+    engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::make_unique<Bullet>(transform2D.position, glm::vec2(std::cos(angle), std::sin(angle)))); engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::make_unique<Bullet>(transform2D.position, glm::vec2(std::cos(angle), std::sin(angle))));
    
     }
 }

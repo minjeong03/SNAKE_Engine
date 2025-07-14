@@ -4,7 +4,7 @@
 #include <glad/gl.h>
 #include "../ThirdParty/glm/glm.hpp"
 
-Mesh::Mesh(const std::vector<float>& vertices, const std::vector<unsigned int>& indices)
+Mesh::Mesh(const std::vector<float>& vertices, const std::vector<unsigned int>& indices) :vao(0), vbo(0), ebo(0), indexCount(0), useIndex(false)
 {
     SetupMesh(vertices, indices);
 }
@@ -51,7 +51,7 @@ void Mesh::SetupInstanceAttributes(GLuint instanceVBO) const
         GLuint loc = 2 + i;
         glEnableVertexArrayAttrib(vao, loc);
         glVertexArrayAttribFormat(vao, loc, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4) * i);
-        glVertexArrayAttribBinding(vao, loc, 1); 
+        glVertexArrayAttribBinding(vao, loc, 1);
     }
 
     glVertexArrayBindingDivisor(vao, 1, 1);

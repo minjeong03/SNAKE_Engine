@@ -1,8 +1,5 @@
 #pragma once
-
 #include <string>
-
-
 
 /**
  * @brief
@@ -37,20 +34,21 @@ struct TextureSettings
 };
 
 class Texture {
+    friend Material;
+
 public:
     Texture(const std::string& path, const TextureSettings& settings = {});
 
     ~Texture();
+   
+    [[nodiscard]] unsigned int GetID() const { return id; }
 
+protected:
     void BindToUnit(unsigned int unit) const;
-
     void UnBind(unsigned int unit) const;
 
-    [[nodiscard]]
-    unsigned int GetID() const { return id; }
-
 private:
-    unsigned int id = 0;
-    int width = 0, height = 0, channels = 0;
+    unsigned int id;
+    int width, height, channels;
 };
 

@@ -28,6 +28,9 @@
 
 #include "Texture.h"
 #include "Shader.h"
+#include "Transform.h"
+#include "Material.h"
+#include "Mesh.h"
 
 #include "../ThirdParty/glm/glm.hpp"
 #include "../ThirdParty/glm/gtc/matrix_transform.hpp"

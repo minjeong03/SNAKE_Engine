@@ -22,7 +22,7 @@ class SNAKE_Engine
 {
 public:
     /** Constructs a new engine instance. */
-    SNAKE_Engine();
+    SNAKE_Engine() = default;
 
     /**
      * @brief Initializes window, input system, and engine context.
@@ -34,8 +34,8 @@ public:
      * Internally initializes GLFW, creates the window, sets up input handling,
      * and binds subsystems to EngineContext.
      */
-    [[nodiscard]]
-    bool Init(int windowWidth, int windowHeight);
+  
+    [[nodiscard]] bool Init(int windowWidth, int windowHeight);
 
     /**
      * @brief Starts the engine's main loop.
@@ -65,8 +65,7 @@ public:
      * @brief Returns a reference to the engine's context.
      * @return Reference to EngineContext containing pointers to core systems.
      */
-    [[nodiscard]]
-    EngineContext& GetEngineContext() { return engineContext; }
+    [[nodiscard]] EngineContext& GetEngineContext() { return engineContext; }
 
 private:
     /**
@@ -95,6 +94,7 @@ private:
     InputManager inputManager;
 
     RenderManager renderManager;
+
     /** Controls whether the main loop is running. */
     bool shouldRun = true;
 };

@@ -60,6 +60,9 @@
     <ClInclude Include="Public\Transform.h">
       <Filter>public</Filter>
     </ClInclude>
+    <ClInclude Include="Public\EngineTimer.h">
+      <Filter>public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Private\StateManager.cpp">
@@ -93,6 +96,9 @@
       <Filter>private</Filter>
     </ClCompile>
     <ClCompile Include="Private\Transform.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\EngineTimer.cpp">
       <Filter>private</Filter>
     </ClCompile>
   </ItemGroup>

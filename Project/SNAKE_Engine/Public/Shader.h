@@ -10,8 +10,12 @@
  * @date 2025-07-11
  */
 
+class RenderManager;
+class Material;
+
 typedef unsigned int GLuint;
 typedef unsigned int GLenum;
+
 enum class ShaderStage
 {
     Vertex,
@@ -21,34 +25,40 @@ enum class ShaderStage
     TessEval,
     Compute
 };
+
 class Shader {
+    friend Material;
+    friend RenderManager;
+
 public:
     Shader();
     ~Shader();
 
-    void AttachFromFile(ShaderStage stage, const std::string& filepath);
-    void Link();
-    void Use();
-    void Unuse();
-
-    void SendUniform(const std::string& name, int value);
-    void SendUniform(const std::string& name, float value);
-    void SendUniform(const std::string& name, const glm::vec2& value);
-    void SendUniform(const std::string& name, const glm::vec3& value);
-    void SendUniform(const std::string& name, const glm::vec4& value);
-    void SendUniform(const std::string& name, const glm::mat4& value);
+    void SendUniform(const std::string& name, int value) const;
+    void SendUniform(const std::string& name, float value) const;
+    void SendUniform(const std::string& name, const glm::vec2& value) const;
+    void SendUniform(const std::string& name, const glm::vec3& value) const;
+    void SendUniform(const std::string& name, const glm::vec4& value) const;
+    void SendUniform(const std::string& name, const glm::mat4& value) const;
 
     GLuint GetProgramID() const { return programID; }
 
+
+
+protected:
+    void Use() const;
+    void Unuse() const;
     bool SupportsInstancing() const;
 
+    void Link();
+    void AttachFromFile(ShaderStage stage, const std::string& filepath);
 
 private:
-    GLuint programID = 0;
+    GLuint programID;
     std::vector<GLuint> attachedShaders;
     std::vector<ShaderStage> attachedStages;
 
-    bool IsSupportInstancing = false;
+    bool isSupportInstancing;
 
     void CheckSupportsInstancing();
     std::string LoadShaderSource(const std::string& filepath);
