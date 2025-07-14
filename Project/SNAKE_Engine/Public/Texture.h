@@ -8,7 +8,8 @@
  * @date 2025-07-11
  */
 
-enum class TextureFilter {
+enum class TextureFilter
+{
     Nearest,
     Linear,
     NearestMipmapNearest,
@@ -17,7 +18,8 @@ enum class TextureFilter {
     LinearMipmapLinear
 };
 
-enum class TextureWrap {
+enum class TextureWrap
+{
     ClampToEdge,
     Repeat,
     MirroredRepeat,
@@ -33,7 +35,8 @@ struct TextureSettings
     bool generateMipmap = true;
 };
 
-class Texture {
+class Texture
+{
     friend Material;
 
 public:

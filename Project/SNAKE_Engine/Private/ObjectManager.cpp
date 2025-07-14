@@ -42,8 +42,6 @@ void ObjectManager::InitAll(const EngineContext& engineContext)
 
 void ObjectManager::UpdateAll(float dt, const EngineContext& engineContext)
 {
-
-    std::cout << objects.size() << std::endl;
     for (const auto& obj : objects)
     {
         if (obj->IsAlive())

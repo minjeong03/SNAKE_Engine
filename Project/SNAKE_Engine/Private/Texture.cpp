@@ -6,7 +6,8 @@
 #include "stb_image.h"
 
 //used anonymous namespace to hide these functions from other files
-namespace {
+namespace
+{
     GLint ConvertFilter(TextureFilter filter)
     {
         switch (filter)

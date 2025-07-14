@@ -1,11 +1,9 @@
+#include "glad/gl.h"
 #include "Material.h"
-
-#include <glad/gl.h>
-
-#include "Debug.h"
 #include "Mesh.h"
 #include "Shader.h"
 #include "Texture.h"
+#include "Debug.h"
 
 void Material::Bind() const
 {
@@ -67,8 +65,9 @@ void Material::SendUniforms()
 
     for (const auto& [name, value] : uniforms)
     {
-        std::visit([&](auto&& val) {
-            shader->SendUniform(name, val);
+        std::visit([&](auto&& val)
+            {
+                shader->SendUniform(name, val);
             }, value);
     }
 }

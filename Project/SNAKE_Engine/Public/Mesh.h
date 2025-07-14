@@ -17,8 +17,7 @@ class Mesh {
     friend Material;
     friend ObjectManager;
 public:
-    Mesh(const std::vector<float>& vertices,
-        const std::vector<unsigned int>& indices = {});
+    Mesh(const std::vector<float>& vertices, const std::vector<unsigned int>& indices = {});
 
     ~Mesh();
 protected:
@@ -33,6 +32,5 @@ private:
     GLsizei indexCount;
     bool useIndex;
 
-    void SetupMesh(const std::vector<float>& vertices,
-        const std::vector<unsigned int>& indices);
+    void SetupMesh(const std::vector<float>& vertices, const std::vector<unsigned int>& indices);
 };

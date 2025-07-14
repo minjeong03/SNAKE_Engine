@@ -30,13 +30,25 @@ public:
     void RegisterMesh(const std::string& tag, const std::vector<float>& vertices, const std::vector<unsigned int>& indices = {});
     void RegisterMaterial(const std::string& tag, const std::string& shaderTag, const std::unordered_map<std::string/*uniformName*/, std::string/*textureTag*/>& textureBindings);
    
-    [[nodiscard]] Shader* GetShaderByTag(const std::string& tag) { return shaderMap[tag].get(); }
+    [[nodiscard]] Shader* GetShaderByTag(const std::string& tag)
+    {
+	    return shaderMap[tag].get();
+    }
   
-    [[nodiscard]] Texture* GetTextureByTag(const std::string& tag) { return textureMap[tag].get(); }
+    [[nodiscard]] Texture* GetTextureByTag(const std::string& tag)
+    {
+	    return textureMap[tag].get();
+    }
     
-    [[nodiscard]] Mesh* GetMeshByTag(const std::string& tag) { return meshMap[tag].get(); }
+    [[nodiscard]] Mesh* GetMeshByTag(const std::string& tag)
+    {
+	    return meshMap[tag].get();
+    }
   
-    [[nodiscard]] Material* GetMaterialByTag(const std::string& tag) { return materialMap[tag].get(); }
+    [[nodiscard]] Material* GetMaterialByTag(const std::string& tag)
+    {
+	    return materialMap[tag].get();
+    }
 
 protected:
     void BeginFrame();

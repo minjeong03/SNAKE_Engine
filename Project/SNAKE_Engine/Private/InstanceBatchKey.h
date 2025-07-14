@@ -1,7 +1,7 @@
 #pragma once
 #include "Mesh.h"
 #include "Material.h"
-#include <utility>
+
 /**
  * @brief
  * @details
@@ -9,7 +9,8 @@
  * @date 2025-07-14
  */
 
-struct InstanceBatchKey {
+struct InstanceBatchKey
+{
     Mesh* mesh;
     Material* material;
 
@@ -19,10 +20,13 @@ struct InstanceBatchKey {
 };
 
 // Hash specialization for unordered_map
-namespace std {
+namespace std
+{
     template<>
-    struct hash<InstanceBatchKey> {
-        std::size_t operator()(const InstanceBatchKey& key) const {
+    struct hash<InstanceBatchKey>
+	{
+        std::size_t operator()(const InstanceBatchKey& key) const noexcept
+    	{
             return hash<Mesh*>()(key.mesh) ^ (hash<Material*>()(key.material) << 1);
         }
     };
