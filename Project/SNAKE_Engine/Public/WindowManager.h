@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+class SNAKE_Engine;
 struct GLFWwindow;
 struct EngineContext;
 
@@ -18,41 +19,51 @@ struct EngineContext;
  */
 class WindowManager
 {
-    friend class SNAKE_Engine;
-
+    friend SNAKE_Engine;
+    friend void framebuffer_size_callback(GLFWwindow*, int, int);
 public:
-    WindowManager():window(nullptr),windowWidth(800),windowHeight(600) {}
-    /**
-     * @brief Initializes the GLFW window.
-     * @return True if window creation was successful.
-     */
-    bool Init();
+    WindowManager() :window(nullptr), windowWidth(800), windowHeight(600) {}
+
 
     /**
      * @brief Returns a pointer to the GLFW window.
      * @return Pointer to the internal GLFWwindow instance.
      */
-   
+
     [[nodiscard]] GLFWwindow* GetHandle() const { return window; }
 
     /**
      * @brief Returns the current window width.
      * @return Width in pixels.
      */
-    
+
     [[nodiscard]] int GetWidth() const { return windowWidth; }
 
     /**
      * @brief Returns the current window height.
      * @return Height in pixels.
      */
-   
+
     [[nodiscard]] int GetHeight() const { return windowHeight; }
 
+
+    void Resize(int width, int height);
+
+    void SetTitle(const std::string& title) const;
+
+ 
+
+
+private:
     /**
-     * @brief Sets the internal window width value (does not resize the actual window).
-     * @param width New width in pixels.
-     */
+	 * @brief Initializes the GLFW window.
+	 * @return True if window creation was successful.
+	 */
+    bool Init(int _windowWidth, int _windowHeight);
+    /**
+	 * @brief Sets the internal window width value (does not resize the actual window).
+	 * @param width New width in pixels.
+	 */
     void SetWidth(int width) { this->windowWidth = width; }
 
     /**
@@ -60,13 +71,6 @@ public:
      * @param height New height in pixels.
      */
     void SetHeight(int height) { this->windowHeight = height; }
-
-    void SetTitle(const std::string& title);
-
-    void Free();
-
-
-private:
     /**
      * @brief Swaps the front and back buffers (displays the current frame).
      */
@@ -81,7 +85,7 @@ private:
      * @brief Polls window and input events (should be called every frame).
      */
     void PollEvents() const;
-
+    void Free();
     /** The GLFW window handle. */
     GLFWwindow* window;
 

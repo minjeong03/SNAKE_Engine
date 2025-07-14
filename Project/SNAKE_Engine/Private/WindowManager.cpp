@@ -18,8 +18,9 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     }
 
 }
-bool WindowManager::Init()
+bool WindowManager::Init(int _windowWidth, int _windowHeight)
 {
+
     if (!glfwInit())
     {
         SNAKE_ERR("Failed to initialize GLFW");
@@ -29,6 +30,9 @@ bool WindowManager::Init()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    windowWidth = _windowWidth;
+    windowHeight = _windowHeight;
 
     window = glfwCreateWindow(windowWidth, windowHeight, "SNAKE ENGINE", nullptr, nullptr);
     if (!window)
@@ -53,7 +57,17 @@ bool WindowManager::Init()
     return true;
 }
 
-void WindowManager::SetTitle(const std::string& title)
+void WindowManager::Resize(int width, int height)
+{
+    if (window)
+    {
+        glfwSetWindowSize(window, width, height);
+        windowWidth = width;
+        windowHeight = height;
+    }
+}
+
+void WindowManager::SetTitle(const std::string& title) const
 {
     glfwSetWindowTitle(window, title.c_str());
 }

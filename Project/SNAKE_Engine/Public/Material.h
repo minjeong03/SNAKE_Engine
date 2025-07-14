@@ -44,7 +44,7 @@ public:
 
     void EnableInstancing(bool enable, Mesh* mesh);
 
-protected:
+private:
     void Bind() const;
 
     void UnBind() const;
@@ -52,8 +52,6 @@ protected:
     void SendUniforms();
 
     void UpdateInstanceBuffer(const std::vector<glm::mat4>& transforms) const;
-
-private:
     Shader* shader;
     std::unordered_map<std::string, Texture*> textures;
     std::unordered_map<std::string, UniformValue> uniforms;

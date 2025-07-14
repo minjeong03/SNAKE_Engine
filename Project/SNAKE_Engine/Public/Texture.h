@@ -46,11 +46,10 @@ public:
    
     [[nodiscard]] unsigned int GetID() const { return id; }
 
-protected:
-    void BindToUnit(unsigned int unit) const;
-    void UnBind(unsigned int unit) const;
 
 private:
+	void BindToUnit(unsigned int unit) const;
+	void UnBind(unsigned int unit) const;
     unsigned int id;
     int width, height, channels;
 };

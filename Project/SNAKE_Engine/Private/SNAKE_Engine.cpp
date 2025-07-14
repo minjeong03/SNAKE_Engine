@@ -11,7 +11,7 @@
 #include "EngineTimer.h"
 
 
-void SNAKE_Engine::SetEngineContext(int windowWidth, int windowHeight)
+void SNAKE_Engine::SetEngineContext()
 {
     engineContext.stateManager = &stateManager;
     engineContext.windowManager = &windowManager;
@@ -23,13 +23,13 @@ void SNAKE_Engine::SetEngineContext(int windowWidth, int windowHeight)
 
 bool SNAKE_Engine::Init(int windowWidth, int windowHeight)
 {
-    if (!windowManager.Init())
+    if (!windowManager.Init(windowWidth, windowHeight))
     {
         SNAKE_ERR("Window Initialization failed.");
         return false;
     }
     inputManager.Init(windowManager.GetHandle());
-    SetEngineContext(windowWidth, windowHeight);
+    SetEngineContext();
 
     return true;
 }

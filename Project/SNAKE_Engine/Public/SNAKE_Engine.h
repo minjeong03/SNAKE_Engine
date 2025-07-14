@@ -79,7 +79,7 @@ private:
       */
     void Free() const;
 
-    void SetEngineContext(int windowWidth, int windowHeight);
+    void SetEngineContext();
 
     /** Central shared context passed to all systems (input, window, state, etc.). */
     EngineContext engineContext;

@@ -45,15 +45,13 @@ public:
 
 
 
-protected:
+private:
     void Use() const;
     void Unuse() const;
     bool SupportsInstancing() const;
 
     void Link();
     void AttachFromFile(ShaderStage stage, const std::string& filepath);
-
-private:
     GLuint programID;
     std::vector<GLuint> attachedShaders;
     std::vector<ShaderStage> attachedStages;

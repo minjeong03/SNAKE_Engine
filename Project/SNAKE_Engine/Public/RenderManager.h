@@ -49,19 +49,15 @@ public:
     {
 	    return materialMap[tag].get();
     }
-
-protected:
-    void BeginFrame();
-    void Submit(std::function<void()>&& drawFunc, unsigned int layer = 0);
-    void EndFrame();
-
 private:
     struct RenderCommand
     {
         std::function<void()> drawFunc;
         unsigned int renderLayer;
     };
-
+    void BeginFrame();
+    void Submit(std::function<void()>&& drawFunc, unsigned int layer = 0);
+    void EndFrame();
     std::unordered_map<std::string, std::unique_ptr<Shader>> shaderMap;
     std::unordered_map<std::string, std::unique_ptr<Texture>> textureMap;
     std::unordered_map<std::string, std::unique_ptr<Mesh>> meshMap;

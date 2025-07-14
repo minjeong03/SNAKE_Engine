@@ -20,12 +20,12 @@ public:
     Mesh(const std::vector<float>& vertices, const std::vector<unsigned int>& indices = {});
 
     ~Mesh();
-protected:
+
+private:
     void BindVAO() const;
     void SetupInstanceAttributes(GLuint instanceVBO) const;
     void Draw() const;
     void DrawInstanced(GLsizei instanceCount) const;
-private:
     GLuint vao;
     GLuint vbo;
     GLuint ebo;
