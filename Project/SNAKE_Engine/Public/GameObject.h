@@ -4,6 +4,7 @@
 #include <string>
 #include "Material.h"
 #include "Mesh.h"
+#include "Transform.h"
 
 struct EngineContext;
 
@@ -73,18 +74,33 @@ public:
     [[nodiscard]]
     const unsigned int& GetRenderLayer() const { return renderLayer; }
 
-    void SetMaterial(std::unique_ptr<Material> _material) { material = std::move(_material); }
+    void SetMaterial(Material* _material) { material = _material; }
 
-    Material* GetMaterial() const { return material.get(); }
+    Material* GetMaterial() const { return material; }
 
     void SetMesh(Mesh* _mesh) { mesh = _mesh; }
 
     Mesh* GetMesh() const { return mesh; }
-protected:
+
+    bool CanBeInstanced() const
+	{
+        if (!mesh || !material) return false;
+
+        if (!material->IsInstancingSupported()) return false;
+
+        return true;
+    }
+
+    glm::mat4 GetTransformMatrix() const { return transform2D.GetMatrix(); }
+
+protected: //to give direct access for inherited gameobject classes
     bool isAlive = true;
     bool isVisible = true;
-    std::string objectID;
-    unsigned int renderLayer = 0;
-    std::unique_ptr<Material> material;
+
+	std::string objectID;
+
+	unsigned int renderLayer = 0;
+    Material* material = nullptr;
     Mesh* mesh = nullptr;
+    Transform2D transform2D;
 };

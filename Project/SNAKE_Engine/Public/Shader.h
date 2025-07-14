@@ -40,11 +40,17 @@ public:
 
     GLuint GetProgramID() const { return programID; }
 
+    bool SupportsInstancing() const;
+
+
 private:
     GLuint programID = 0;
     std::vector<GLuint> attachedShaders;
     std::vector<ShaderStage> attachedStages;
 
+    bool IsSupportInstancing = false;
+
+    void CheckSupportsInstancing();
     std::string LoadShaderSource(const std::string& filepath);
     GLuint CompileShader(ShaderStage stage, const std::string& source);
 };

@@ -9,12 +9,54 @@
 void MainMenu::Load(const EngineContext& engineContext)
 {
     SNAKE_LOG("[MainMenu] load called");
+
+    engineContext.renderManager->RegisterMesh("default", std::make_unique<Mesh>(std::vector<float>{
+        -0.5f, -0.5f, 0.f, 0.f, 0.f, // vertex 0
+            0.5f, -0.5f, 0.f, 1.f, 0.f, // vertex 1
+            0.5f, 0.5f, 0.f, 1.f, 1.f, // vertex 2
+            -0.5f, 0.5f, 0.f, 0.f, 1.f  // vertex 3
+    }, std::vector<unsigned int>{0, 1, 2,
+        2, 3, 0}));
+    static std::vector<float> starVertices = {
+        // pos         // uv (mapped to [0, 1])
+         0.0f,  0.5f, 0.0f,   0.5f, 1.0f,  // top
+         0.2f,  0.1f, 0.0f,   0.7f, 0.6f,
+         0.5f,  0.1f, 0.0f,   1.0f, 0.6f,
+         0.3f, -0.1f, 0.0f,   0.8f, 0.4f,
+         0.4f, -0.5f, 0.0f,   0.9f, 0.0f,
+         0.0f, -0.2f, 0.0f,   0.5f, 0.3f,
+        -0.4f, -0.5f, 0.0f,   0.1f, 0.0f,
+        -0.3f, -0.1f, 0.0f,   0.2f, 0.4f,
+        -0.5f,  0.1f, 0.0f,   0.0f, 0.6f,
+        -0.2f,  0.1f, 0.0f,   0.3f, 0.6f
+    };
+
+    static std::vector<unsigned int> starIndices = {
+        0, 1, 9,    // top -> inner right -> inner left
+        1, 2, 3,
+        1, 3, 5,
+        3, 4, 5,
+        5, 6, 7,
+        5, 7, 9,
+        7, 8, 9,
+        9, 0, 1
+    };
+    auto starMesh = std::make_unique<Mesh>(starVertices, starIndices);
+    engineContext.renderManager->RegisterMesh("star", std::move(starMesh));
+
+    TextureSettings ts;
+    engineContext.renderManager->RegisterTexture("default", "Textures/Default.jpg", ts);
+    engineContext.renderManager->RegisterTexture("uvchecker", "Textures/uvchecker.jpg", ts);
+    engineContext.renderManager->RegisterShader("s_default", { {ShaderStage::Vertex,"Shaders/Default.vert"},{ShaderStage::Fragment,"Shaders/Default.frag"} });
+    engineContext.renderManager->RegisterShader("s_instancing", { {ShaderStage::Vertex,"Shaders/Instancing.vert"},{ShaderStage::Fragment,"Shaders/Instancing.frag"} });
+    engineContext.renderManager->RegisterMaterial("m_default", "s_default", { std::pair<std::string, std::string>("u_Texture","uvchecker") });
+    engineContext.renderManager->RegisterMaterial("m_instancing", "s_instancing", { std::pair<std::string, std::string>("u_Texture","default") });
 }
 
 void MainMenu::Init(const EngineContext& engineContext)
 {
     SNAKE_LOG("[MainMenu] init called");
-
+    //objectManager.AddObject(std::make_unique<Player>(), "mainmenu player");
 }
 
 void MainMenu::LateInit(const EngineContext& engineContext)

@@ -26,12 +26,18 @@ public:
     void RegisterShader(const std::string& tag, const std::vector<std::pair<ShaderStage, std::string>>& sources);
     void RegisterTexture(const std::string& tag, const std::string& path, const TextureSettings& settings);
     void RegisterMesh(const std::string& tag, std::unique_ptr<Mesh> mesh);
+    void RegisterMaterial(const std::string& tag, const std::string& shaderTag, const std::unordered_map<std::string, std::string>& textureBindings);// unordered_map<uniformName, textureTag>
     [[nodiscard]]
-    std::unique_ptr<Material> CreateMaterial(const std::string& shaderTag, const std::unordered_map<std::string, std::string>& textureBindings); // unordered_map<uniformName, textureTag>
-
     Shader* GetShaderByTag(const std::string& tag) { return shaderMap[tag].get(); }
+    [[nodiscard]]
     Texture* GetTextureByTag(const std::string& tag) { return textureMap[tag].get(); }
+    [[nodiscard]]
     Mesh* GetMeshByTag(const std::string& tag) { return meshMap[tag].get(); }
+    [[nodiscard]]
+    Material* GetMaterialByTag(const std::string& tag)
+    {
+	    return materialMap[tag].get();
+    }
 
 
 private:
@@ -44,5 +50,6 @@ private:
     std::unordered_map<std::string, std::unique_ptr<Shader>> shaderMap;
     std::unordered_map<std::string, std::unique_ptr<Texture>> textureMap;
     std::unordered_map<std::string, std::unique_ptr<Mesh>> meshMap;
+    std::unordered_map<std::string, std::unique_ptr<Material>> materialMap;
     std::vector<RenderCommand> renderQueue;
 };

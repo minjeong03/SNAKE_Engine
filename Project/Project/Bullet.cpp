@@ -5,39 +5,42 @@
 #include "Debug.h"
 #include "Engine.h"
 
-Bullet::Bullet(glm::vec2 _pos, glm::vec2 _dir) :pos(_pos), dir(_dir)
+Bullet::Bullet(glm::vec2 pos, glm::vec2 _dir): dir(_dir)
 {
+    transform2D.position = pos;
 }
 
 void Bullet::Init(const EngineContext& engineContext)
 {
     SNAKE_LOG("Bullet initialized");
-    material = engineContext.renderManager->CreateMaterial("default", { std::pair<std::string, std::string>("u_Texture","default") });
+   
     mesh = engineContext.renderManager->GetMeshByTag("star");
+    material = engineContext.renderManager->GetMaterialByTag("m_instancing");
+    material->EnableInstancing(true, mesh);
+    renderLayer = 1;
+    transform2D.scale = glm::vec2(50.f);
 }
 
 void Bullet::LateInit(const EngineContext& engineContext)
 {
+
+
 }
 
 void Bullet::Update(float dt, const EngineContext& engineContext)
 {
-    pos += glm::vec2(1 * dir.x, 1 * dir.y);
+    transform2D.position += glm::vec2(1 * dir.x, 1 * dir.y);
     //SNAKE_LOG("Bullet pos: " << pos.x << " " << pos.y);
     timer += dt;
-    if (timer > 10.f)
-    {
-		Kill();
-    }
+
 }
 
 void Bullet::Draw(const EngineContext& engineContext)
 {
-    material->SetUniform("u_Color", glm::vec4(1.0, 1.0, 0, 1.0));
-    material->SetUniform("u_Model", glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(pos, 0.0f)),glm::vec3(25)));
+    material->SetUniform("u_Color", glm::vec4(1.0, 1.0, 1.0, 1.0));
     material->SetUniform("u_Projection", glm::ortho(
-	-engineContext.windowManager->GetWidth() / 2.0f, engineContext.windowManager->GetWidth() / 2.0f,
-	-engineContext.windowManager->GetHeight() / 2.0f, engineContext.windowManager->GetHeight() / 2.0f
+        -engineContext.windowManager->GetWidth() / 2.0f, engineContext.windowManager->GetWidth() / 2.0f,
+        -engineContext.windowManager->GetHeight() / 2.0f, engineContext.windowManager->GetHeight() / 2.0f
     ));
 }
 

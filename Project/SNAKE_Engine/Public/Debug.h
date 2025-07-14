@@ -1,5 +1,11 @@
 #pragma once
-
+/**
+ * @brief
+ * @details
+ * @author Jinwoo Choi
+ * @date 2025-07-11
+ */
+#include <iostream>
 #ifdef _DEBUG
 #define FILENAME (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__)
 #define SNAKE_LOG(x) std::cout << "[LOG] " << FILENAME << ":" << __LINE__ << " - " << x << std::endl

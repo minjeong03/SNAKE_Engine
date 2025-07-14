@@ -86,6 +86,8 @@ void Shader::Link()
         SNAKE_ERR("Shader program link error:\n" << infoLog);
     }
 
+    CheckSupportsInstancing();
+
     for (GLuint shader : attachedShaders)
     {
         glDetachShader(programID, shader);
@@ -172,6 +174,17 @@ void Shader::SendUniform(const std::string& name, const glm::mat4& value)
     glUniformMatrix4fv(location, 1, GL_FALSE, &value[0][0]);
 }
 
+bool Shader::SupportsInstancing() const
+{
+    return IsSupportInstancing;
+}
+
+
+void Shader::CheckSupportsInstancing()
+{
+    GLint loc = glGetAttribLocation(programID, "i_Model");
+    IsSupportInstancing = loc != -1;
+}
 
 std::string Shader::LoadShaderSource(const std::string& filepath)
 {

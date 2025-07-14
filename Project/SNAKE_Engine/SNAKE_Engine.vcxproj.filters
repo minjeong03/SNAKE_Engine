@@ -54,6 +54,12 @@
     <ClInclude Include="Public\Mesh.h">
       <Filter>public</Filter>
     </ClInclude>
+    <ClInclude Include="Private\InstanceBatchKey.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Transform.h">
+      <Filter>public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Private\StateManager.cpp">
@@ -84,6 +90,9 @@
       <Filter>private</Filter>
     </ClCompile>
     <ClCompile Include="Private\Mesh.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\Transform.cpp">
       <Filter>private</Filter>
     </ClCompile>
   </ItemGroup>

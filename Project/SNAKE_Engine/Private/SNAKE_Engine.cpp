@@ -5,10 +5,10 @@
 #include<vld.h>//TODO: remove this and directories before release (VC++ Directories -> Include Directories & Library Directories)
 #endif
 #include "SNAKE_Engine.h"
-#include <iostream>
+
 
 #include "Debug.h"
-#include"glm/glm.hpp"
+
 
 void SNAKE_Engine::SetEngineContext(int windowWidth, int windowHeight)
 {

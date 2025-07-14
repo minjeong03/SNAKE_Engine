@@ -1,33 +1,74 @@
 #include "Material.h"
+
+#include <glad/gl.h>
+
+#include "Debug.h"
+#include "Mesh.h"
 #include "Shader.h"
 #include "Texture.h"
 
 void Material::Bind() const
 {
-    m_shader->Use();
-
-    int unit = 0;
-    for (const auto& [uniformName, tex] : m_textures) {
-        if (!tex) continue;
-        tex->BindToUnit(unit);
-        m_shader->SendUniform(uniformName, unit);
-        unit++;
-    }
-
-    for (const auto& [name, value] : m_uniforms) {
-        std::visit([&](auto&& val) {
-            m_shader->SendUniform(name, val);
-            }, value);
-    }
+    shader->Use();
 }
 
 void Material::UnBind() const
 {
     int unit = 0;
-    for (const auto& [uniformName, tex] : m_textures) {
+    for (const auto& [uniformName, tex] : textures)
+    {
         if (!tex) continue;
         tex->UnBind(unit);
         unit++;
     }
-    m_shader->Unuse();
+    shader->Unuse();
+}
+
+void Material::UpdateInstanceBuffer(const std::vector<glm::mat4>& transforms)
+{
+    glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
+    glBufferData(GL_ARRAY_BUFFER, transforms.size() * sizeof(glm::mat4), transforms.data(), GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+bool Material::IsInstancingSupported() const
+{
+    return isInstancingEnabled && shader && shader->SupportsInstancing();
+}
+void Material::EnableInstancing(bool enable, Mesh* mesh)
+{
+    if (shader && !shader->SupportsInstancing())
+    {
+        SNAKE_WRN("Enable Instancing skipped: Tried enable instancing, but shader does not support 'i_Model'.");
+        return;
+    }
+    if (!isInstancingEnabled)
+    {
+        isInstancingEnabled = enable;
+        if (mesh)
+        {
+            if (!instanceVBO)
+                glGenBuffers(1, &instanceVBO);
+            mesh->SetupInstanceAttributes(instanceVBO);
+        }
+    }
+}
+
+void Material::SendUniforms()
+{
+    int unit = 0;
+    for (const auto& [uniformName, tex] : textures)
+    {
+        if (!tex) continue;
+        tex->BindToUnit(unit);
+        shader->SendUniform(uniformName, unit);
+        unit++;
+    }
+
+    for (const auto& [name, value] : uniforms)
+    {
+        std::visit([&](auto&& val) {
+            shader->SendUniform(name, val);
+            }, value);
+    }
 }

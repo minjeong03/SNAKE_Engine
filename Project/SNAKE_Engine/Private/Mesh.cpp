@@ -1,5 +1,8 @@
 #include "Mesh.h"
+
+#include <iostream>
 #include <glad/gl.h>
+#include "../ThirdParty/glm/glm.hpp"
 
 Mesh::Mesh(const std::vector<float>& vertices, const std::vector<unsigned int>& indices)
 {
@@ -20,11 +23,38 @@ void Mesh::Draw() const
     }
 }
 
+void Mesh::DrawInstanced(GLsizei instanceCount) const
+{
+    if (useIndex)
+        glDrawElementsInstanced(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr, instanceCount);
+    else
+        glDrawArraysInstanced(GL_TRIANGLES, 0, indexCount, instanceCount);
+}
+
+void Mesh::BindVAO() const
+{
+    glBindVertexArray(vao);
+}
+
 Mesh::~Mesh()
 {
     if (ebo) glDeleteBuffers(1, &ebo);
     if (vbo) glDeleteBuffers(1, &vbo);
     if (vao) glDeleteVertexArrays(1, &vao);
+}
+
+void Mesh::SetupInstanceAttributes(GLuint instanceVBO) const
+{
+    glVertexArrayVertexBuffer(vao, 1, instanceVBO, 0, sizeof(glm::mat4));
+    for (int i = 0; i < 4; i++)
+    {
+        GLuint loc = 2 + i;
+        glEnableVertexArrayAttrib(vao, loc);
+        glVertexArrayAttribFormat(vao, loc, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4) * i);
+        glVertexArrayAttribBinding(vao, loc, 1); 
+    }
+
+    glVertexArrayBindingDivisor(vao, 1, 1);
 }
 
 

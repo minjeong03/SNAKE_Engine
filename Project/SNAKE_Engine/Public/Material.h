@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <variant>
 #include "../ThirdParty/glm/glm.hpp"
+class Mesh;
 /**
  * @brief
  * @details
@@ -12,6 +13,7 @@
 class Shader;
 class Texture;
 
+using GLuint = unsigned int;
 using UniformValue = std::variant<
     int,
     float,
@@ -23,26 +25,40 @@ using UniformValue = std::variant<
 
 class Material {
 public:
-    Material(Shader* shader) :m_shader(shader)
+    Material(Shader* _shader) :shader(_shader)
     {
     }
 
     void SetTexture(const std::string& uniformName, Texture* texture)
     {
-        m_textures[uniformName] = texture;
+        textures[uniformName] = texture;
     }
 
     void SetUniform(const std::string& name, UniformValue value)
     {
-        m_uniforms[name] = value;
+        uniforms[name] = value;
     }
 
     void Bind() const;
 
     void UnBind() const;
 
+    void UpdateInstanceBuffer(const std::vector<glm::mat4>& transforms);
+
+    GLuint GetInstanceVBO() const
+    {
+        return instanceVBO;
+    }
+
+    bool IsInstancingSupported() const;
+    void EnableInstancing(bool enable, Mesh* mesh);
+
+    void SendUniforms();
 private:
-    Shader* m_shader;
-    std::unordered_map<std::string, Texture*> m_textures;
-    std::unordered_map<std::string, UniformValue> m_uniforms;
+    Shader* shader;
+    std::unordered_map<std::string, Texture*> textures;
+    std::unordered_map<std::string, UniformValue> uniforms;
+
+    GLuint instanceVBO;
+    bool isInstancingEnabled = false;
 };

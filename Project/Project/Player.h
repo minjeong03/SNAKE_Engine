@@ -12,6 +12,5 @@ public:
     void Free(const EngineContext& engineContext) override;
     void LateFree(const EngineContext& engineContext) override;
 private:
-    glm::vec2 pos;
 };
 

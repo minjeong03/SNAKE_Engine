@@ -46,7 +46,10 @@ void Level1::Load(const EngineContext& engineContext)
     TextureSettings ts;
     engineContext.renderManager->RegisterTexture("default", "Textures/Default.jpg", ts);
     engineContext.renderManager->RegisterTexture("uvchecker", "Textures/uvchecker.jpg", ts);
-    engineContext.renderManager->RegisterShader("default", { {ShaderStage::Vertex,"Shaders/Default.vert"},{ShaderStage::Fragment,"Shaders/Default.frag"} });
+    engineContext.renderManager->RegisterShader("s_default", { {ShaderStage::Vertex,"Shaders/Default.vert"},{ShaderStage::Fragment,"Shaders/Default.frag"} });
+    engineContext.renderManager->RegisterShader("s_instancing", { {ShaderStage::Vertex,"Shaders/Instancing.vert"},{ShaderStage::Fragment,"Shaders/Instancing.frag"} });
+    engineContext.renderManager->RegisterMaterial("m_default", "s_default", { std::pair<std::string, std::string>("u_Texture","uvchecker") });
+	engineContext.renderManager->RegisterMaterial("m_instancing", "s_instancing", { std::pair<std::string, std::string>("u_Texture","default") });
 }
 
 void Level1::Init(const EngineContext& engineContext)
