@@ -11,7 +11,7 @@ void Material::Bind() const
         if (!tex) continue;
         tex->BindToUnit(unit);
         m_shader->SendUniform(uniformName, unit);
-        ++unit;
+        unit++;
     }
 
     for (const auto& [name, value] : m_uniforms) {
@@ -23,5 +23,11 @@ void Material::Bind() const
 
 void Material::UnBind() const
 {
+    int unit = 0;
+    for (const auto& [uniformName, tex] : m_textures) {
+        if (!tex) continue;
+        tex->UnBind(unit);
+        unit++;
+    }
     m_shader->Unuse();
 }

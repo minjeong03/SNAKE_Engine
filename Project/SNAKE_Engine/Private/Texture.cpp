@@ -76,3 +76,8 @@ void Texture::BindToUnit(unsigned int unit) const
 {
     glBindTextureUnit(unit, id);
 }
+
+void Texture::UnBind(unsigned int unit) const
+{
+    glBindTextureUnit(unit, 0);
+}

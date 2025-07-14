@@ -46,7 +46,7 @@ void RenderManager::RegisterShader(const std::string& tag, const std::vector<std
     shaderMap[tag] = std::move(shader);
 }
 
-void RenderManager::LoadAndRegisterTexture(const std::string& tag, const std::string& path, const TextureSettings& settings)
+void RenderManager::RegisterTexture(const std::string& tag, const std::string& path, const TextureSettings& settings)
 {
     if (textureMap.find(tag) == textureMap.end())
         textureMap[tag] = std::make_unique<Texture>(path, settings);

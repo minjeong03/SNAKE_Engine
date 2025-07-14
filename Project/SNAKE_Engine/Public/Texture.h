@@ -44,6 +44,8 @@ public:
 
     void BindToUnit(unsigned int unit) const;
 
+    void UnBind(unsigned int unit) const;
+
     [[nodiscard]]
     unsigned int GetID() const { return id; }
 

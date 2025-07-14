@@ -11,6 +11,7 @@ public:
 
     void Draw() const;
 
+    ~Mesh();
 private:
     GLuint vao = 0;
     GLuint vbo = 0;

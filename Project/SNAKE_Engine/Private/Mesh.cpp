@@ -20,29 +20,44 @@ void Mesh::Draw() const
     }
 }
 
+Mesh::~Mesh()
+{
+    if (ebo) glDeleteBuffers(1, &ebo);
+    if (vbo) glDeleteBuffers(1, &vbo);
+    if (vao) glDeleteVertexArrays(1, &vao);
+}
+
+
 void Mesh::SetupMesh(const std::vector<float>& vertices, const std::vector<unsigned int>& indices)
 {
     useIndex = !indices.empty();
     indexCount = useIndex ? static_cast<GLsizei>(indices.size()) : static_cast<GLsizei>(vertices.size() / 3);
 
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
+    // Create VAO
+    glCreateVertexArrays(1, &vao);
 
-    // VBO
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+    // Create and bind VBO
+    glCreateBuffers(1, &vbo);
+    glNamedBufferData(vbo, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
 
-    // EBO
+    // Bind VBO to VAO
+    glVertexArrayVertexBuffer(vao, 0, vbo, 0, 3 * sizeof(float));
+
+    glEnableVertexArrayAttrib(vao, 0); // position
+    glVertexArrayAttribFormat(vao, 0, 3, GL_FLOAT, GL_FALSE, 0);
+    glVertexArrayAttribBinding(vao, 0, 0);
+
+    glEnableVertexArrayAttrib(vao, 1); // uv
+    glVertexArrayAttribFormat(vao, 1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 3);
+    glVertexArrayAttribBinding(vao, 1, 0);
+
+    glVertexArrayVertexBuffer(vao, 0, vbo, 0, sizeof(float) * 5);
+
+    // EBO (Element Buffer)
     if (useIndex)
     {
-        glGenBuffers(1, &ebo);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned), indices.data(), GL_STATIC_DRAW);
+        glCreateBuffers(1, &ebo);
+        glNamedBufferData(ebo, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
+        glVertexArrayElementBuffer(vao, ebo);
     }
-
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-
-    glBindVertexArray(0);
 }

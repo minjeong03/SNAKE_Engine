@@ -53,6 +53,11 @@ bool WindowManager::Init()
     return true;
 }
 
+void WindowManager::Free()
+{
+    glfwDestroyWindow(window);
+}
+
 void WindowManager::SwapBuffers() const
 {
     glfwSwapBuffers(window);

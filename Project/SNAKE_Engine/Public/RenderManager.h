@@ -24,7 +24,7 @@ public:
     void Submit(std::function<void()>&& drawFunc, unsigned int layer = 0);
     void EndFrame();
     void RegisterShader(const std::string& tag, const std::vector<std::pair<ShaderStage, std::string>>& sources);
-    void LoadAndRegisterTexture(const std::string& tag, const std::string& path, const TextureSettings& settings);
+    void RegisterTexture(const std::string& tag, const std::string& path, const TextureSettings& settings);
     void RegisterMesh(const std::string& tag, std::unique_ptr<Mesh> mesh);
     [[nodiscard]]
     std::unique_ptr<Material> CreateMaterial(const std::string& shaderTag, const std::unordered_map<std::string, std::string>& textureBindings); // unordered_map<uniformName, textureTag>

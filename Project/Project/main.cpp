@@ -3,7 +3,9 @@
 #include "Debug.h"
 #include "MainMenu.h"
 #include "Engine.h"
-
+#ifdef _DEBUG
+#include<vld.h>//TODO: remove this and directories before release (VC++ Directories -> Include Directories & Library Directories)
+#endif
 int main(int argc, char* argv[])
 {
     SNAKE_Engine snakeEngine;

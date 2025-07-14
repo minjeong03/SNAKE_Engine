@@ -1,8 +1,9 @@
 #define GLAD_GL_IMPLEMENTATION
 #include "glad/gl.h"
 #include"glfw3/glfw3.h"
-
-
+#ifdef _DEBUG
+#include<vld.h>//TODO: remove this and directories before release (VC++ Directories -> Include Directories & Library Directories)
+#endif
 #include "SNAKE_Engine.h"
 #include <iostream>
 
@@ -53,15 +54,14 @@ void SNAKE_Engine::Run()
         stateManager.Update(dt, engineContext);
         stateManager.Draw(engineContext);
 
-
-
         windowManager.SwapBuffers();
     }
     stateManager.Free(engineContext);
-
+    windowManager.Free();
+    Free();
 }
 
-void SNAKE_Engine::Shutdown() const
+void SNAKE_Engine::Free() const
 {
     glfwTerminate();
 }

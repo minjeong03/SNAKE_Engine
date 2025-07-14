@@ -12,8 +12,8 @@ Bullet::Bullet(glm::vec2 _pos, glm::vec2 _dir) :pos(_pos), dir(_dir)
 void Bullet::Init(const EngineContext& engineContext)
 {
     SNAKE_LOG("Bullet initialized");
-    material = engineContext.renderManager->CreateMaterial("default", {});
-    mesh = engineContext.renderManager->GetMeshByTag("default");
+    material = engineContext.renderManager->CreateMaterial("default", { std::pair<std::string, std::string>("u_Texture","default") });
+    mesh = engineContext.renderManager->GetMeshByTag("star");
 }
 
 void Bullet::LateInit(const EngineContext& engineContext)
@@ -25,9 +25,9 @@ void Bullet::Update(float dt, const EngineContext& engineContext)
     pos += glm::vec2(1 * dir.x, 1 * dir.y);
     //SNAKE_LOG("Bullet pos: " << pos.x << " " << pos.y);
     timer += dt;
-    if (timer > 2.f)
+    if (timer > 10.f)
     {
-	Kill();
+		Kill();
     }
 }
 

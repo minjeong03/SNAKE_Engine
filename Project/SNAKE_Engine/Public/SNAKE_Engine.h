@@ -52,10 +52,6 @@ public:
      */
     void Run();
 
-    /**
-     * @brief Cleans up engine systems and terminates GLFW.
-     */
-    void Shutdown() const;
 
     /**
      * @brief Requests the engine to stop running.
@@ -78,6 +74,12 @@ private:
      * @param windowWidth Width of the game window (not used directly here).
      * @param windowHeight Height of the game window (not used directly here).
      */
+
+     /**
+      * @brief Cleans up engine systems and terminates GLFW.
+      */
+    void Free() const;
+
     void SetEngineContext(int windowWidth, int windowHeight);
 
     /** Central shared context passed to all systems (input, window, state, etc.). */

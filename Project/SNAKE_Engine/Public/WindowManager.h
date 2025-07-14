@@ -60,6 +60,8 @@ public:
      */
     void SetHeight(int height) { this->windowHeight = height; }
 
+    void Free();
+
 private:
     /**
      * @brief Swaps the front and back buffers (displays the current frame).
