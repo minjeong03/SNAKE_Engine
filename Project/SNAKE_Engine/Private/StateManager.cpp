@@ -37,7 +37,7 @@ void StateManager::Draw(const EngineContext& engineContext)
     if (currentState != nullptr)
     {
 	engineContext.renderManager->BeginFrame();
-	currentState->SystemDraw(engineContext);
+	currentState->Draw(engineContext);
 	engineContext.renderManager->EndFrame();
     }
 }

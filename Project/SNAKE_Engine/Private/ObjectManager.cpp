@@ -7,7 +7,7 @@
 #include "InstanceBatchKey.h"
 
 
-void ObjectManager::AddObject(std::unique_ptr<GameObject> obj, std::string ID)
+void ObjectManager::AddObject(std::unique_ptr<GameObject> obj, const std::string& ID)
 {
     assert(obj != nullptr && "Cannot add null object");
 

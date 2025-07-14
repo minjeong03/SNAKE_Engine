@@ -31,7 +31,7 @@ public:
      * @param obj Unique pointer to the new object.
      * @param ID Optional string ID. If set, used for lookup via FindByID().
      */
-    void AddObject(std::unique_ptr<GameObject> obj, std::string ID = "");
+    void AddObject(std::unique_ptr<GameObject> obj, const std::string& ID = "");
 
     /** Initializes all currently registered objects. */
     void InitAll(const EngineContext& engineContext);

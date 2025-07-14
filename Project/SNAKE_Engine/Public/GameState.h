@@ -78,7 +78,7 @@ protected:
      * @brief User-defined rendering logic. Called after ObjectManager draws all objects.
      * @param engineContext Rendering context.
      */
-    virtual void Draw([[maybe_unused]] const EngineContext& engineContext) {}
+    virtual void Draw([[maybe_unused]] const EngineContext& engineContext) { objectManager.DrawAll(engineContext); }
 
     /**
      * @brief Cleanup for any custom objects or systems created in Init().
@@ -139,17 +139,6 @@ private:
         LateUpdate(dt, engineContext);
     }
 
-    /**
-     * @brief Internal engine call to draw the state.
-     * Draws user content first, then objectManager content.
-     *
-     * @param engineContext Rendering context.
-     */
-    virtual void SystemDraw(const EngineContext& engineContext)
-    {
-        Draw(engineContext);
-        objectManager.DrawAll(engineContext);
-    }
 
     /**
      * @brief Internal engine call to clean up all game objects and user-defined systems.
