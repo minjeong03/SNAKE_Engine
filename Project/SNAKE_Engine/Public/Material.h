@@ -5,12 +5,6 @@
 #include "../ThirdParty/glm/glm.hpp"
 
 class ObjectManager;
-/**
- * @brief
- * @details
- * @author Jinwoo Choi
- * @date 2025-07-11
- */
 class Shader;
 class Texture;
 class Mesh;
