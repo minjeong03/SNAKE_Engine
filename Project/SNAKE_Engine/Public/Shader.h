@@ -41,7 +41,7 @@ public:
     void SendUniform(const std::string& name, const glm::vec4& value) const;
     void SendUniform(const std::string& name, const glm::mat4& value) const;
 
-    GLuint GetProgramID() const { return programID; }
+    [[nodiscard]] GLuint GetProgramID() const { return programID; }
 
 
 
@@ -59,6 +59,6 @@ private:
     bool isSupportInstancing;
 
     void CheckSupportsInstancing();
-    std::string LoadShaderSource(const std::string& filepath);
-    GLuint CompileShader(ShaderStage stage, const std::string& source);
+    [[nodiscard]] std::string LoadShaderSource(const std::string& filepath);
+    [[nodiscard]] GLuint CompileShader(ShaderStage stage, const std::string& source);
 };

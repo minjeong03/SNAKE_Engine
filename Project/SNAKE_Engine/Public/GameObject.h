@@ -4,6 +4,7 @@
 #include "Mesh.h"
 #include "Transform.h"
 
+class FrustumCuller;
 struct EngineContext;
 
 /**
@@ -27,6 +28,7 @@ struct EngineContext;
  */
 class GameObject
 {
+    friend FrustumCuller;
 public:
     /** Called once when the object is added (for initial setup). */
     virtual void Init(const EngineContext& engineContext) = 0;
@@ -61,10 +63,10 @@ public:
     void Kill() { isAlive = false; }
 
     /** Sets the string ID of this object. */
-    void SetID(const std::string& id) { objectID = id; }
+    void SetTag(const std::string& tag) { objectTag = tag; }
 
     /** Returns the string ID of this object. */
-    [[nodiscard]] const std::string& GetID() const { return objectID; }
+    [[nodiscard]] const std::string& GetTag() const { return objectTag; }
 
     [[nodiscard]] const unsigned int& GetRenderLayer() const { return renderLayer; }
 
@@ -78,18 +80,30 @@ public:
 
     [[nodiscard]] bool CanBeInstanced() const;
 
-    [[nodiscard]] glm::mat4 GetTransformMatrix() const { return transform2D.GetMatrix(); }
+    [[nodiscard]] glm::mat4& GetTransformMatrix() { return transform2D.GetMatrix(); }
+
+    [[nodiscard]] Transform2D& GetTransform2D() { return transform2D; }
+
+
 
 protected: //to give direct access for inherited gameobject classes
     bool isAlive = true;
     bool isVisible = true;
 
-	std::string objectID;
+    std::string objectTag;
 
-	unsigned int renderLayer = 0;
+    unsigned int renderLayer = 0;
     Material* material = nullptr;
     Mesh* mesh = nullptr;
     Transform2D transform2D;
+
+private:
+    [[nodiscard]] float GetBoundingRadius() const
+    {
+        glm::vec2 halfSize = mesh ? mesh->GetLocalBoundsHalfSize() : glm::vec2(0.5f);
+        glm::vec2 scaled = halfSize * transform2D.GetScale();
+        return glm::length(scaled);
+    }
 };
 
 inline bool GameObject::CanBeInstanced() const

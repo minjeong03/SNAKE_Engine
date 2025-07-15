@@ -4,8 +4,37 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <map>
 
+#include "Camera2D.h"
 #include "GameObject.h"
+
+struct InstanceBatchKey;
+class Camera2D;
+
+class FrustumCuller
+{
+public:
+    static void CullVisible(const Camera2D& camera, const std::vector<GameObject*>& allObjects,
+        std::vector<GameObject*>& outVisibleList, glm::vec2 viewportSize)
+    {
+        outVisibleList.clear();
+        for (GameObject* obj : allObjects)
+        {
+            if (!obj->IsAlive())
+                continue;
+
+            const glm::vec2& pos = obj->GetTransform2D().GetPosition();
+            float radius = obj->GetBoundingRadius();
+
+            if (camera.IsInView(pos, radius, viewportSize/camera.GetZoom()))
+                outVisibleList.push_back(obj);
+        }
+    }
+};
+
+using ShaderMap = std::map<Shader*, std::map<InstanceBatchKey, std::vector<GameObject*>>>;
+using RenderMap = std::map<int, ShaderMap>;
 
 struct EngineContext;
 
@@ -31,7 +60,7 @@ public:
      * @param obj Unique pointer to the new object.
      * @param ID Optional string ID. If set, used for lookup via FindByID().
      */
-    void AddObject(std::unique_ptr<GameObject> obj, const std::string& ID = "");
+    void AddObject(std::unique_ptr<GameObject> obj, const std::string& tag = "");
 
     /** Initializes all currently registered objects. */
     void InitAll(const EngineContext& engineContext);
@@ -53,7 +82,10 @@ public:
      * @brief Draws all alive objects.
      * @param engineContext Rendering and system context passed to each object.
      */
-    void DrawAll(const EngineContext& engineContext);
+    void DrawAll(const EngineContext& engineContext, Camera2D* camera);
+
+    void DrawObjects(const EngineContext& engineContext, Camera2D* camera, const std::vector<GameObject*>& gameObjects);
+    void DrawObjectsWithTag(const EngineContext& engineContext, Camera2D* camera, const std::string& tag);
 
     /** Frees and clears all objects. Called when state ends. */
     void FreeAll(const EngineContext& engineContext);
@@ -66,12 +98,16 @@ public:
     [[nodiscard]] GameObject* FindByID(const std::string& id) const;
 
 private:
+
+    void SubmitRenderMap(const EngineContext& engineContext, Camera2D* camera, const RenderMap& renderMap);
+    [[nodiscard]] RenderMap BuildRenderMap(const std::vector<GameObject*>& source);
     /** All currently active objects. */
     std::vector<std::unique_ptr<GameObject>> objects;
 
     /** Objects waiting to be initialized in the next frame. */
     std::vector<std::unique_ptr<GameObject>> pendingObjects;
 
+    std::vector<GameObject*> allRawPtrs;
     /**
      * Map of object IDs to raw pointers for fast lookup.
      * Ownership is held by `objects` or `pendingObjects`.

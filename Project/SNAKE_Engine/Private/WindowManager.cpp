@@ -9,16 +9,17 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
-    WindowManager* windowManager = static_cast<WindowManager*>(glfwGetWindowUserPointer(window));
-    if (windowManager)
+    SNAKE_Engine* snakeEngine = static_cast<SNAKE_Engine*>(glfwGetWindowUserPointer(window));
+    if (snakeEngine)
     {
-        windowManager->SetWidth(width);
-        windowManager->SetHeight(height);
-        SNAKE_LOG("changed: " << windowManager->GetWidth() << " " << windowManager->GetHeight());
+        snakeEngine->GetEngineContext().windowManager->SetWidth(width);
+        snakeEngine->GetEngineContext().windowManager->SetHeight(height);
+        snakeEngine->GetEngineContext().stateManager->GetCurrentState()->GetCameraManager().SetScreenSizeForAll(width, height);
+        SNAKE_LOG("changed: " << snakeEngine->GetEngineContext().windowManager->GetWidth() << " " << snakeEngine->GetEngineContext().windowManager->GetHeight());
     }
 
 }
-bool WindowManager::Init(int _windowWidth, int _windowHeight)
+bool WindowManager::Init(int _windowWidth, int _windowHeight, SNAKE_Engine& engine)
 {
 
     if (!glfwInit())
@@ -51,7 +52,7 @@ bool WindowManager::Init(int _windowWidth, int _windowHeight)
     }
 
     glViewport(0, 0, windowWidth, windowHeight);
-    glfwSetWindowUserPointer(window, this);
+    glfwSetWindowUserPointer(window, &engine);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     return true;
@@ -72,7 +73,7 @@ void WindowManager::SetTitle(const std::string& title) const
     glfwSetWindowTitle(window, title.c_str());
 }
 
-void WindowManager::Free()
+void WindowManager::Free() const
 {
     glfwDestroyWindow(window);
 }
@@ -84,7 +85,7 @@ void WindowManager::SwapBuffers() const
 
 void WindowManager::ClearScreen() const
 {
-    glClearColor(0.1f, 0.3f, 0.7f, 1.0f);
+    glClearColor(0.f,0.f,0.f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 }
 

@@ -1,6 +1,8 @@
 #include "RenderManager.h"
 #include <algorithm>
 #include <iostream>
+#include "../ThirdParty/glad/gl.h"
+
 #include "Debug.h"
 
 
@@ -14,7 +16,7 @@ void RenderManager::Submit(std::function<void()>&& drawFunc, unsigned int layer)
     renderQueue.push_back({ std::move(drawFunc), layer });
 }
 
-void RenderManager::EndFrame()
+void RenderManager::FlushCommands()
 {
     std::sort(renderQueue.begin(), renderQueue.end(),
         [](const RenderCommand& a, const RenderCommand& b)
@@ -26,6 +28,25 @@ void RenderManager::EndFrame()
     {
         cmd.drawFunc();
     }
+    renderQueue.clear();
+}
+
+void RenderManager::SetViewport(int x, int y, int width, int height, int layer)
+{
+    Submit([=]() {
+        glViewport(x, y, width, height);
+        }, layer);
+}
+
+void RenderManager::ClearBackground(int x, int y, int width, int height, glm::vec4 color, int layer)
+{
+    Submit([=]() {
+        glEnable(GL_SCISSOR_TEST);
+        glScissor(x, y, width, height);
+        glClearColor(color.r, color.g, color.b, color.a);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glDisable(GL_SCISSOR_TEST);
+        }, layer);
 }
 
 /*

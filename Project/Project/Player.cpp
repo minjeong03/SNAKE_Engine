@@ -8,11 +8,11 @@
 
 void Player::Init(const EngineContext& engineContext)
 {
-    transform2D.position = glm::vec2(0, 0);
-    
+    transform2D.SetPosition(glm::vec2(0, 0));
+    transform2D.SetScale(glm::vec2(50.f));
     mesh = engineContext.renderManager->GetMeshByTag("default");
     material = engineContext.renderManager->GetMaterialByTag("m_default");
-    renderLayer = 0;
+    renderLayer = 2;
 }
 
 void Player::LateInit(const EngineContext& engineContext)
@@ -24,19 +24,19 @@ void Player::Update(float dt, const EngineContext& engineContext)
 {
     if (engineContext.inputManager->IsKeyDown(KEY_W))
     {
-        transform2D.position += glm::vec2(0, 150 * dt);
+        transform2D.AddPosition(glm::vec2(0, 150*dt));
     }
     if (engineContext.inputManager->IsKeyDown(KEY_A))
     {
-        transform2D.position += glm::vec2(-150 * dt, 0);
+        transform2D.AddPosition(glm::vec2(-150 * dt, 0));
     }
     if (engineContext.inputManager->IsKeyDown(KEY_S))
     {
-        transform2D.position += glm::vec2(0, -150 * dt);
+        transform2D.AddPosition(glm::vec2(0, -150 * dt));
     }
     if (engineContext.inputManager->IsKeyDown(KEY_D))
     {
-        transform2D.position += glm::vec2(150 * dt, 0);
+        transform2D.AddPosition(glm::vec2(150 * dt, 0));
     }
 
     if (engineContext.inputManager->IsKeyDown(KEY_SPACE))
@@ -48,19 +48,15 @@ void Player::Update(float dt, const EngineContext& engineContext)
 	static std::uniform_real_distribution<float> angleDist(0.0f, 2.0f * glm::pi<float>());
 
 	float angle = angleDist(gen);
-    engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::make_unique<Bullet>(transform2D.position, glm::vec2(std::cos(angle), std::sin(angle))));
+    engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::make_unique<Bullet>(transform2D.GetPosition(), glm::vec2(std::cos(angle), std::sin(angle))));
    
     }
 }
 
 void Player::Draw(const EngineContext& engineContext)
 {
-    material->SetUniform("u_Color", glm::vec4(1.0, 1.0, 1.0, 1.0));
-    material->SetUniform("u_Model", glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(transform2D.position, 0.0f)), glm::vec3(50)));
-    material->SetUniform("u_Projection", glm::ortho(
-	-engineContext.windowManager->GetWidth() / 2.0f, engineContext.windowManager->GetWidth() / 2.0f,
-	-engineContext.windowManager->GetHeight() / 2.0f, engineContext.windowManager->GetHeight() / 2.0f
-    ));
+    material->SetUniform("u_Color", glm::vec4(1.0, 0.0, 1.0, 1.0));
+    material->SetUniform("u_Model", transform2D.GetMatrix());
 }
 
 void Player::Free(const EngineContext& engineContext)

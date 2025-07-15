@@ -52,6 +52,8 @@ private:
     void SendUniforms();
 
     void UpdateInstanceBuffer(const std::vector<glm::mat4>& transforms) const;
+
+    [[nodiscard]] Shader* GetShader() const { return shader; }
     Shader* shader;
     std::unordered_map<std::string, Texture*> textures;
     std::unordered_map<std::string, UniformValue> uniforms;

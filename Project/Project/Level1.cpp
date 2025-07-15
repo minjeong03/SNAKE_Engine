@@ -55,6 +55,17 @@ void Level1::Init(const EngineContext& engineContext)
 {
     SNAKE_LOG("[level1] init called");
     objectManager.AddObject(std::make_unique<Player>(), "level1 player");
+
+    auto mainCam = std::make_unique<Camera2D>(engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
+    mainCam->SetZoom(1.0f);
+    cameraManager.RegisterCamera("main", std::move(mainCam));
+
+    auto minimapCam = std::make_unique<Camera2D>();
+    minimapCam->SetZoom(0.1f);
+    minimapCam->SetPosition({ 200, 200 });
+    cameraManager.RegisterCamera("minimap", std::move(minimapCam));
+
+    cameraManager.SetActiveCamera("main");
 }
 
 void Level1::LateInit(const EngineContext& engineContext)
@@ -97,7 +108,7 @@ void Level1::LateUpdate(float dt, const EngineContext& engineContext)
 
 void Level1::Draw(const EngineContext& engineContext)
 {
-    GameState::Draw(engineContext);
+    objectManager.DrawAll(engineContext,cameraManager.GetActiveCamera());
 }
 
 void Level1::Free(const EngineContext& engineContext)

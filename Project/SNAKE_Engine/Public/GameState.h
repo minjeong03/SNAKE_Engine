@@ -1,4 +1,5 @@
 #pragma once
+#include "CameraManager.h"
 #include "ObjectManager.h"
 
 class StateManager;
@@ -44,6 +45,9 @@ public:
      */
     [[nodiscard]] virtual ObjectManager& GetObjectManager() { return objectManager; }
 
+    CameraManager& GetCameraManager() { return cameraManager; }
+    Camera2D* GetActiveCamera() const { return cameraManager.GetActiveCamera(); }
+    void SetActiveCamera(const std::string& tag) { cameraManager.SetActiveCamera(tag); }
 protected:
     /**
      * @brief User-defined initialization logic. Override this to add game objects or initialize variables.
@@ -78,7 +82,7 @@ protected:
      * @brief User-defined rendering logic. Called after ObjectManager draws all objects.
      * @param engineContext Rendering context.
      */
-    virtual void Draw([[maybe_unused]] const EngineContext& engineContext) { objectManager.DrawAll(engineContext); }
+    virtual void Draw([[maybe_unused]] const EngineContext& engineContext) { objectManager.DrawAll(engineContext,cameraManager.GetActiveCamera()); }
 
     /**
      * @brief Cleanup for any custom objects or systems created in Init().
@@ -104,7 +108,7 @@ protected:
      * @brief Each state owns its own object manager, which handles game objects.
      */
     ObjectManager objectManager;
-
+    CameraManager cameraManager;
 private:
     /**
      * @brief Internal engine call to load persistent assets.

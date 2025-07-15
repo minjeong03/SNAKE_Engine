@@ -17,6 +17,12 @@ struct InstanceBatchKey
     bool operator==(const InstanceBatchKey& other) const {
         return mesh == other.mesh && material == other.material;
     }
+    bool operator<(const InstanceBatchKey& other) const
+    {
+        if (mesh != other.mesh)
+            return mesh < other.mesh;
+        return material < other.material;
+    }
 };
 
 // Hash specialization for unordered_map

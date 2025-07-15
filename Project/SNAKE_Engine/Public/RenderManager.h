@@ -49,15 +49,19 @@ public:
     {
 	    return materialMap[tag].get();
     }
+	void Submit(std::function<void()>&& drawFunc, unsigned int layer = 0);
+    void BeginFrame();
+    void FlushCommands();
+    void SetViewport(int x, int y, int width, int height, int layer = 0);
+    void ClearBackground(int x, int y, int width, int height, glm::vec4 color, int layer = 0);
+
+
 private:
     struct RenderCommand
     {
         std::function<void()> drawFunc;
         unsigned int renderLayer;
     };
-    void BeginFrame();
-    void Submit(std::function<void()>&& drawFunc, unsigned int layer = 0);
-    void EndFrame();
     std::unordered_map<std::string, std::unique_ptr<Shader>> shaderMap;
     std::unordered_map<std::string, std::unique_ptr<Texture>> textureMap;
     std::unordered_map<std::string, std::unique_ptr<Mesh>> meshMap;

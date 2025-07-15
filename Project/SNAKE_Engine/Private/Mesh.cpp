@@ -7,6 +7,7 @@
 Mesh::Mesh(const std::vector<float>& vertices, const std::vector<unsigned int>& indices) :vao(0), vbo(0), ebo(0), indexCount(0), useIndex(false)
 {
     SetupMesh(vertices, indices);
+    ComputeLocalBounds(vertices);
 }
 
 void Mesh::Draw() const

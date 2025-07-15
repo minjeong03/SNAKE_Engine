@@ -23,14 +23,13 @@ void SNAKE_Engine::SetEngineContext()
 
 bool SNAKE_Engine::Init(int windowWidth, int windowHeight)
 {
-    if (!windowManager.Init(windowWidth, windowHeight))
+    if (!windowManager.Init(windowWidth, windowHeight,*this))
     {
         SNAKE_ERR("Window Initialization failed.");
         return false;
     }
     inputManager.Init(windowManager.GetHandle());
     SetEngineContext();
-
     return true;
 }
 

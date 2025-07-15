@@ -63,6 +63,12 @@
     <ClInclude Include="Public\EngineTimer.h">
       <Filter>public</Filter>
     </ClInclude>
+    <ClInclude Include="Public\CameraManager.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Camera2D.h">
+      <Filter>public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Private\StateManager.cpp">
@@ -99,6 +105,12 @@
       <Filter>private</Filter>
     </ClCompile>
     <ClCompile Include="Private\EngineTimer.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\CameraManager.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\Camera2D.cpp">
       <Filter>private</Filter>
     </ClCompile>
   </ItemGroup>
