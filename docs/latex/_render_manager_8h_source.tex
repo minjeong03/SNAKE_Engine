@@ -1,0 +1,73 @@
+\doxysection{Render\+Manager.\+h}
+\hypertarget{_render_manager_8h_source}{}\label{_render_manager_8h_source}\index{Project/SNAKE\_Engine/Public/RenderManager.h@{Project/SNAKE\_Engine/Public/RenderManager.h}}
+\mbox{\hyperlink{_render_manager_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00001}00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00002}00002\ \textcolor{preprocessor}{\#include\ <functional>}}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00003}00003\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <unordered\_map>}}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00006}00006\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00007}00007\ }
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00008}00008\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_material_8h}{Material.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00009}00009\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_mesh_8h}{Mesh.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00010}00010\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_shader_8h}{Shader.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00011}00011\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_texture_8h}{Texture.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00012}00012\ }
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00013}00013\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_state_manager}{StateManager}};}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00027}\mbox{\hyperlink{class_render_manager}{00027}}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_render_manager}{RenderManager}}}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00028}00028\ \{}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00029}\mbox{\hyperlink{class_render_manager_a7042c6ff67962075d3a4dab2bec2c9f1}{00029}}\ \ \ \ \ \textcolor{keyword}{friend}\ \mbox{\hyperlink{class_render_manager_a7042c6ff67962075d3a4dab2bec2c9f1}{ObjectManager}};}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00030}\mbox{\hyperlink{class_render_manager_af2ef4f86575ce11bfd14ce11725f3a2f}{00030}}\ \ \ \ \ \textcolor{keyword}{friend}\ \mbox{\hyperlink{class_render_manager_af2ef4f86575ce11bfd14ce11725f3a2f}{StateManager}};}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00032}00032\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00051}00051\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_render_manager_a2f8879b24a453a20a2769712177488af}{RegisterShader}}(\textcolor{keyword}{const}\ std::string\&\ tag,\ \textcolor{keyword}{const}\ std::vector<std::pair<ShaderStage,\ std::string>>\&\ sources);}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00052}00052\ }
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00059}00059\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_render_manager_a2f8879b24a453a20a2769712177488af}{RegisterShader}}(\textcolor{keyword}{const}\ std::string\&\ tag,\ std::unique\_ptr<Shader>\ shader);}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00060}00060\ }
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00072}00072\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_render_manager_a4b9064e2eca0056ff1ea0a5976365776}{RegisterTexture}}(\textcolor{keyword}{const}\ std::string\&\ tag,\ \textcolor{keyword}{const}\ std::string\&\ path,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_texture_settings}{TextureSettings}}\&\ settings);}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00073}00073\ }
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00080}00080\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_render_manager_a4b9064e2eca0056ff1ea0a5976365776}{RegisterTexture}}(\textcolor{keyword}{const}\ std::string\&\ tag,\ std::unique\_ptr<Texture>\ texture);}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00081}00081\ }
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00089}00089\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_render_manager_a0c653bad0572ea65efe1cea470d319ab}{RegisterMesh}}(\textcolor{keyword}{const}\ std::string\&\ tag,\ \textcolor{keyword}{const}\ std::vector<float>\&\ vertices,\ \textcolor{keyword}{const}\ std::vector<unsigned\ int>\&\ indices\ =\ \{\});}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00090}00090\ }
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00097}00097\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_render_manager_a0c653bad0572ea65efe1cea470d319ab}{RegisterMesh}}(\textcolor{keyword}{const}\ std::string\&\ tag,\ std::unique\_ptr<Mesh>\ mesh);}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00098}00098\ }
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00110}00110\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_render_manager_ab554f9dd0a5b1701cdc7aee6d579d0c1}{RegisterMaterial}}(\textcolor{keyword}{const}\ std::string\&\ tag,\ \textcolor{keyword}{const}\ std::string\&\ shaderTag,\ \textcolor{keyword}{const}\ std::unordered\_map<std::string,\ std::string>\&\ textureBindings);}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00111}00111\ }
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00118}00118\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_render_manager_ab554f9dd0a5b1701cdc7aee6d579d0c1}{RegisterMaterial}}(\textcolor{keyword}{const}\ std::string\&\ tag,\ std::unique\_ptr<Material>\ material);}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00119}00119\ }
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00126}\mbox{\hyperlink{class_render_manager_a67c1df4d0a8b98e45b56f0d58874c8d2}{00126}}\ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{class_shader}{Shader}}*\ \mbox{\hyperlink{class_render_manager_a67c1df4d0a8b98e45b56f0d58874c8d2}{GetShaderByTag}}(\textcolor{keyword}{const}\ std::string\&\ tag)\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_render_manager_a0bbf3f0fa486af058946484deb28e225}{shaderMap}}[tag].get();\ \}}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00127}00127\ }
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00134}\mbox{\hyperlink{class_render_manager_a2b5ba5cf131ebc7c9d6a1d4d59e68fce}{00134}}\ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{class_texture}{Texture}}*\ \mbox{\hyperlink{class_render_manager_a2b5ba5cf131ebc7c9d6a1d4d59e68fce}{GetTextureByTag}}(\textcolor{keyword}{const}\ std::string\&\ tag)\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_render_manager_abe4e30c3165baa0304fe8e196ffac510}{textureMap}}[tag].get();\ \}}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00135}00135\ }
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00142}\mbox{\hyperlink{class_render_manager_a499160c2c55c9da2db17bb372e8159b7}{00142}}\ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{class_mesh}{Mesh}}*\ \mbox{\hyperlink{class_render_manager_a499160c2c55c9da2db17bb372e8159b7}{GetMeshByTag}}(\textcolor{keyword}{const}\ std::string\&\ tag)\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_render_manager_a38415ded934cd5ed4ff0da4a14cb84eb}{meshMap}}[tag].get();\ \}}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00143}00143\ }
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00150}\mbox{\hyperlink{class_render_manager_a529409768d03b2cf0638f07eadefaa5e}{00150}}\ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{class_material}{Material}}*\ \mbox{\hyperlink{class_render_manager_a529409768d03b2cf0638f07eadefaa5e}{GetMaterialByTag}}(\textcolor{keyword}{const}\ std::string\&\ tag)\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_render_manager_abab1e694fabb0d1ac10fd119770e4f4f}{materialMap}}[tag].get();\ \}}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00151}00151\ }
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00160}00160\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_render_manager_a5906c7d7d3fbcece5fe4851c520d3154}{Submit}}(std::function<\textcolor{keywordtype}{void}()>\&\&\ drawFunc);}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00161}00161\ }
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00168}00168\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_render_manager_a4ae16c75da8bb89c1c888986632c7afb}{ClearDrawCommands}}();}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00169}00169\ }
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00173}00173\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_render_manager_aff85070eef9769739f2478fd5b86da87}{FlushDrawCommands}}();}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00174}00174\ }
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00186}00186\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_render_manager_a87231d2b7a22851bea34593c85692209}{SetViewport}}(\textcolor{keywordtype}{int}\ x,\ \textcolor{keywordtype}{int}\ y,\ \textcolor{keywordtype}{int}\ width,\ \textcolor{keywordtype}{int}\ height);}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00187}00187\ }
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00201}00201\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_render_manager_a80b5e6df0bbbb276abb3a2da87bb2007}{ClearBackground}}(\textcolor{keywordtype}{int}\ x,\ \textcolor{keywordtype}{int}\ y,\ \textcolor{keywordtype}{int}\ width,\ \textcolor{keywordtype}{int}\ height,\ glm::vec4\ color);}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00202}00202\ }
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00203}00203\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00204}\mbox{\hyperlink{struct_render_manager_1_1_render_command}{00204}}\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_render_manager_1_1_render_command}{RenderCommand}}}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00205}00205\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00206}\mbox{\hyperlink{struct_render_manager_1_1_render_command_afa7946ca310f01b7454b64bd5d3b508a}{00206}}\ \ \ \ \ \ \ \ \ std::function<void()>\ \mbox{\hyperlink{struct_render_manager_1_1_render_command_afa7946ca310f01b7454b64bd5d3b508a}{drawFunc}};}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00207}\mbox{\hyperlink{struct_render_manager_1_1_render_command_a280470b9fc720a1bcf72e3bdfd2ba762}{00207}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_render_manager_1_1_render_command_a280470b9fc720a1bcf72e3bdfd2ba762}{renderLayer}};}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00208}00208\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00209}00209\ }
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00210}\mbox{\hyperlink{class_render_manager_a0bbf3f0fa486af058946484deb28e225}{00210}}\ \ \ \ \ std::unordered\_map<std::string,\ std::unique\_ptr<Shader>>\ \mbox{\hyperlink{class_render_manager_a0bbf3f0fa486af058946484deb28e225}{shaderMap}};}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00211}\mbox{\hyperlink{class_render_manager_abe4e30c3165baa0304fe8e196ffac510}{00211}}\ \ \ \ \ std::unordered\_map<std::string,\ std::unique\_ptr<Texture>>\ \mbox{\hyperlink{class_render_manager_abe4e30c3165baa0304fe8e196ffac510}{textureMap}};}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00212}\mbox{\hyperlink{class_render_manager_a38415ded934cd5ed4ff0da4a14cb84eb}{00212}}\ \ \ \ \ std::unordered\_map<std::string,\ std::unique\_ptr<Mesh>>\ \mbox{\hyperlink{class_render_manager_a38415ded934cd5ed4ff0da4a14cb84eb}{meshMap}};}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00213}\mbox{\hyperlink{class_render_manager_abab1e694fabb0d1ac10fd119770e4f4f}{00213}}\ \ \ \ \ std::unordered\_map<std::string,\ std::unique\_ptr<Material>>\ \mbox{\hyperlink{class_render_manager_abab1e694fabb0d1ac10fd119770e4f4f}{materialMap}};}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00214}\mbox{\hyperlink{class_render_manager_a38351db8b0eb65397ece072ea4324566}{00214}}\ \ \ \ \ std::vector<RenderCommand>\ \mbox{\hyperlink{class_render_manager_a38351db8b0eb65397ece072ea4324566}{renderQueue}};}
+\DoxyCodeLine{\Hypertarget{_render_manager_8h_source_l00215}00215\ \};}
+
+\end{DoxyCode}

@@ -1,0 +1,28 @@
+var class_render_manager =
+[
+    [ "RenderCommand", "struct_render_manager_1_1_render_command.html", "struct_render_manager_1_1_render_command" ],
+    [ "ClearBackground", "class_render_manager.html#a80b5e6df0bbbb276abb3a2da87bb2007", null ],
+    [ "ClearDrawCommands", "class_render_manager.html#a4ae16c75da8bb89c1c888986632c7afb", null ],
+    [ "FlushDrawCommands", "class_render_manager.html#aff85070eef9769739f2478fd5b86da87", null ],
+    [ "GetMaterialByTag", "class_render_manager.html#a529409768d03b2cf0638f07eadefaa5e", null ],
+    [ "GetMeshByTag", "class_render_manager.html#a499160c2c55c9da2db17bb372e8159b7", null ],
+    [ "GetShaderByTag", "class_render_manager.html#a67c1df4d0a8b98e45b56f0d58874c8d2", null ],
+    [ "GetTextureByTag", "class_render_manager.html#a2b5ba5cf131ebc7c9d6a1d4d59e68fce", null ],
+    [ "RegisterMaterial", "class_render_manager.html#ab554f9dd0a5b1701cdc7aee6d579d0c1", null ],
+    [ "RegisterMaterial", "class_render_manager.html#ab6579c1378d7bd959f904cd9873de718", null ],
+    [ "RegisterMesh", "class_render_manager.html#a0c653bad0572ea65efe1cea470d319ab", null ],
+    [ "RegisterMesh", "class_render_manager.html#a1ff449a750370ad55b640f36f7360201", null ],
+    [ "RegisterShader", "class_render_manager.html#a2f8879b24a453a20a2769712177488af", null ],
+    [ "RegisterShader", "class_render_manager.html#ae40eaa505bcc1ecfb90c373ffe1325a0", null ],
+    [ "RegisterTexture", "class_render_manager.html#a4b9064e2eca0056ff1ea0a5976365776", null ],
+    [ "RegisterTexture", "class_render_manager.html#a9037fe19d94d48401a84d3ccb107b8d0", null ],
+    [ "SetViewport", "class_render_manager.html#a87231d2b7a22851bea34593c85692209", null ],
+    [ "Submit", "class_render_manager.html#a5906c7d7d3fbcece5fe4851c520d3154", null ],
+    [ "materialMap", "class_render_manager.html#abab1e694fabb0d1ac10fd119770e4f4f", null ],
+    [ "meshMap", "class_render_manager.html#a38415ded934cd5ed4ff0da4a14cb84eb", null ],
+    [ "ObjectManager", "class_render_manager.html#a7042c6ff67962075d3a4dab2bec2c9f1", null ],
+    [ "renderQueue", "class_render_manager.html#a38351db8b0eb65397ece072ea4324566", null ],
+    [ "shaderMap", "class_render_manager.html#a0bbf3f0fa486af058946484deb28e225", null ],
+    [ "StateManager", "class_render_manager.html#af2ef4f86575ce11bfd14ce11725f3a2f", null ],
+    [ "textureMap", "class_render_manager.html#abe4e30c3165baa0304fe8e196ffac510", null ]
+];

@@ -1,0 +1,56 @@
+\doxysection{Project/\+SNAKE\+\_\+\+Engine/\+Public/\+Object\+Manager.h File Reference}
+\hypertarget{_object_manager_8h}{}\label{_object_manager_8h}\index{Project/SNAKE\_Engine/Public/ObjectManager.h@{Project/SNAKE\_Engine/Public/ObjectManager.h}}
+{\ttfamily \#include $<$memory$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$unordered\+\_\+map$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$map$>$}\newline
+{\ttfamily \#include "{}Camera2\+D.\+h"{}}\newline
+{\ttfamily \#include "{}Game\+Object.\+h"{}}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_frustum_culler}{Frustum\+Culler}}
+\begin{DoxyCompactList}\small\item\em Utility class for view frustum culling based on 2D bounding circles. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_object_manager}{Object\+Manager}}
+\begin{DoxyCompactList}\small\item\em Manages the lifecycle, visibility, and rendering of Game\+Objects in a scene. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{_object_manager_8h_af06c6289a6847d547d7480421d34e14b}{Shader\+Map}} = std\+::map$<$\mbox{\hyperlink{class_shader}{Shader}}\texorpdfstring{$\ast$}{*}, std\+::map$<$\mbox{\hyperlink{struct_instance_batch_key}{Instance\+Batch\+Key}}, std\+::vector$<$\mbox{\hyperlink{class_game_object}{Game\+Object}}\texorpdfstring{$\ast$}{*}$>$$>$$>$
+\begin{DoxyCompactList}\small\item\em Render batching structure organized by \doxylink{class_shader}{Shader} and instancing key. \end{DoxyCompactList}\item 
+using \mbox{\hyperlink{_object_manager_8h_ac21c42be3863d1e33440c7ecaff04b00}{Render\+Map}} = std\+::map$<$int, \mbox{\hyperlink{_object_manager_8h_af06c6289a6847d547d7480421d34e14b}{Shader\+Map}}$>$
+\begin{DoxyCompactList}\small\item\em Top-\/level render command grouping by render layer. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\label{doc-typedef-members}
+\Hypertarget{_object_manager_8h_doc-typedef-members}
+\doxysubsection{Typedef Documentation}
+\Hypertarget{_object_manager_8h_ac21c42be3863d1e33440c7ecaff04b00}\index{ObjectManager.h@{ObjectManager.h}!RenderMap@{RenderMap}}
+\index{RenderMap@{RenderMap}!ObjectManager.h@{ObjectManager.h}}
+\doxysubsubsection{\texorpdfstring{RenderMap}{RenderMap}}
+{\footnotesize\ttfamily \label{_object_manager_8h_ac21c42be3863d1e33440c7ecaff04b00} 
+using \mbox{\hyperlink{_object_manager_8h_ac21c42be3863d1e33440c7ecaff04b00}{Render\+Map}} = std\+::map$<$int, \mbox{\hyperlink{_object_manager_8h_af06c6289a6847d547d7480421d34e14b}{Shader\+Map}}$>$}
+
+
+
+Top-\/level render command grouping by render layer. 
+
+\doxylink{_object_manager_8h_ac21c42be3863d1e33440c7ecaff04b00}{Render\+Map} groups \doxylink{_object_manager_8h_af06c6289a6847d547d7480421d34e14b}{Shader\+Map} entries under a render layer key. (higher layers are drawn in front) 
+
+Definition at line \mbox{\hyperlink{_object_manager_8h_source_l00080}{80}} of file \mbox{\hyperlink{_object_manager_8h_source}{Object\+Manager.\+h}}.
+
+\Hypertarget{_object_manager_8h_af06c6289a6847d547d7480421d34e14b}\index{ObjectManager.h@{ObjectManager.h}!ShaderMap@{ShaderMap}}
+\index{ShaderMap@{ShaderMap}!ObjectManager.h@{ObjectManager.h}}
+\doxysubsubsection{\texorpdfstring{ShaderMap}{ShaderMap}}
+{\footnotesize\ttfamily \label{_object_manager_8h_af06c6289a6847d547d7480421d34e14b} 
+using \mbox{\hyperlink{_object_manager_8h_af06c6289a6847d547d7480421d34e14b}{Shader\+Map}} = std\+::map$<$\mbox{\hyperlink{class_shader}{Shader}}\texorpdfstring{$\ast$}{*}, std\+::map$<$\mbox{\hyperlink{struct_instance_batch_key}{Instance\+Batch\+Key}}, std\+::vector$<$\mbox{\hyperlink{class_game_object}{Game\+Object}}\texorpdfstring{$\ast$}{*}$>$$>$$>$}
+
+
+
+Render batching structure organized by \doxylink{class_shader}{Shader} and instancing key. 
+
+Each Shader\texorpdfstring{$\ast$}{*} points to a map from (\doxylink{class_mesh}{Mesh} + \doxylink{class_material}{Material}) -\/\texorpdfstring{$>$}{>} list of Game\+Objects. Used internally by \doxylink{class_object_manager}{Object\+Manager} to prepare instanced draw submissions. 
+
+Definition at line \mbox{\hyperlink{_object_manager_8h_source_l00071}{71}} of file \mbox{\hyperlink{_object_manager_8h_source}{Object\+Manager.\+h}}.
+
