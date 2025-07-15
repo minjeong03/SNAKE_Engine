@@ -6,13 +6,14 @@
 #include "Debug.h"
 #include "Engine.h"
 
+
 void Player::Init(const EngineContext& engineContext)
 {
     transform2D.SetPosition(glm::vec2(0, 0));
     transform2D.SetScale(glm::vec2(50.f));
     mesh = engineContext.renderManager->GetMeshByTag("default");
     material = engineContext.renderManager->GetMaterialByTag("m_default");
-    renderLayer = 2;
+    renderLayer = 950;
 }
 
 void Player::LateInit(const EngineContext& engineContext)
@@ -48,7 +49,9 @@ void Player::Update(float dt, const EngineContext& engineContext)
 	static std::uniform_real_distribution<float> angleDist(0.0f, 2.0f * glm::pi<float>());
 
 	float angle = angleDist(gen);
-    engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::make_unique<Bullet>(transform2D.GetPosition(), glm::vec2(std::cos(angle), std::sin(angle))));
+	std::unique_ptr<Bullet> b = std::make_unique<Bullet>(transform2D.GetPosition(), glm::vec2(std::cos(angle), std::sin(angle)));
+	b->SetRenderLayer(--bulletLayer);
+    engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::move(b));
    
     }
 }
@@ -61,7 +64,6 @@ void Player::Draw(const EngineContext& engineContext)
 
 void Player::Free(const EngineContext& engineContext)
 {
-    material->SetUniform("u_Model", glm::mat4(1.0f));
     SNAKE_LOG("Player Free Called");
 }
 

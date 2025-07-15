@@ -3,66 +3,91 @@
 #include <memory>
 #include "GameState.h"
 
+class SNAKE_Engine;
 struct EngineContext;
 
 /**
- * @brief Handles game state transitions and lifecycle management.
+ * @brief Manages the current and next game states.
  *
  * @details
- * StateManager controls the active game state and manages transitions
- * between different states (e.g., from TitleScreen to Gameplay).
+ * StateManager owns the active GameState and handles transitions to the next one.
+ * It allows only one active state at a time, but supports scheduling a new state
+ * to be swapped in at the beginning of the next update cycle.
  *
- * The manager holds two states:
- * - currentState: the active state currently being updated and drawn
- * - nextState: a queued state that will replace currentState at the next update
+ * State transitions are deferred to avoid accessing deleted states during execution.
  *
- * Usage:
- * - Call ChangeState() to set the next state
- * - Call Update() and Draw() from the main loop
+ * This class is updated every frame by the engine.
  *
- * This class ensures safe state transitions by delaying the switch until the start of a frame.
- *
- * @author Jinwoo Choi
- * @date 2025-07-08
+ * @code
+ * engineContext.stateManager->ChangeState(std::make_unique<MainMenuState>());
+ * engineContext.stateManager->Update(dt, engineContext);
+ * engineContext.stateManager->Draw(engineContext);
+ * @endcode
  */
 class StateManager
 {
+    friend SNAKE_Engine;
 public:
     /**
-     * @brief Returns the currently active game state.
-     * @return Pointer to the current GameState.
+     * @brief Returns the currently active GameState.
+     *
+     * @details
+     * Used to query the state currently being updated and rendered.
+     * May return nullptr if no state is loaded.
+     *
+     * @return Raw pointer to the active GameState.
      */
     [[nodiscard]] GameState* GetCurrentState() const;
 
     /**
-     * @brief Queues a new game state to replace the current one.
-     * @param newState A unique pointer to the next GameState.
+     * @brief Schedules a new GameState to be activated.
      *
      * @details
-     * The actual transition happens at the start of the next Update().
-     * The current state will be safely freed before switching.
+     * The switch does not happen immediately. Instead, the new state is stored internally
+     * and the swap occurs at the start of the next call to Update().
+     * This avoids modifying the state mid-frame.
+     *
+     * @param newState A unique_ptr to the new GameState to use next frame.
+     *
+     * @code
+     * stateManager->ChangeState(std::make_unique<PlayState>());
+     * @endcode
      */
     void ChangeState(std::unique_ptr<GameState> newState);
 
+private:
     /**
-     * @brief Updates the current game state and handles state transitions.
+     * @brief Updates the active state and performs pending transitions.
+     *
+     * @details
+     * If a new state has been queued via ChangeState(), it is swapped in here.
+     * Then the current state's Update() is called.
+     *
      * @param dt Delta time since the last frame.
-     * @param engineContext Shared engine systems.
+     * @param engineContext Engine services and system access.
      */
     void Update(float dt, const EngineContext& engineContext);
 
     /**
-     * @brief Draws the current game state.
-     * @param engineContext Rendering context.
+     * @brief Draws the currently active state.
+     *
+     * @details
+     * Invokes Draw() on the current GameState, if any is loaded.
+     *
+     * @param engineContext Provides rendering and resource access.
      */
     void Draw(const EngineContext& engineContext);
 
+    /**
+     * @brief Releases memory of both current and next states.
+     *
+     * @details
+     * Called when shutting down the engine to clean up any loaded GameStates.
+     *
+     * @param engineContext Used for cleanup calls to each GameState.
+     */
     void Free(const EngineContext& engineContext);
 
-private:
-    /** The currently active state. */
     std::unique_ptr<GameState> currentState;
-
-    /** The state to be switched to at the next update. */
     std::unique_ptr<GameState> nextState;
 };

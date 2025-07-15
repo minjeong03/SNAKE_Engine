@@ -17,7 +17,7 @@ void Bullet::Init(const EngineContext& engineContext)
     mesh = engineContext.renderManager->GetMeshByTag("star");
     material = engineContext.renderManager->GetMaterialByTag("m_instancing");
     material->EnableInstancing(true, mesh);
-    renderLayer = 3;
+   // renderLayer = 3;
     transform2D.SetScale(glm::vec2(50.f));
     objectTag = "bullet";
 }
@@ -46,4 +46,9 @@ void Bullet::Free(const EngineContext& engineContext)
 void Bullet::LateFree(const EngineContext& engineContext)
 {
     SNAKE_LOG("Bullet LateFree Called");
+}
+
+void Bullet::SetRenderLayer(int layer)
+{
+    renderLayer = layer;
 }

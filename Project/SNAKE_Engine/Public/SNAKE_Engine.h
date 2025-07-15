@@ -3,98 +3,101 @@
 #include "EngineContext.h"
 
 /**
- * @brief Main class that initializes and runs the game engine.
+ * @brief Main entry point and system coordinator for the entire engine lifecycle.
  *
  * @details
- * SNAKE_Engine manages the initialization, execution, and shutdown of the core engine systems.
- * It handles:
- * - Creating the game window
- * - Managing input and frame timing
- * - Running the main game loop
- * - Delegating logic and rendering to StateManager
+ * SNAKE_Engine initializes all subsystems, maintains the main game loop, and provides
+ * access to the centralized EngineContext. This class must be created and executed by the user.
  *
- * EngineContext is initialized once and passed to other systems for access to shared resources.
- *
- * @author Jinwoo Choi
- * @date 2025-07-08
+ * @code
+ * SNAKE_Engine engine;
+ * if (engine.Init(1280, 720))
+ * {
+ *     engine.Run();
+ * }
+ * @endcode
  */
 class SNAKE_Engine
 {
 public:
-    /** Constructs a new engine instance. */
+    /**
+     * @brief Constructs the engine and allocates all core systems.
+     *
+     * @details
+     * This constructor only allocates internal members. You must call Init() before Run().
+     */
     SNAKE_Engine() = default;
 
     /**
-     * @brief Initializes window, input system, and engine context.
-     * @param windowWidth Width of the game window.
-     * @param windowHeight Height of the game window.
-     * @return True if all systems initialized successfully.
+     * @brief Initializes window, input, rendering, and all engine subsystems.
      *
      * @details
-     * Internally initializes GLFW, creates the window, sets up input handling,
-     * and binds subsystems to EngineContext.
+     * Sets up OpenGL context and links all systems into the EngineContext.
+     *
+     * @param windowWidth Width of the application window.
+     * @param windowHeight Height of the application window.
+     * @return True if initialization succeeds.
+     *
+     * @code
+     * if (!engine.Init(1280, 720)) return -1;
+     * @endcode
      */
-  
     [[nodiscard]] bool Init(int windowWidth, int windowHeight);
 
     /**
-     * @brief Starts the engine's main loop.
+     * @brief Starts and runs the main game loop.
      *
      * @details
-     * Each frame performs the following steps:
-     * - Poll window events
-     * - Update input states
-     * - Clear the screen
-     * - Call StateManager's Update and Draw
-     * - Swap buffers
-     *
-     * The loop continues until `RequestQuit()` is called or the window is closed.
+     * Handles input polling, game logic updates, rendering, and buffer swapping
+     * until the window is closed or RequestQuit() is called.
      */
     void Run();
 
-
     /**
-     * @brief Requests the engine to stop running.
+     * @brief Requests to exit the main loop after the current frame.
      *
      * @details
-     * This sets an internal flag so the Run() loop exits cleanly.
+     * This flag is checked each frame to determine whether to continue running.
+     * Typically used when pressing ESC or closing the window.
      */
     void RequestQuit();
 
     /**
-     * @brief Returns a reference to the engine's context.
-     * @return Reference to EngineContext containing pointers to core systems.
+     * @brief Returns the centralized engine context.
+     *
+     * @details
+     * EngineContext provides access to subsystems like input, state, window, and renderer.
+     *
+     * @return Reference to the EngineContext.
+     *
+     * @code
+     * EngineContext& ctx = engine.GetEngineContext();
+     * if (ctx.inputManager->IsKeyPressed(KEY_SPACE)) { ... }
+     * @endcode
      */
     [[nodiscard]] EngineContext& GetEngineContext() { return engineContext; }
 
 private:
     /**
-     * @brief Internal helper to populate EngineContext with pointers to subsystems.
-     * @param windowWidth Width of the game window (not used directly here).
-     * @param windowHeight Height of the game window (not used directly here).
+     * @brief Cleans up engine subsystems and releases resources.
+     *
+     * @details
+     * Automatically called when the engine stops or is destroyed.
      */
-
-     /**
-      * @brief Cleans up engine systems and terminates GLFW.
-      */
     void Free() const;
 
+    /**
+     * @brief Registers all subsystems into the EngineContext.
+     *
+     * @details
+     * Called internally by Init(). Connects managers to the context for global access.
+     */
     void SetEngineContext();
 
-    /** Central shared context passed to all systems (input, window, state, etc.). */
     EngineContext engineContext;
-
-    /** Manages state transitions and delegates per-state Update/Draw calls. */
     StateManager stateManager;
-
-    /** Handles window creation, OpenGL context, and buffer swapping. */
     WindowManager windowManager;
-
-    /** Polls and tracks keyboard and mouse input states. */
     InputManager inputManager;
-
     RenderManager renderManager;
-
-    /** Controls whether the main loop is running. */
     bool shouldRun = true;
 };

@@ -12,6 +12,7 @@ public:
     void Draw(const EngineContext& engineContext) override;
     void Free(const EngineContext& engineContext) override;
     void LateFree(const EngineContext& engineContext) override;
+    void SetRenderLayer(int layer);
 private:
     glm::vec2 dir;
     float timer = 0;

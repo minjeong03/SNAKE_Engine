@@ -98,6 +98,7 @@ void ObjectManager::EraseDeadObjects(const EngineContext& engineContext)
 
 void ObjectManager::DrawAll(const EngineContext& engineContext, Camera2D* camera)
 {
+    std::cout << objects.size() << std::endl;
     std::vector<GameObject*> visibleObjects;
     FrustumCuller::CullVisible(*camera, allRawPtrs, visibleObjects,glm::vec2(engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight()));
     using ShaderMap = std::map<Shader*, std::map<InstanceBatchKey, std::vector<GameObject*>>>;
@@ -154,6 +155,29 @@ GameObject* ObjectManager::FindByID(const std::string& id) const
     return nullptr;
 }
 
+RenderMap ObjectManager::BuildRenderMap(const std::vector<GameObject*>& source)
+{
+    std::map<int, ShaderMap> renderMap;
+
+    for (auto* obj : source)
+    {
+        if (!obj || !obj->IsVisible())
+            continue;
+
+        Material* material = obj->GetMaterial();
+        Mesh* mesh = obj->GetMesh();
+        Shader* shader = material ? material->GetShader() : nullptr;
+
+        if (!material || !mesh || !shader)
+            continue;
+
+        InstanceBatchKey key{ mesh, material };
+        renderMap[obj->GetRenderLayer()][shader][key].push_back(obj);
+    }
+
+    return renderMap;
+}
+
 void ObjectManager::SubmitRenderMap(const EngineContext& engineContext, Camera2D* camera,
 	const RenderMap& renderMap)
 {
@@ -172,7 +196,7 @@ void ObjectManager::SubmitRenderMap(const EngineContext& engineContext, Camera2D
                         std::vector<glm::mat4> transforms;
                         transforms.reserve(batch.size());
                         for (auto* obj : batch)
-                            transforms.push_back(obj->GetTransformMatrix());
+                            transforms.push_back(obj->GetTransform2DMatrix());
 
                         Material* material = key.material;
                         Shader* currentShader = material->GetShader();
@@ -197,7 +221,7 @@ void ObjectManager::SubmitRenderMap(const EngineContext& engineContext, Camera2D
                         key.mesh->DrawInstanced(static_cast<GLsizei>(transforms.size()));
 
                         material->UnBind();
-                        }, layer);
+                        });
                 }
                 else
                 {
@@ -223,32 +247,10 @@ void ObjectManager::SubmitRenderMap(const EngineContext& engineContext, Camera2D
                             mat->SendUniforms();
                             key.mesh->Draw();
                             mat->UnBind();
-                            }, layer);
+                            });
                     }
                 }
             }
         }
     }
-}
-RenderMap ObjectManager::BuildRenderMap(const std::vector<GameObject*>& source)
-{
-    std::map<int, ShaderMap> renderMap;
-
-    for (auto* obj : source)
-    {
-        if (!obj || !obj->IsVisible())
-            continue;
-
-        Material* material = obj->GetMaterial();
-        Mesh* mesh = obj->GetMesh();
-        Shader* shader = material ? material->GetShader() : nullptr;
-
-        if (!material || !mesh || !shader)
-            continue;
-
-        InstanceBatchKey key{ mesh, material };
-        renderMap[obj->GetRenderLayer()][shader][key].push_back(obj);
-    }
-
-    return renderMap;
 }

@@ -6,24 +6,18 @@
 #include "Debug.h"
 
 
-void RenderManager::BeginFrame()
+void RenderManager::ClearDrawCommands()
 {
     renderQueue.clear();
 }
 
-void RenderManager::Submit(std::function<void()>&& drawFunc, unsigned int layer)
+void RenderManager::Submit(std::function<void()>&& drawFunc)
 {
-    renderQueue.push_back({ std::move(drawFunc), layer });
+    renderQueue.push_back({ std::move(drawFunc)});
 }
 
-void RenderManager::FlushCommands()
+void RenderManager::FlushDrawCommands()
 {
-    std::sort(renderQueue.begin(), renderQueue.end(),
-        [](const RenderCommand& a, const RenderCommand& b)
-        {
-            return a.renderLayer > b.renderLayer;
-        });
-
     for (const auto& cmd : renderQueue)
     {
         cmd.drawFunc();
@@ -31,14 +25,14 @@ void RenderManager::FlushCommands()
     renderQueue.clear();
 }
 
-void RenderManager::SetViewport(int x, int y, int width, int height, int layer)
+void RenderManager::SetViewport(int x, int y, int width, int height)
 {
     Submit([=]() {
         glViewport(x, y, width, height);
-        }, layer);
+        });
 }
 
-void RenderManager::ClearBackground(int x, int y, int width, int height, glm::vec4 color, int layer)
+void RenderManager::ClearBackground(int x, int y, int width, int height, glm::vec4 color)
 {
     Submit([=]() {
         glEnable(GL_SCISSOR_TEST);
@@ -46,7 +40,7 @@ void RenderManager::ClearBackground(int x, int y, int width, int height, glm::ve
         glClearColor(color.r, color.g, color.b, color.a);
         glClear(GL_COLOR_BUFFER_BIT);
         glDisable(GL_SCISSOR_TEST);
-        }, layer);
+        });
 }
 
 /*
@@ -60,7 +54,7 @@ void RenderManager::RegisterShader(const std::string& tag, const std::vector<std
 {
     if (shaderMap.find(tag) != shaderMap.end())
     {
-        SNAKE_WRN("Mesh with tag \"" << tag << "\" already registered.");
+        SNAKE_WRN("Shader with tag \"" << tag << "\" already registered.");
         return;
     }
     auto shader = std::make_unique<Shader>();
@@ -69,6 +63,16 @@ void RenderManager::RegisterShader(const std::string& tag, const std::vector<std
         shader->AttachFromFile(stage, path);
 
     shader->Link();
+    shaderMap[tag] = std::move(shader);
+}
+
+void RenderManager::RegisterShader(const std::string& tag, std::unique_ptr<Shader> shader)
+{
+    if (shaderMap.find(tag) != shaderMap.end())
+    {
+        SNAKE_WRN("Shader with tag \"" << tag << "\" already registered.");
+        return;
+    }
     shaderMap[tag] = std::move(shader);
 }
 
@@ -82,8 +86,18 @@ void RenderManager::RegisterTexture(const std::string& tag, const std::string& p
 	textureMap[tag] = std::make_unique<Texture>(path, settings);
 }
 
+void RenderManager::RegisterTexture(const std::string& tag, std::unique_ptr<Texture> texture)
+{
+    if (textureMap.find(tag) != textureMap.end())
+    {
+        SNAKE_WRN("Texture with tag \"" << tag << "\" already registered.");
+        return;
+    }
+    textureMap[tag] = std::move(texture);
+}
+
 void RenderManager::RegisterMesh(const std::string& tag, const std::vector<float>& vertices,
-    const std::vector<unsigned int>& indices)
+                                 const std::vector<unsigned int>& indices)
 {
     if (meshMap.find(tag) != meshMap.end())
     {
@@ -93,8 +107,18 @@ void RenderManager::RegisterMesh(const std::string& tag, const std::vector<float
     meshMap[tag] = std::make_unique<Mesh>(vertices, indices);
 }
 
+void RenderManager::RegisterMesh(const std::string& tag, std::unique_ptr<Mesh> mesh)
+{
+    if (meshMap.find(tag) != meshMap.end())
+    {
+        SNAKE_WRN("Mesh with tag \"" << tag << "\" already registered.");
+        return;
+    }
+    meshMap[tag] = std::move(mesh);
+}
+
 void RenderManager::RegisterMaterial(const std::string& tag, const std::string& shaderTag,
-    const std::unordered_map<std::string, std::string>& textureBindings)
+                                     const std::unordered_map<std::string, std::string>& textureBindings)
 {
     if (materialMap.find(tag) != materialMap.end())
     {
@@ -120,5 +144,15 @@ void RenderManager::RegisterMaterial(const std::string& tag, const std::string& 
             SNAKE_WRN("Texture not found: " << textureTag);
     }
 
+    materialMap[tag] = std::move(material);
+}
+
+void RenderManager::RegisterMaterial(const std::string& tag, std::unique_ptr<Material> material)
+{
+    if (materialMap.find(tag) != materialMap.end())
+    {
+        SNAKE_WRN("Material tag already registered: " << tag);
+        return;
+    }
     materialMap[tag] = std::move(material);
 }

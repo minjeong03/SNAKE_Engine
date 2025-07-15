@@ -8,25 +8,35 @@ struct GLFWwindow;
 class SNAKE_Engine;
 
 /**
- * @brief Engine Context structure
- * @details
- * This struct provides unified access to core engine subsystems.
- * It is passed to GameObjects and systems to avoid global dependencies.
- * Includes access to managers such as state, window, input, and the engine itself.
+ * @brief Shared access point to all major engine systems.
  *
- * Use this to access shared engine-wide functionality during update, draw, or event handling.
+ * Acts as a container that holds pointers to engine-wide subsystems:
+ * - StateManager
+ * - WindowManager
+ * - InputManager
+ * - RenderManager
+ * - Root engine instance (SNAKE_Engine)
+ *
+ * This struct is owned and initialized by the engine, and passed to game systems
+ * like GameState, GameObject, and custom logic that need coordinated access
+ * to rendering, input, or state transitions.
  *
  * Example usage:
- *     engineContext.inputManager->IsKeyPressed(KEY_SPACE);
- *
- * @author Jinwoo Choi
- * @date 2025-07-08
+ * @code
+ * void Player::Update(float dt, const EngineContext& engineContext)
+ * {
+ *     if (engineContext.inputManager->IsKeyPressed(KEY_SPACE))
+ *     {
+ *         Jump();
+ *     }
+ * }
+ * @endcode
  */
 struct EngineContext
 {
-    StateManager* stateManager = nullptr;
-    WindowManager* windowManager = nullptr;
-    InputManager* inputManager = nullptr;
-    RenderManager* renderManager = nullptr;
-    SNAKE_Engine* engine = nullptr;
+    StateManager* stateManager = nullptr;    ///< Manages active and queued game states.
+    WindowManager* windowManager = nullptr;  ///< Manages window size, title, and event polling.
+    InputManager* inputManager = nullptr;    ///< Tracks real-time keyboard and mouse input.
+    RenderManager* renderManager = nullptr;  ///< Handles draw call submission and batching.
+    SNAKE_Engine* engine = nullptr;          ///< Root engine instance. Owns all subsystems.
 };

@@ -6,28 +6,13 @@ class StateManager;
 struct EngineContext;
 
 /**
- * @brief Base class for defining game states (such as menus, gameplay, pause, etc.)
+ * @brief Abstract base class representing a game state or scene.
  *
- * @details
- * GameState is an abstract base class that represents a self-contained mode or scene in the game,
- * such as main menu, gameplay, pause screen, etc. It provides a structured lifecycle that the engine
- * can manage consistently:
+ * A GameState represents a self-contained mode in the game such as title screen, gameplay, or pause.
+ * It defines a full lifecycle: Load -> Init -> Update/Draw -> Free -> Unload.
+ * Each state manages its own ObjectManager and CameraManager.
  *
- * - Load(): Load persistent resources (e.g., textures, music)
- * - Init(): Set up game objects and state-specific logic
- * - Update(): Per-frame logic
- * - Draw(): Rendering
- * - Free(): Cleanup objects created in Init
- * - Unload(): Release persistent assets
- *
- * Each state manages its own ObjectManager and is expected to be subclassed by specific game states
- * like TitleState, Level1, PauseMenu, etc.
- *
- * The engine calls the System-prefixed methods internally to control flow.
- * Users should override the protected lifecycle methods to define custom behavior.
- *
- * @author Jinwoo Choi
- * @date 2025-07-08
+ * Override protected methods to implement the specific logic of your game state.
  */
 class GameState
 {
@@ -35,68 +20,129 @@ class GameState
 
 public:
     /**
-     * @brief Virtual destructor to ensure proper cleanup of derived classes.
+     * @brief Virtual destructor to allow safe cleanup of derived states.
      */
     virtual ~GameState() = default;
 
     /**
-     * @brief Access the state's internal ObjectManager.
-     * @return Reference to the ObjectManager instance used by this state.
+     * @brief Returns the object manager used by this state.
+     *
+     * Provides access to game object creation, update, and rendering.
+     *
+     * @return Reference to the ObjectManager.
      */
     [[nodiscard]] virtual ObjectManager& GetObjectManager() { return objectManager; }
 
+    /**
+     * @brief Returns the camera manager for this state.
+     *
+     * Provides access to registered 2D cameras and camera switching.
+     *
+     * @return Reference to the CameraManager.
+     */
     CameraManager& GetCameraManager() { return cameraManager; }
+
+    /**
+     * @brief Returns the currently active camera.
+     *
+     * @return Pointer to the active Camera2D, or nullptr if none is set.
+     */
     Camera2D* GetActiveCamera() const { return cameraManager.GetActiveCamera(); }
+
+    /**
+     * @brief Sets the active camera by tag.
+     *
+     * @param tag A string key matching a previously registered camera.
+     */
     void SetActiveCamera(const std::string& tag) { cameraManager.SetActiveCamera(tag); }
+
 protected:
     /**
-     * @brief User-defined initialization logic. Override this to add game objects or initialize variables.
+     * @brief Called once at the start of the state's lifetime.
+     *
+     * Override to create game objects and initialize state variables.
+     *
+     * @param engineContext Provides access to engine-wide systems.
      */
     virtual void Init([[maybe_unused]] const EngineContext& engineContext) {}
 
     /**
-     * @brief Called after Init() and all objects have been added. Override for late-stage setup.
+     * @brief Called after Init and after all game objects are initialized.
+     *
+     * Useful for referencing other objects or setting up systems that depend on them.
+     *
+     * @param engineContext Engine-wide context.
      */
     virtual void LateInit([[maybe_unused]] const EngineContext& engineContext) {}
 
     /**
-     * @brief User-defined per-frame update logic. Called before ObjectManager updates.
+     * @brief Per-frame update logic for the state.
+     *
+     * Runs before ObjectManager updates its objects.
+     *
      * @param dt Delta time since last frame.
-     * @param engineContext Shared access to engine systems.
+     * @param engineContext Engine services and data access.
      */
     virtual void Update(float dt, [[maybe_unused]] const EngineContext& engineContext) {}
 
     /**
-     * @brief Called after ObjectManager updates. Use for post-update cleanup or deferred logic.
+     * @brief Called after all objects have been updated.
+     *
+     * Useful for post-processing, cleanup, or deferred logic.
+     *
      * @param dt Delta time.
      * @param engineContext Engine context.
      */
     virtual void LateUpdate([[maybe_unused]] float dt, [[maybe_unused]] const EngineContext& engineContext) {}
 
     /**
-     * @brief Load persistent assets before Init(). Override to load textures, sounds, etc.
+     * @brief Loads persistent assets like textures or audio.
+     *
+     * Called before Init(). Override to preload large assets.
+     *
+     * @param engineContext Used for resource loading.
      */
     virtual void Load([[maybe_unused]] const EngineContext& engineContext) {}
 
     /**
-     * @brief User-defined rendering logic. Called after ObjectManager draws all objects.
-     * @param engineContext Rendering context.
+     * @brief Draws the state to the screen.
+     *
+     * Default implementation draws all registered objects using the active camera.
+     *
+     * @param engineContext Provides access to renderer and camera.
      */
-    virtual void Draw([[maybe_unused]] const EngineContext& engineContext) { objectManager.DrawAll(engineContext,cameraManager.GetActiveCamera()); }
+    virtual void Draw([[maybe_unused]] const EngineContext& engineContext)
+    {
+        objectManager.DrawAll(engineContext, cameraManager.GetActiveCamera());
+    }
 
     /**
-     * @brief Cleanup for any custom objects or systems created in Init().
+     * @brief Frees memory created in Init().
+     *
+     * Called when the state is being shut down or restarted.
+     *
+     * @param engineContext For resource cleanup.
      */
     virtual void Free([[maybe_unused]] const EngineContext& engineContext) {}
 
     /**
-     * @brief Unload heavy or persistent resources loaded in Load().
+     * @brief Unloads persistent assets previously loaded in Load().
+     *
+     * @param engineContext Used to access file/resource systems.
      */
     virtual void Unload([[maybe_unused]] const EngineContext& engineContext) {}
 
     /**
-     * @brief Re-initializes the state by calling SystemFree() and SystemInit().
-     * @note Can be used to restart the state without reloading assets.
+     * @brief Restarts the state without unloading its assets.
+     *
+     * Calls Free and Init again.
+     *
+     * @param engineContext Engine context passed into Init and Free.
+     *
+     * Example usage:
+     * @code
+     * engineContext.stateManager->GetCurrentState()->Restart(engineContext);
+     * @endcode
      */
     void Restart(const EngineContext& engineContext)
     {
@@ -104,14 +150,12 @@ protected:
         SystemInit(engineContext);
     }
 
-    /**
-     * @brief Each state owns its own object manager, which handles game objects.
-     */
     ObjectManager objectManager;
     CameraManager cameraManager;
+
 private:
     /**
-     * @brief Internal engine call to load persistent assets.
+     * @brief Called internally by the engine to begin loading phase.
      */
     virtual void SystemLoad(const EngineContext& engineContext)
     {
@@ -119,8 +163,7 @@ private:
     }
 
     /**
-     * @brief Internal engine call to initialize the state.
-     * Calls Init(), then initializes objects, then LateInit().
+     * @brief Called internally to initialize the state and its objects.
      */
     virtual void SystemInit(const EngineContext& engineContext)
     {
@@ -130,11 +173,7 @@ private:
     }
 
     /**
-     * @brief Internal engine call to update the state each frame.
-     * Calls Update(), updates objects, then calls LateUpdate().
-     *
-     * @param dt Delta time.
-     * @param engineContext Engine context.
+     * @brief Called every frame to update the state and its objects.
      */
     virtual void SystemUpdate(float dt, const EngineContext& engineContext)
     {
@@ -143,9 +182,8 @@ private:
         LateUpdate(dt, engineContext);
     }
 
-
     /**
-     * @brief Internal engine call to clean up all game objects and user-defined systems.
+     * @brief Called during shutdown or Restart to clean up state.
      */
     virtual void SystemFree(const EngineContext& engineContext)
     {
@@ -154,7 +192,7 @@ private:
     }
 
     /**
-     * @brief Internal engine call to unload persistent assets.
+     * @brief Called after shutdown to unload persistent assets.
      */
     virtual void SystemUnload(const EngineContext& engineContext)
     {

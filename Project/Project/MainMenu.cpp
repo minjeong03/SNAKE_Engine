@@ -102,19 +102,19 @@ void MainMenu::Draw(const EngineContext& engineContext)
     rm.SetViewport(0, 0, engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
     cameraManager.SetActiveCamera("main");
     objectManager.DrawAll(engineContext, cameraManager.GetActiveCamera());
-    rm.FlushCommands();
+    rm.FlushDrawCommands();
 
-    rm.ClearBackground(10, 10, 200, 200, glm::vec4(0.3, 0.3, 1, 0), 0);
+    rm.ClearBackground(10, 10, 200, 200, glm::vec4(0.3, 0.3, 1, 0));
     rm.SetViewport(10, 10, 200, 200);
-    rm.FlushCommands();
+    rm.FlushDrawCommands();
 
     cameraManager.SetActiveCamera("minimap");
     cameraManager.SetScreenSize("minimap", 200, 200);
     objectManager.DrawObjectsWithTag(engineContext, cameraManager.GetActiveCamera(), "bullet");
-    rm.FlushCommands();
+    rm.FlushDrawCommands();
 
     rm.SetViewport(0, 0, engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
-    rm.FlushCommands();
+    rm.FlushDrawCommands();
 }
 
 

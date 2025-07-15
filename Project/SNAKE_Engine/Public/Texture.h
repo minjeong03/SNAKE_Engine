@@ -2,7 +2,11 @@
 #include <string>
 
 /**
- * @brief Texture filtering modes used during sampling.
+ * @brief Enumerates filtering strategies for texture magnification and minification.
+ *
+ * @details
+ * Used to determine how pixel colors are sampled when a texture is scaled.
+ * Options include nearest-neighbor and linear filtering, with or without mipmapping.
  */
 enum class TextureFilter
 {
@@ -15,7 +19,10 @@ enum class TextureFilter
 };
 
 /**
- * @brief Texture wrapping modes for UV coordinates.
+ * @brief Enumerates how texture coordinates outside the [0,1] range are handled.
+ *
+ * @details
+ * Used to define how textures repeat or clamp on the horizontal (S) and vertical (T) axes.
  */
 enum class TextureWrap
 {
@@ -26,50 +33,83 @@ enum class TextureWrap
 };
 
 /**
- * @brief Texture configuration options including filter, wrap, and mipmap generation.
+ * @brief Stores texture sampling behavior including filter and wrap modes.
+ *
+ * @details
+ * Defines how a texture should be filtered (minification/magnification)
+ * and wrapped (for out-of-bounds coordinates).
+ * Passed as a configuration object when loading a Texture.
+ *
+ * @code
+ * TextureSettings settings;
+ * settings.wrapS = TextureWrap::Repeat;
+ * settings.minFilter = TextureFilter::LinearMipmapLinear;
+ * @endcode
  */
 struct TextureSettings
 {
-    TextureFilter minFilter = TextureFilter::Linear;  ///< Minification filter.
-    TextureFilter magFilter = TextureFilter::Linear;  ///< Magnification filter.
-    TextureWrap wrapS = TextureWrap::ClampToEdge;     ///< Horizontal wrap mode.
-    TextureWrap wrapT = TextureWrap::ClampToEdge;     ///< Vertical wrap mode.
-    bool generateMipmap = true;                       ///< Whether to generate mipmaps.
+    TextureFilter minFilter = TextureFilter::Linear;  ///< Used when shrinking the texture.
+    TextureFilter magFilter = TextureFilter::Linear;  ///< Used when enlarging the texture.
+    TextureWrap wrapS = TextureWrap::ClampToEdge;     ///< Horizontal wrap behavior.
+    TextureWrap wrapT = TextureWrap::ClampToEdge;     ///< Vertical wrap behavior.
+    bool generateMipmap = true;                       ///< Enable mipmap generation after loading.
 };
 
 /**
- * @brief Loads and manages an OpenGL texture object.
+ * @brief Represents an OpenGL 2D texture loaded from file.
  *
- * Supports configuration via TextureSettings and provides access to texture ID
- * for binding to specific texture units.
+ * @details
+ * This class manages OpenGL texture creation, binding, and filtering.
+ * It supports both basic and custom configuration and is used by Materials
+ * or directly by users in custom rendering scenarios.
+ *
+ * @code
+ * // Basic usage
+ * Texture myTexture("assets/wall.png");
+ *
+ * // With custom settings
+ * TextureSettings settings;
+ * settings.wrapS = TextureWrap::Repeat;
+ * settings.minFilter = TextureFilter::LinearMipmapLinear;
+ * Texture customTex("assets/ground.jpg", settings);
+ * @endcode
  */
 class Texture
 {
-    friend Material;
+    friend class Material;
 
 public:
     /**
-     * @brief Loads a texture from file with the given settings.
-     * @param path File path to the texture image.
-     * @param settings Filtering and wrapping options.
+     * @brief Loads an image file and creates an OpenGL texture object.
+     *
+     * @details
+     * Creates the texture with OpenGL and applies settings like wrap mode and filters.
+     *
+     * @param path Path to the texture image (e.g., PNG, JPG).
+     * @param settings Optional configuration object.
      */
     Texture(const std::string& path, const TextureSettings& settings = {});
 
     /**
-     * @brief Deletes the OpenGL texture object.
+     * @brief Frees GPU memory used by the texture.
+     *
+     * @details
+     * This is called automatically upon object destruction.
      */
     ~Texture();
 
 private:
     /**
-     * @brief Binds this texture to the specified texture unit.
-     * @param unit Texture unit index.
+     * @brief Binds the texture to the specified OpenGL texture unit.
+     *
+     * @param unit Texture unit index (0 = GL_TEXTURE0, 1 = GL_TEXTURE1, etc.)
      */
     void BindToUnit(unsigned int unit) const;
 
     /**
-     * @brief Unbinds this texture from the specified texture unit.
-     * @param unit Texture unit index.
+     * @brief Unbinds this texture from a specific texture unit.
+     *
+     * @param unit Texture unit index to unbind.
      */
     void UnBind(unsigned int unit) const;
 
