@@ -34,7 +34,6 @@ void Bullet::Update(float dt, const EngineContext& engineContext)
 {
     transform2D.SetRotation(transform2D.GetRotation() + dt * 2);
     transform2D.AddPosition(glm::vec2(1 * dir.x, 1 * dir.y));
-    SNAKE_LOG("Bullet pos: " << transform2D.GetPosition().x << " " << transform2D.GetPosition().y);
     timer += dt;
 }
 

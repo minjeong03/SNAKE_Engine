@@ -4,22 +4,6 @@
 class SNAKE_Engine;
 struct GLFWwindow;
 
-/**
- * @brief Handles per-frame keyboard and mouse input polling using GLFW.
- *
- * @details
- * This class manages input state by caching current and previous frames' key and mouse button statuses.
- * It supports querying for real-time key/mouse down, press, and release events, as well as tracking the cursor position.
- *
- * InputManager must be initialized with a valid GLFW window before use.
- *
- * @code
- * if (engineContext.inputManager->IsKeyPressed(KEY_SPACE))
- * {
- *     player->Jump();
- * }
- * @endcode
- */
 class InputManager
 {
     friend SNAKE_Engine;
@@ -28,120 +12,25 @@ public:
 
     InputManager() :window(nullptr), mouseX(0.0), mouseY(0.0) {}
 
-    /**
-     * @brief Checks if a specific key is currently being held down.
-     *
-     * @details
-     * Returns true if the specified key is currently held during this frame.
-     *
-     * @param key Integer GLFW key code (see InputKey enum).
-     * @return True if key is currently down.
-     */
     [[nodiscard]] bool IsKeyDown(int key) const;
 
-    /**
-     * @brief Checks if a specific key was pressed during this frame.
-     *
-     * @details
-     * Returns true if the key was not held last frame but is held this frame.
-     *
-     * @param key Integer GLFW key code.
-     * @return True if key was just pressed.
-     *
-     * @code
-     * if (inputManager->IsKeyPressed(KEY_ENTER))
-     * {
-     *     ConfirmSelection();
-     * }
-     * @endcode
-     */
     [[nodiscard]] bool IsKeyPressed(int key) const;
 
-    /**
-     * @brief Checks if a specific key was released during this frame.
-     *
-     * @details
-     * Returns true if the key was held last frame but is not held now.
-     *
-     * @param key Integer GLFW key code.
-     * @return True if key was just released.
-     */
     [[nodiscard]] bool IsKeyReleased(int key) const;
 
-    /**
-     * @brief Checks if a mouse button is currently being held down.
-     *
-     * @details
-     * Returns true if the specified mouse button is held this frame.
-     *
-     * @param button Integer GLFW mouse button code (see InputMouseButton enum).
-     * @return True if button is down.
-     */
     [[nodiscard]] bool IsMouseButtonDown(int button) const;
 
-    /**
-     * @brief Checks if a mouse button was just pressed this frame.
-     *
-     * @details
-     * Returns true if the button was not held last frame but is now pressed.
-     *
-     * @param button Integer mouse button code.
-     * @return True if button was just pressed.
-     *
-     * @code
-     * if (inputManager->IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-     * {
-     *     SelectObject();
-     * }
-     * @endcode
-     */
     [[nodiscard]] bool IsMouseButtonPressed(int button) const;
 
-    /**
-     * @brief Checks if a mouse button was just released this frame.
-     *
-     * @details
-     * Returns true if the button was pressed last frame and is now released.
-     *
-     * @param button Integer mouse button code.
-     * @return True if button was just released.
-     */
     [[nodiscard]] bool IsMouseButtonReleased(int button) const;
 
-    /**
-     * @brief Retrieves the current X position of the mouse cursor in pixels.
-     *
-     * @return X position of the mouse in window coordinates.
-     */
     [[nodiscard]] double GetMouseX() const;
 
-    /**
-     * @brief Retrieves the current Y position of the mouse cursor in pixels.
-     *
-     * @return Y position of the mouse in window coordinates.
-     */
     [[nodiscard]] double GetMouseY() const;
 
 private:
-    /**
-     * @brief Initializes the input manager with a GLFW window.
-     *
-     * @details
-     * This function must be called exactly once before querying input.
-     * It is intended to be called only by the engine during startup.
-     *
-     * @param _window A pointer to the GLFW window used for input polling.
-     */
     void Init(GLFWwindow* _window);
 
-    /**
-     * @brief Updates the input state for the current frame.
-     *
-     * @details
-     * This function should be called once every frame.
-     * It captures the current keyboard and mouse states and computes the transition logic.
-     * Intended for internal use by the engine loop.
-     */
     void Update();
 
     GLFWwindow* window;
@@ -158,31 +47,15 @@ private:
     double mouseY;
 };
 
-
-/**
- * @brief Defines keyboard key codes used by the input system.
- *
- * @details
- * These values are directly mapped to GLFW key codes.
- * Use them as parameters in InputManager methods such as IsKeyDown(), IsKeyPressed(), and IsKeyReleased().
- *
- * @code
- * if (inputManager->IsKeyPressed(KEY_ESCAPE))
- * {
- *     engine->RequestQuit();
- * }
- * @endcode
- */
-
 enum InputKey
 {
     KEY_UNKNOWN = -1,
     KEY_SPACE = 32,
-    KEY_APOSTROPHE = 39,  /* ' */
-    KEY_COMMA = 44,  /* , */
-    KEY_MINUS = 45,  /* - */
-    KEY_PERIOD = 46,  /* . */
-    KEY_SLASH = 47,  /* / */
+    KEY_APOSTROPHE = 39,
+    KEY_COMMA = 44,
+    KEY_MINUS = 45,
+    KEY_PERIOD = 46,
+    KEY_SLASH = 47,
     KEY_0 = 48,
     KEY_1 = 49,
     KEY_2 = 50,
@@ -193,8 +66,8 @@ enum InputKey
     KEY_7 = 55,
     KEY_8 = 56,
     KEY_9 = 57,
-    KEY_SEMICOLON = 59,  /* ; */
-    KEY_EQUAL = 61,  /* = */
+    KEY_SEMICOLON = 59,
+    KEY_EQUAL = 61,
     KEY_A = 65,
     KEY_B = 66,
     KEY_C = 67,
@@ -221,10 +94,10 @@ enum InputKey
     KEY_X = 88,
     KEY_Y = 89,
     KEY_Z = 90,
-    KEY_LEFT_BRACKET = 91,  /* [ */
-    KEY_BACKSLASH = 92,  /* \ */
-    KEY_RIGHT_BRACKET = 93,  /* ] */
-    KEY_GRAVE_ACCENT = 96,  /* ` */
+    KEY_LEFT_BRACKET = 91,
+    KEY_BACKSLASH = 92,
+    KEY_RIGHT_BRACKET = 93,
+    KEY_GRAVE_ACCENT = 96,
 
     KEY_ESCAPE = 256,
     KEY_ENTER = 257,
@@ -270,29 +143,15 @@ enum InputKey
 
     KEY_MENU = 348
 };
-/**
- * @brief Defines mouse button codes used by the input system.
- *
- * @details
- * These values correspond to GLFW mouse button constants.
- * Use them in InputManager methods such as IsMouseButtonDown(), IsMouseButtonPressed(), and IsMouseButtonReleased().
- *
- * @code
- * if (inputManager->IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
- * {
- *     SelectObject();
- * }
- * @endcode
- */
 
 enum InputMouseButton
 {
     MOUSE_BUTTON_1 = 0,
-    MOUSE_BUTTON_LEFT = MOUSE_BUTTON_1,  // alias
+    MOUSE_BUTTON_LEFT = MOUSE_BUTTON_1,
     MOUSE_BUTTON_2 = 1,
-    MOUSE_BUTTON_RIGHT = MOUSE_BUTTON_2, // alias
+    MOUSE_BUTTON_RIGHT = MOUSE_BUTTON_2,
     MOUSE_BUTTON_3 = 2,
-    MOUSE_BUTTON_MIDDLE = MOUSE_BUTTON_3, // alias
+    MOUSE_BUTTON_MIDDLE = MOUSE_BUTTON_3,
     MOUSE_BUTTON_4 = 3,
     MOUSE_BUTTON_5 = 4,
     MOUSE_BUTTON_6 = 5,
