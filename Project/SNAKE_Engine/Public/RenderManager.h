@@ -14,7 +14,7 @@
 #include "Texture.h"
 #include "Camera2D.h"
 #include "GameObject.h"
-#include "RenderLayer.h"
+#include "RenderLayerManager.h"
 
 struct InstanceBatchKey;
 class StateManager;
@@ -38,11 +38,13 @@ using RenderCommand = std::function<void()>;
 using ShaderMap = std::map<Shader*, std::map<InstanceBatchKey, std::vector<GameObject*>>>;
 
 /**
- * @brief Top-level render command grouping by render layer.
+ * @brief Fixed-size array mapping render layers to ShaderMaps.
  *
  * @details
- * RenderMap groups ShaderMap entries under a render layer key.
- * (higher layers are drawn in front)
+ * RenderMap is a 16-element array (MAX_LAYERS) where each entry represents a render layer.
+ * Each layer holds a ShaderMap, which batches objects by Shader and instance data.
+ *
+ * Internally used by RenderManager for layered and instanced rendering.
  */
 using RenderMap = std::array<ShaderMap, RenderLayerManager::MAX_LAYERS>;
 
@@ -152,6 +154,21 @@ public:
      */
     void RegisterMaterial(const std::string& tag, std::unique_ptr<Material> material);
 
+    /**
+	 * @brief Registers a new custom render layer by name.
+	 *
+	 * @details
+	 * Adds a new named layer to the internal RenderLayerManager. This allows
+	 * GameObjects to specify which layer they belong to for rendering order.
+	 * Layers are drawn in increasing order (layer 0 drawn first).
+	 *
+	 * @param tag String identifier for the new render layer (max 16 layers).
+	 *
+	 * @code
+	 * renderManager.RegisterRenderLayer("UI"); // layer 0 
+	 * renderManager.RegisterRenderLayer("Enemies"); // layer 1
+	 * @endcode
+	 */
     void RegisterRenderLayer(const std::string& tag);
 
     /**
@@ -237,8 +254,20 @@ public:
      */
     void ClearBackground(int x, int y, int width, int height, glm::vec4 color);
 
-
-    RenderLayerManager& GetLayerManager();
+    /**
+	 * @brief Provides access to the internal render layer manager.
+	 *
+	 * @details
+	 * Returns a reference to the RenderLayerManager, which can be used to
+	 * query existing layer indices or manually assign layers to GameObjects.
+	 *
+	 * @return Reference to the RenderLayerManager instance.
+	 *
+	 * @code
+	 * std::string layerName = renderManager.GetLayerManager().GetLayerName(0);
+	 * @endcode
+	 */
+    RenderLayerManager& GetRenderLayerManager();
 
 private:
 
@@ -273,6 +302,21 @@ private:
      */
     void SubmitRenderMap(const EngineContext& engineContext, Camera2D* camera, const RenderMap& renderMap);
 
+    /**
+     * @brief Internal helper for visibility culling and batched submission.
+     *
+     * @details
+     * This method performs frustum culling on the given objects using the provided camera,
+     * builds a render map, and delegates to SubmitRenderMap().
+     * Intended for internal use during per-frame rendering.
+     *
+     * Called by: ObjectManager::DrawAll, DrawObjects, DrawObjectsByTag
+     * Not intended for direct external use.
+     *
+     * @param engineContext Engine services used during submission.
+     * @param allObjects List of potentially visible GameObjects.
+     * @param camera Active camera for culling and projection.
+     */
     void Submit(const EngineContext& engineContext, const std::vector<GameObject*>& allObjects, Camera2D* camera);
 
     std::unordered_map<std::string, std::unique_ptr<Shader>> shaderMap;

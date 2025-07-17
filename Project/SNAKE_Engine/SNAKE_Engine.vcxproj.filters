@@ -69,7 +69,7 @@
     <ClInclude Include="Public\Camera2D.h">
       <Filter>public</Filter>
     </ClInclude>
-    <ClInclude Include="Public\RenderLayer.h">
+    <ClInclude Include="Public\RenderLayerManager.h">
       <Filter>public</Filter>
     </ClInclude>
   </ItemGroup>

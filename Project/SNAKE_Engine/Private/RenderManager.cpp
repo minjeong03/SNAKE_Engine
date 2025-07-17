@@ -57,7 +57,7 @@ void RenderManager::ClearBackground(int x, int y, int width, int height, glm::ve
         });
 }
 
-RenderLayerManager& RenderManager::GetLayerManager()
+RenderLayerManager& RenderManager::GetRenderLayerManager()
 {
     return renderLayerManager;
 }

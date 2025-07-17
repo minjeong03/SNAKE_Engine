@@ -39,7 +39,7 @@ const uint8_t& GameObject::GetRenderLayer() const
 
 void GameObject::SetRenderLayer(const EngineContext& engineContext, const std::string& tag)
 {
-    renderLayer = engineContext.renderManager->GetLayerManager().GetLayerID(tag).value_or(0);
+    renderLayer = engineContext.renderManager->GetRenderLayerManager().GetLayerID(tag).value_or(0);
 }
 
 void GameObject::SetMaterial(const EngineContext& engineContext, const std::string& tag)

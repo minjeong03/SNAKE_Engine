@@ -10,17 +10,31 @@ int main(int argc, char* argv[])
 {
     SNAKE_Engine snakeEngine;
 
-    if (argc == 3)
+    int width = 800;
+    int height = 600;
+
+    try
     {
-        snakeEngine.Init(atoi(argv[1]), atoi(argv[2]));
+        if (argc == 3)
+        {
+            width = std::stoi(argv[1]);
+            height = std::stoi(argv[2]);
+        }
+        else if (argc != 1)
+        {
+            SNAKE_ERR("Usage: ./MyGame [width height]");
+            return -1;
+        }
     }
-    else if (argc == 1)
+    catch (const std::exception& e)
     {
-        snakeEngine.Init(800, 600);
+        SNAKE_ERR("Invalid arguments. Width and height must be integers.");
+        return -1;
     }
-    else
+
+    if (!snakeEngine.Init(width, height))
     {
-        SNAKE_ERR("Too many arguments for input");
+        SNAKE_ERR("Engine initialization failed.");
         return -1;
     }
     snakeEngine.GetEngineContext().renderManager->RegisterMesh("default", std::vector<float>{
@@ -62,9 +76,9 @@ int main(int argc, char* argv[])
     snakeEngine.GetEngineContext().renderManager->RegisterShader("s_instancing", { {ShaderStage::Vertex,"Shaders/Instancing.vert"},{ShaderStage::Fragment,"Shaders/Instancing.frag"} });
     snakeEngine.GetEngineContext().renderManager->RegisterMaterial("m_default", "s_default", { std::pair<std::string, std::string>("u_Texture","uvchecker") });
     snakeEngine.GetEngineContext().renderManager->RegisterMaterial("m_instancing", "s_instancing", { std::pair<std::string, std::string>("u_Texture","default") });
-    snakeEngine.GetEngineContext().renderManager->GetLayerManager().RegisterLayer("Bullet");
-    snakeEngine.GetEngineContext().renderManager->GetLayerManager().RegisterLayer("Player");
-    snakeEngine.GetEngineContext().renderManager->GetLayerManager().RegisterLayer("UI");
+    snakeEngine.GetEngineContext().renderManager->RegisterRenderLayer("Bullet");
+    snakeEngine.GetEngineContext().renderManager->RegisterRenderLayer("Player");
+    snakeEngine.GetEngineContext().renderManager->RegisterRenderLayer("UI");
 
     snakeEngine.GetEngineContext().stateManager->ChangeState(std::make_unique<MainMenu>());
 

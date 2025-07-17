@@ -40,7 +40,7 @@
     <ClInclude Include="Public\Material.h" />
     <ClInclude Include="Public\Mesh.h" />
     <ClInclude Include="Public\ObjectManager.h" />
-    <ClInclude Include="Public\RenderLayer.h" />
+    <ClInclude Include="Public\RenderLayerManager.h" />
     <ClInclude Include="Public\RenderManager.h" />
     <ClInclude Include="Public\Shader.h" />
     <ClInclude Include="Public\SNAKE_Engine.h" />

@@ -122,6 +122,25 @@ public:
      */
     [[nodiscard]] const uint8_t& GetRenderLayer() const;
 
+    /**
+ * @brief Sets the render layer of the GameObject using a named tag.
+ *
+ * @details
+ * Retrieves the numeric layer ID associated with the provided tag from the engine's RenderLayerManager.
+ * If the tag is not registered, it defaults to layer 0.
+ *
+ * This allows objects to be grouped into rendering layers (e.g., background, UI).
+ * Higher layers are rendered in front of lower layers.
+ *
+ * Example usage:
+ * @code
+ * player->SetRenderLayer(engineContext, "UI");
+ * @endcode
+ *
+ * @param engineContext Reference to the engine-wide context.
+ * @param tag Name of the render layer previously registered (e.g., "Background", "UI").
+ */
+
     void SetRenderLayer(const EngineContext& engineContext, const std::string& tag);
 
     /**
