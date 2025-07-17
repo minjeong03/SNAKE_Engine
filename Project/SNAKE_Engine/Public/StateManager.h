@@ -1,8 +1,7 @@
 #pragma once
-
 #include <memory>
-#include "GameState.h"
 
+class GameState;
 class SNAKE_Engine;
 struct EngineContext;
 

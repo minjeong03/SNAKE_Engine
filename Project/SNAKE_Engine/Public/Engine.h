@@ -27,5 +27,9 @@
 #include "Material.h"
 #include "Mesh.h"
 
+#include "EngineTimer.h"
+#include "CameraManager.h"
+#include "Camera2D.h"
+
 #include "../ThirdParty/glm/glm.hpp"
 #include "../ThirdParty/glm/gtc/matrix_transform.hpp"

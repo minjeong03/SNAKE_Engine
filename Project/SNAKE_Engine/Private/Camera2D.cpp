@@ -34,8 +34,8 @@ float Camera2D::GetZoom() const
 
 glm::mat4 Camera2D::GetProjectionMatrix() const
 {
-    float halfW = screenWidth * 0.5f / zoom;
-    float halfH = screenHeight * 0.5f / zoom;
+    float halfW = static_cast<float>(screenWidth) * 0.5f / zoom;
+    float halfH = static_cast<float>(screenHeight) * 0.5f / zoom;
 
     return glm::ortho(
         -halfW + position.x, halfW + position.x,

@@ -1,11 +1,10 @@
 #pragma once
-#include <string>
-#include "Material.h"
 #include "Mesh.h"
 #include "Transform.h"
 
-class FrustumCuller;
+
 struct EngineContext;
+class FrustumCuller;
 
 /**
  * @brief Base interface for all game world objects.
@@ -81,78 +80,84 @@ public:
      *
      * @return True if object is alive.
      */
-    [[nodiscard]] const bool& IsAlive() const { return isAlive; }
+    [[nodiscard]] const bool& IsAlive() const;
 
     /**
      * @brief Checks if this object should be drawn this frame.
      *
      * @return True if visible.
      */
-    [[nodiscard]] const bool& IsVisible() const { return isVisible; }
+    [[nodiscard]] const bool& IsVisible() const;
 
     /**
      * @brief Sets the visibility state of this object.
      *
      * @param _isVisible Whether this object should be visible.
      */
-    void SetVisibility(bool _isVisible) { isVisible = _isVisible; }
+    void SetVisibility(bool _isVisible);
 
     /**
      * @brief Marks this object for destruction.
      */
-    void Kill() { isAlive = false; }
+    void Kill();
 
     /**
      * @brief Sets the object's string identifier tag.
      *
      * @param tag Unique string used to tag this object.
      */
-    void SetTag(const std::string& tag) { objectTag = tag; }
+    void SetTag(const std::string& tag);
 
     /**
      * @brief Gets the object's string tag.
      *
      * @return Reference to string tag.
      */
-    [[nodiscard]] const std::string& GetTag() const { return objectTag; }
+    [[nodiscard]] const std::string& GetTag() const;
 
     /**
      * @brief Returns the render layer used for sorting.
      *
-     * @return Render layer as unsigned int.
+     * @return Render layer as uint8_t(unsigned char).
      */
-    [[nodiscard]] const unsigned int& GetRenderLayer() const { return renderLayer; }
+    [[nodiscard]] const uint8_t& GetRenderLayer() const;
+
+    void SetRenderLayer(const EngineContext& engineContext, const std::string& tag);
 
     /**
      * @brief Sets the Material used by this object when rendered.
      *
      * @param _material Pointer to Material instance.
      */
-    void SetMaterial(Material* _material) { material = _material; }
+    void SetMaterial(const EngineContext& engineContext, const std::string& tag);
 
     /**
      * @brief Gets the current Material used by this object.
      *
      * @return Pointer to Material.
      */
-    [[nodiscard]] Material* GetMaterial() const { return material; }
+    [[nodiscard]] Material* GetMaterial() const;
 
     /**
      * @brief Sets the Mesh for this object.
      *
      * @param _mesh Pointer to Mesh.
      */
-    void SetMesh(Mesh* _mesh) { mesh = _mesh; }
+    void SetMesh(const EngineContext& engineContext, const std::string& tag);
 
     /**
      * @brief Gets the Mesh currently assigned to this object.
      *
      * @return Pointer to Mesh.
      */
-    [[nodiscard]] Mesh* GetMesh() const { return mesh; }
+    [[nodiscard]] Mesh* GetMesh() const;
 
     /**
-     * @brief Checks if this object supports GPU instancing.
+     * @brief Determines if the GameObject can use GPU instancing.
+     *
+     * @details
+     * Returns false if the object lacks a mesh or material,
+     * or if the material does not support instancing.
      *
      * @return True if instancing is supported.
      */
@@ -163,14 +168,14 @@ public:
      *
      * @return Reference to transformation matrix.
      */
-    [[nodiscard]] glm::mat4& GetTransform2DMatrix() { return transform2D.GetMatrix(); }
+    [[nodiscard]] glm::mat4& GetTransform2DMatrix();
 
     /**
      * @brief Accesses the 2D transform struct.
      *
      * @return Reference to internal Transform2D.
      */
-    [[nodiscard]] Transform2D& GetTransform2D() { return transform2D; }
+    [[nodiscard]] Transform2D& GetTransform2D();
 
 protected:
     bool isAlive = true;
@@ -178,12 +183,12 @@ protected:
 
     std::string objectTag;
 
-    unsigned int renderLayer = 0;
-    Material* material = nullptr;
-    Mesh* mesh = nullptr;
     Transform2D transform2D;
 
 private:
+    uint8_t renderLayer = 0;
+    Material* material = nullptr;
+    Mesh* mesh = nullptr;
     /**
      * @brief Calculates the bounding radius based on mesh and transform scale.
      *
@@ -192,26 +197,7 @@ private:
      * Culling: Objects that are outside the camera view will be ignored during the draw stage.
      * @return Scaled bounding radius.
      */
-    [[nodiscard]] float GetBoundingRadius() const
-    {
-        glm::vec2 halfSize = mesh ? mesh->GetLocalBoundsHalfSize() : glm::vec2(0.5f);
-        glm::vec2 scaled = halfSize * transform2D.GetScale();
-        return glm::length(scaled);
-    }
+    [[nodiscard]] float GetBoundingRadius() const;
+
 };
 
-/**
- * @brief Determines if the GameObject can use GPU instancing.
- *
- * @details
- * Returns false if the object lacks a mesh or material,
- * or if the material does not support instancing.
- *
- * @return True if instancing is supported.
- */
-inline bool GameObject::CanBeInstanced() const
-{
-    if (!mesh || !material) return false;
-    if (!material->IsInstancingSupported()) return false;
-    return true;
-}

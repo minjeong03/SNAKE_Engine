@@ -116,5 +116,8 @@
     <ClCompile Include="Private\Camera2D.cpp">
       <Filter>private</Filter>
     </ClCompile>
+    <ClCompile Include="Private\GameObject.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

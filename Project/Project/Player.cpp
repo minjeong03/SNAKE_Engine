@@ -11,9 +11,10 @@ void Player::Init(const EngineContext& engineContext)
 {
     transform2D.SetPosition(glm::vec2(0, 0));
     transform2D.SetScale(glm::vec2(50.f));
-    mesh = engineContext.renderManager->GetMeshByTag("default");
-    material = engineContext.renderManager->GetMaterialByTag("m_default");
-    renderLayer = 950;
+
+    SetMesh(engineContext, "default");
+    SetMaterial(engineContext, "m_default");
+    SetRenderLayer(engineContext, "Player");
 }
 
 void Player::LateInit(const EngineContext& engineContext)
@@ -50,39 +51,14 @@ void Player::Update(float dt, const EngineContext& engineContext)
 
 	float angle = angleDist(gen);
 	std::unique_ptr<Bullet> b = std::make_unique<Bullet>(transform2D.GetPosition(), glm::vec2(std::cos(angle), std::sin(angle)));
-	b->SetRenderLayer(--bulletLayer);
-    engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::move(b));
-    b = std::make_unique<Bullet>(transform2D.GetPosition(), glm::vec2(std::cos(angle), std::sin(angle)));
-    b->SetRenderLayer(--bulletLayer);
-    engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::move(b));
-    b = std::make_unique<Bullet>(transform2D.GetPosition(), glm::vec2(std::cos(angle), std::sin(angle)));
-    b->SetRenderLayer(--bulletLayer);
-    engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::move(b));
-    b = std::make_unique<Bullet>(transform2D.GetPosition(), glm::vec2(std::cos(angle), std::sin(angle)));
-    b->SetRenderLayer(--bulletLayer);
-    engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::move(b));
-    b = std::make_unique<Bullet>(transform2D.GetPosition(), glm::vec2(std::cos(angle), std::sin(angle)));
-    b->SetRenderLayer(--bulletLayer);
-    engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::move(b));
-    b = std::make_unique<Bullet>(transform2D.GetPosition(), glm::vec2(std::cos(angle), std::sin(angle)));
-    b->SetRenderLayer(--bulletLayer);
-    engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::move(b));
-    b = std::make_unique<Bullet>(transform2D.GetPosition(), glm::vec2(std::cos(angle), std::sin(angle)));
-    b->SetRenderLayer(--bulletLayer);
-    engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::move(b));
-    b = std::make_unique<Bullet>(transform2D.GetPosition(), glm::vec2(std::cos(angle), std::sin(angle)));
-    b->SetRenderLayer(--bulletLayer);
-    engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::move(b));
-    b = std::make_unique<Bullet>(transform2D.GetPosition(), glm::vec2(std::cos(angle), std::sin(angle)));
-    b->SetRenderLayer(--bulletLayer);
     engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::move(b));
     }
 }
 
 void Player::Draw(const EngineContext& engineContext)
 {
-    material->SetUniform("u_Color", glm::vec4(1.0, 0.0, 1.0, 1.0));
-    material->SetUniform("u_Model", transform2D.GetMatrix());
+    GetMaterial()->SetUniform("u_Color", glm::vec4(1.0, 0.0, 1.0, 1.0));
+    GetMaterial()->SetUniform("u_Model", transform2D.GetMatrix());
 }
 
 void Player::Free(const EngineContext& engineContext)

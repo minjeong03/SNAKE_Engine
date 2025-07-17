@@ -20,7 +20,7 @@ using GLsizei = int;
  */
 class Mesh {
     friend Material;
-    friend ObjectManager;
+    friend RenderManager;
 
 public:
     /**

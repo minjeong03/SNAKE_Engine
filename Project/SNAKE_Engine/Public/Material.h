@@ -4,6 +4,7 @@
 #include <variant>
 #include "../ThirdParty/glm/glm.hpp"
 
+class RenderManager;
 class ObjectManager;
 class Shader;
 class Texture;
@@ -32,7 +33,7 @@ using UniformValue = std::variant<
  * Used internally by ObjectManager and RenderManager to prepare draw submissions.
  */
 class Material {
-    friend ObjectManager;
+    friend RenderManager;
 
 public:
     /**

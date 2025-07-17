@@ -1,8 +1,8 @@
-
 #include "StateManager.h"
-
+#include "GameState.h"
 #include "EngineContext.h"
-
+#include"WindowManager.h"
+#include"RenderManager.h"
 GameState* StateManager::GetCurrentState() const
 {
     return currentState ? currentState.get() : nullptr;
