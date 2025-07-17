@@ -12,6 +12,11 @@
 
 class StateManager;
 
+
+using TextureTag = std::string;
+using UniformName = std::string;
+using FilePath = std::string;
+
 /**
  * @brief Central renderer and asset registry for GPU resources.
  *
@@ -48,7 +53,7 @@ public:
      * });
      * @endcode
      */
-    void RegisterShader(const std::string& tag, const std::vector<std::pair<ShaderStage, std::string>>& sources);
+    void RegisterShader(const std::string& tag, const std::vector<std::pair<ShaderStage, FilePath>>& sources);
 
     /**
      * @brief Registers a user-created shader into the manager.
@@ -69,7 +74,7 @@ public:
      * @param path Path to the image file.
      * @param settings Texture loading configuration.
      */
-    void RegisterTexture(const std::string& tag, const std::string& path, const TextureSettings& settings);
+    void RegisterTexture(const std::string& tag, const FilePath& path, const TextureSettings& settings);
 
     /**
      * @brief Registers a pre-created texture object.
@@ -107,7 +112,7 @@ public:
      * @param shaderTag Shader to use.
      * @param textureBindings Map of uniform names to texture tags.
      */
-    void RegisterMaterial(const std::string& tag, const std::string& shaderTag, const std::unordered_map<std::string, std::string>& textureBindings);
+    void RegisterMaterial(const std::string& tag, const std::string& shaderTag, const std::unordered_map<UniformName, TextureTag>& textureBindings);
 
     /**
      * @brief Registers an existing material object by ownership transfer.

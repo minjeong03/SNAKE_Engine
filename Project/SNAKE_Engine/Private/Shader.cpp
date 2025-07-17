@@ -49,7 +49,7 @@ Shader::~Shader()
     glDeleteProgram(programID);
 }
 
-void Shader::AttachFromFile(ShaderStage stage, const std::string& path)
+void Shader::AttachFromFile(ShaderStage stage, const FilePath& path)
 {
     std::string src = LoadShaderSource(path);
     GLuint shader = CompileShader(stage, src);
@@ -186,7 +186,7 @@ void Shader::CheckSupportsInstancing()
     isSupportInstancing = loc != -1;
 }
 
-std::string Shader::LoadShaderSource(const std::string& filepath)
+std::string Shader::LoadShaderSource(const FilePath& filepath)
 {
     std::ifstream file(filepath);
     if (!file.is_open())

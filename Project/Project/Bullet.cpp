@@ -17,7 +17,6 @@ void Bullet::Init(const EngineContext& engineContext)
     mesh = engineContext.renderManager->GetMeshByTag("star");
     material = engineContext.renderManager->GetMaterialByTag("m_instancing");
     material->EnableInstancing(true, mesh);
-   // renderLayer = 3;
     transform2D.SetScale(glm::vec2(50.f));
     objectTag = "bullet";
 }
@@ -28,7 +27,7 @@ void Bullet::LateInit(const EngineContext& engineContext)
 
 void Bullet::Update(float dt, const EngineContext& engineContext)
 {
-    transform2D.AddPosition(glm::vec2(1 * dir.x, 1 * dir.y));
+    transform2D.AddPosition(glm::vec2(0.1 * dir.x, 0.1 * dir.y));
     //SNAKE_LOG("Bullet pos: " << pos.x << " " << pos.y);
     timer += dt;
 }

@@ -50,7 +50,7 @@ void RenderManager::ClearBackground(int x, int y, int width, int height, glm::ve
  * { ShaderStage::Fragment, "shaders/basic.frag" }
  * });
  */
-void RenderManager::RegisterShader(const std::string& tag, const std::vector<std::pair<ShaderStage, std::string>>& sources)
+void RenderManager::RegisterShader(const std::string& tag, const std::vector<std::pair<ShaderStage, FilePath>>& sources)
 {
     if (shaderMap.find(tag) != shaderMap.end())
     {
@@ -76,7 +76,7 @@ void RenderManager::RegisterShader(const std::string& tag, std::unique_ptr<Shade
     shaderMap[tag] = std::move(shader);
 }
 
-void RenderManager::RegisterTexture(const std::string& tag, const std::string& path, const TextureSettings& settings)
+void RenderManager::RegisterTexture(const std::string& tag, const FilePath& path, const TextureSettings& settings)
 {
     if (textureMap.find(tag) != textureMap.end())
     {
@@ -118,7 +118,7 @@ void RenderManager::RegisterMesh(const std::string& tag, std::unique_ptr<Mesh> m
 }
 
 void RenderManager::RegisterMaterial(const std::string& tag, const std::string& shaderTag,
-                                     const std::unordered_map<std::string, std::string>& textureBindings)
+                                     const std::unordered_map<UniformName, TextureTag>& textureBindings)
 {
     if (materialMap.find(tag) != materialMap.end())
     {

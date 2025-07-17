@@ -23,8 +23,9 @@ enum class ShaderStage
 class RenderManager;
 class Material;
 
-typedef unsigned int GLuint;
-typedef unsigned int GLenum;
+using GLuint = unsigned int;
+using GLenum = unsigned int;
+using FilePath = std::string;
 
 /**
  * @brief Represents an OpenGL shader program composed of multiple shader stages.
@@ -176,7 +177,7 @@ private:
      * @param stage Shader stage (e.g., Vertex, Fragment)
      * @param filepath Path to the GLSL shader file.
      */
-    void AttachFromFile(ShaderStage stage, const std::string& filepath);
+    void AttachFromFile(ShaderStage stage, const FilePath& filepath);
 
     /**
      * @brief Loads shader source code from a text file.
@@ -188,7 +189,7 @@ private:
      * @param filepath Absolute or relative path to the GLSL file.
      * @return Entire shader source code as a single string.
      */
-    [[nodiscard]] std::string LoadShaderSource(const std::string& filepath);
+    [[nodiscard]] std::string LoadShaderSource(const FilePath& filepath);
 
 
     /**

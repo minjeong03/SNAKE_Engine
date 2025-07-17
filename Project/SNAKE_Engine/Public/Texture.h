@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 
+using FilePath = std::string;
 /**
  * @brief Enumerates filtering strategies for texture magnification and minification.
  *
@@ -88,7 +89,7 @@ public:
      * @param path Path to the texture image (e.g., PNG, JPG).
      * @param settings Optional configuration object.
      */
-    Texture(const std::string& path, const TextureSettings& settings = {});
+    Texture(const FilePath& path, const TextureSettings& settings = {});
 
     /**
      * @brief Frees GPU memory used by the texture.

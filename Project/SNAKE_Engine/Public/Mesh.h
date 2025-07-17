@@ -4,8 +4,10 @@
 
 
 class ObjectManager;
-typedef unsigned int GLuint;
-typedef int GLsizei;
+
+using GLuint = unsigned int;
+using GLsizei = int;
+
 /**
  * @brief Represents a GPU-side 2D mesh including vertex and optional index data.
  *

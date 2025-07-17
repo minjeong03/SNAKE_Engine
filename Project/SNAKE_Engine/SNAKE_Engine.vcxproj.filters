@@ -69,6 +69,9 @@
     <ClInclude Include="Public\Camera2D.h">
       <Filter>public</Filter>
     </ClInclude>
+    <ClInclude Include="Public\RenderLayer.h">
+      <Filter>public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Private\StateManager.cpp">
