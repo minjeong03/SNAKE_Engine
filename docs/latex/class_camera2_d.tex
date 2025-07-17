@@ -50,8 +50,6 @@ Definition at line \mbox{\hyperlink{_camera2_d_8h_source_l00011}{11}} of file \m
 
 
 
-\label{doc-constructors}
-\Hypertarget{class_camera2_d_doc-constructors}
 \doxysubsection{Constructor \& Destructor Documentation}
 \Hypertarget{class_camera2_d_a1e373f26fbf3a2ad457e4afc0542644c}\index{Camera2D@{Camera2D}!Camera2D@{Camera2D}}
 \index{Camera2D@{Camera2D}!Camera2D@{Camera2D}}
@@ -83,8 +81,6 @@ Definition at line \mbox{\hyperlink{_camera2_d_8cpp_source_l00004}{4}} of file \
 \end{DoxyCode}
 
 
-\label{doc-func-members}
-\Hypertarget{class_camera2_d_doc-func-members}
 \doxysubsection{Member Function Documentation}
 \Hypertarget{class_camera2_d_a107d6516d1fdb17883af65460bd6752f}\index{Camera2D@{Camera2D}!GetPosition@{GetPosition}}
 \index{GetPosition@{GetPosition}!Camera2D@{Camera2D}}
@@ -130,8 +126,8 @@ Definition at line \mbox{\hyperlink{_camera2_d_8cpp_source_l00035}{35}} of file 
 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{00036\ \{}
-\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{float}\ halfW\ =\ \mbox{\hyperlink{class_camera2_d_a7b7971364cef32360d4c753a158313f9}{screenWidth}}\ *\ 0.5f\ /\ \mbox{\hyperlink{class_camera2_d_ac617e7e6d2ef6aa9df681b63d958d8ac}{zoom}};}
-\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{float}\ halfH\ =\ \mbox{\hyperlink{class_camera2_d_ae8ba4a81b96923a42e1d3ca9cca8a63d}{screenHeight}}\ *\ 0.5f\ /\ \mbox{\hyperlink{class_camera2_d_ac617e7e6d2ef6aa9df681b63d958d8ac}{zoom}};}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{float}\ halfW\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(\mbox{\hyperlink{class_camera2_d_a7b7971364cef32360d4c753a158313f9}{screenWidth}})\ *\ 0.5f\ /\ \mbox{\hyperlink{class_camera2_d_ac617e7e6d2ef6aa9df681b63d958d8ac}{zoom}};}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{float}\ halfH\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(\mbox{\hyperlink{class_camera2_d_ae8ba4a81b96923a42e1d3ca9cca8a63d}{screenHeight}})\ *\ 0.5f\ /\ \mbox{\hyperlink{class_camera2_d_ac617e7e6d2ef6aa9df681b63d958d8ac}{zoom}};}
 \DoxyCodeLine{00039\ }
 \DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordflow}{return}\ glm::ortho(}
 \DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ -\/halfW\ +\ \mbox{\hyperlink{class_camera2_d_a998840db69cc35ba61e70927800e0480}{position}}.x,\ halfW\ +\ \mbox{\hyperlink{class_camera2_d_a998840db69cc35ba61e70927800e0480}{position}}.x,}
@@ -289,8 +285,6 @@ Definition at line \mbox{\hyperlink{_camera2_d_8cpp_source_l00020}{20}} of file 
 \end{DoxyCode}
 
 
-\label{doc-variable-members}
-\Hypertarget{class_camera2_d_doc-variable-members}
 \doxysubsection{Member Data Documentation}
 \Hypertarget{class_camera2_d_a998840db69cc35ba61e70927800e0480}\index{Camera2D@{Camera2D}!position@{position}}
 \index{position@{position}!Camera2D@{Camera2D}}

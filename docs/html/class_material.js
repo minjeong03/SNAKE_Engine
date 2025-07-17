@@ -12,7 +12,7 @@ var class_material =
     [ "UpdateInstanceBuffer", "class_material.html#a68598fd0aa4da2c7db0e045b2352204d", null ],
     [ "instanceVBO", "class_material.html#aacc07f549272b14fdd1471b897d38150", null ],
     [ "isInstancingEnabled", "class_material.html#a88e57329587a1d1d2852d926890e2c4f", null ],
-    [ "ObjectManager", "class_material.html#a1656f49b618ab5ed54aa4672a210435a", null ],
+    [ "RenderManager", "class_material.html#ac45dc348bf7022593d789b6bf7b407cb", null ],
     [ "shader", "class_material.html#abaac6082ee6cf042b2d4da4f6e6fe403", null ],
     [ "textures", "class_material.html#a73c44b66bc920571726bfd6dbdeeec26", null ],
     [ "uniforms", "class_material.html#ac18d1c428804aef46a8ec751989e0677", null ]

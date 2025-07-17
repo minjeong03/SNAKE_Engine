@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['uniforms_0',['uniforms',['../class_material.html#ac18d1c428804aef46a8ec751989e0677',1,'Material']]],
-  ['useindex_1',['useIndex',['../class_mesh.html#a3153eeca2bbde0037c365662bbeb52f1',1,'Mesh']]]
+  ['vao_0',['vao',['../class_mesh.html#a101a39d88bc5c8d33f0ebd6e77a60129',1,'Mesh']]],
+  ['vbo_1',['vbo',['../class_mesh.html#ad8eff04c857fc1f1f42584af599f8267',1,'Mesh']]]
 ];

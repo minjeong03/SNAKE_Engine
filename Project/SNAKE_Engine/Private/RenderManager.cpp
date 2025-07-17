@@ -19,7 +19,7 @@ void RenderManager::ClearDrawCommands()
 
 void RenderManager::Submit(std::function<void()>&& drawFunc)
 {
-    renderQueue.push_back({ std::move(drawFunc)});
+    renderQueue.push_back({ std::move(drawFunc) });
 }
 
 void RenderManager::Submit(const EngineContext& engineContext, const std::vector<GameObject*>& objects, Camera2D* camera)
@@ -209,7 +209,7 @@ void RenderManager::RegisterTexture(const std::string& tag, const FilePath& path
         SNAKE_WRN("Texture with tag \"" << tag << "\" already registered.");
         return;
     }
-	textureMap[tag] = std::make_unique<Texture>(path, settings);
+    textureMap[tag] = std::make_unique<Texture>(path, settings);
 }
 
 void RenderManager::RegisterTexture(const std::string& tag, std::unique_ptr<Texture> texture)
@@ -223,7 +223,7 @@ void RenderManager::RegisterTexture(const std::string& tag, std::unique_ptr<Text
 }
 
 void RenderManager::RegisterMesh(const std::string& tag, const std::vector<float>& vertices,
-                                 const std::vector<unsigned int>& indices)
+    const std::vector<unsigned int>& indices)
 {
     if (meshMap.find(tag) != meshMap.end())
     {
@@ -244,7 +244,7 @@ void RenderManager::RegisterMesh(const std::string& tag, std::unique_ptr<Mesh> m
 }
 
 void RenderManager::RegisterMaterial(const std::string& tag, const std::string& shaderTag,
-                                     const std::unordered_map<UniformName, TextureTag>& textureBindings)
+    const std::unordered_map<UniformName, TextureTag>& textureBindings)
 {
     if (materialMap.find(tag) != materialMap.end())
     {

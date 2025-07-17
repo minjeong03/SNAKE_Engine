@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['rendercommand_0',['RenderCommand',['../struct_render_manager_1_1_render_command.html',1,'RenderManager']]],
+  ['renderlayermanager_0',['RenderLayerManager',['../class_render_layer_manager.html',1,'']]],
   ['rendermanager_1',['RenderManager',['../class_render_manager.html',1,'']]]
 ];

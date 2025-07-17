@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['objectmanager_0',['ObjectManager',['../class_object_manager.html',1,'ObjectManager'],['../class_material.html#a1656f49b618ab5ed54aa4672a210435a',1,'Material::ObjectManager'],['../class_mesh.html#a4081c525076281d0fdd8f46f992fea34',1,'Mesh::ObjectManager'],['../class_render_manager.html#a7042c6ff67962075d3a4dab2bec2c9f1',1,'RenderManager::ObjectManager']]],
+  ['objectmanager_0',['ObjectManager',['../class_object_manager.html',1,'ObjectManager'],['../class_render_manager.html#a7042c6ff67962075d3a4dab2bec2c9f1',1,'RenderManager::ObjectManager']]],
   ['objectmanager_1',['objectManager',['../class_game_state.html#a688b4f8864623a3d8e9ad873434b062e',1,'GameState']]],
   ['objectmanager_2ecpp_2',['ObjectManager.cpp',['../_object_manager_8cpp.html',1,'']]],
   ['objectmanager_2eh_3',['ObjectManager.h',['../_object_manager_8h.html',1,'']]],

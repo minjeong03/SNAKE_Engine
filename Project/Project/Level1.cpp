@@ -9,7 +9,7 @@
 void Level1::Load(const EngineContext& engineContext)
 {
     SNAKE_LOG("[level1] load called");
-   
+
 }
 
 void Level1::Init(const EngineContext& engineContext)
@@ -69,7 +69,7 @@ void Level1::LateUpdate(float dt, const EngineContext& engineContext)
 
 void Level1::Draw(const EngineContext& engineContext)
 {
-    objectManager.DrawAll(engineContext,cameraManager.GetActiveCamera());
+    objectManager.DrawAll(engineContext, cameraManager.GetActiveCamera());
 }
 
 void Level1::Free(const EngineContext& engineContext)

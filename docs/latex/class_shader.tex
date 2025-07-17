@@ -41,9 +41,9 @@ bool \mbox{\hyperlink{class_shader_a4b4b3ee126f9f81076917e0e7ec2d1c1}{Supports\+
 \begin{DoxyCompactList}\small\item\em Returns whether this shader is compatible with GPU instancing. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_shader_af8f02a3a21176e8c9b728661038212eb}{Link}} ()
 \begin{DoxyCompactList}\small\item\em Links all attached shaders into a single GPU program. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_shader_ae4bc45fa4373b9cd547a4a4b76196ff4}{Attach\+From\+File}} (\mbox{\hyperlink{_shader_8h_a22fa67f5720e9bfbd075bd088285c531}{Shader\+Stage}} stage, const std\+::string \&filepath)
+void \mbox{\hyperlink{class_shader_a3c3f209170f257de08119a1a1735e042}{Attach\+From\+File}} (\mbox{\hyperlink{_shader_8h_a22fa67f5720e9bfbd075bd088285c531}{Shader\+Stage}} stage, const \mbox{\hyperlink{_render_manager_8h_a1db05f4e4bd57f5e7db00f908dab03be}{File\+Path}} \&filepath)
 \begin{DoxyCompactList}\small\item\em Loads, compiles, and attaches a shader from a GLSL source file. \end{DoxyCompactList}\item 
-std\+::string \mbox{\hyperlink{class_shader_ae9b4dd4989528feae1aad1e2c5969649}{Load\+Shader\+Source}} (const std\+::string \&filepath)
+std\+::string \mbox{\hyperlink{class_shader_a0c101a970453ff3e82574ec8a86f889d}{Load\+Shader\+Source}} (const \mbox{\hyperlink{_render_manager_8h_a1db05f4e4bd57f5e7db00f908dab03be}{File\+Path}} \&filepath)
 \begin{DoxyCompactList}\small\item\em Loads shader source code from a text file. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{_material_8h_a9b79d6d8dc8627e68412974748f1c08c}{GLuint}} \mbox{\hyperlink{class_shader_ab291bb28e453118aaa10d21e0bdf4606}{Compile\+Shader}} (\mbox{\hyperlink{_shader_8h_a22fa67f5720e9bfbd075bd088285c531}{Shader\+Stage}} stage, const std\+::string \&source)
 \begin{DoxyCompactList}\small\item\em Compiles raw GLSL source code into a shader object. \end{DoxyCompactList}\item 
@@ -73,12 +73,10 @@ The \doxylink{class_shader}{Shader} class handles loading, compiling, linking, a
 
 Typical usage includes loading a shader, linking, and then binding it before rendering. 
 
-Definition at line \mbox{\hyperlink{_shader_8h_source_l00039}{39}} of file \mbox{\hyperlink{_shader_8h_source}{Shader.\+h}}.
+Definition at line \mbox{\hyperlink{_shader_8h_source_l00040}{40}} of file \mbox{\hyperlink{_shader_8h_source}{Shader.\+h}}.
 
 
 
-\label{doc-constructors}
-\Hypertarget{class_shader_doc-constructors}
 \doxysubsection{Constructor \& Destructor Documentation}
 \Hypertarget{class_shader_a0d654ebaca4e0555197c0724c6d30610}\index{Shader@{Shader}!Shader@{Shader}}
 \index{Shader@{Shader}!Shader@{Shader}}
@@ -127,14 +125,12 @@ Definition at line \mbox{\hyperlink{_shader_8cpp_source_l00045}{45}} of file \mb
 \end{DoxyCode}
 
 
-\label{doc-func-members}
-\Hypertarget{class_shader_doc-func-members}
 \doxysubsection{Member Function Documentation}
-\Hypertarget{class_shader_ae4bc45fa4373b9cd547a4a4b76196ff4}\index{Shader@{Shader}!AttachFromFile@{AttachFromFile}}
+\Hypertarget{class_shader_a3c3f209170f257de08119a1a1735e042}\index{Shader@{Shader}!AttachFromFile@{AttachFromFile}}
 \index{AttachFromFile@{AttachFromFile}!Shader@{Shader}}
 \doxysubsubsection{\texorpdfstring{AttachFromFile()}{AttachFromFile()}}
-{\footnotesize\ttfamily \label{class_shader_ae4bc45fa4373b9cd547a4a4b76196ff4} 
-void Shader\+::\+Attach\+From\+File (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{_shader_8h_a22fa67f5720e9bfbd075bd088285c531}{Shader\+Stage}}}]{stage}{, }\item[{const std\+::string \&}]{filepath}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily \label{class_shader_a3c3f209170f257de08119a1a1735e042} 
+void Shader\+::\+Attach\+From\+File (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{_shader_8h_a22fa67f5720e9bfbd075bd088285c531}{Shader\+Stage}}}]{stage}{, }\item[{const \mbox{\hyperlink{_render_manager_8h_a1db05f4e4bd57f5e7db00f908dab03be}{File\+Path}} \&}]{filepath}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
 
 
 
@@ -158,7 +154,7 @@ Definition at line \mbox{\hyperlink{_shader_8cpp_source_l00052}{52}} of file \mb
 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{00053\ \{}
-\DoxyCodeLine{00054\ \ \ \ \ std::string\ src\ =\ \mbox{\hyperlink{class_shader_ae9b4dd4989528feae1aad1e2c5969649}{LoadShaderSource}}(path);}
+\DoxyCodeLine{00054\ \ \ \ \ std::string\ src\ =\ \mbox{\hyperlink{class_shader_a0c101a970453ff3e82574ec8a86f889d}{LoadShaderSource}}(path);}
 \DoxyCodeLine{00055\ \ \ \ \ \mbox{\hyperlink{_material_8h_a9b79d6d8dc8627e68412974748f1c08c}{GLuint}}\ shader\ =\ \mbox{\hyperlink{class_shader_ab291bb28e453118aaa10d21e0bdf4606}{CompileShader}}(stage,\ src);}
 \DoxyCodeLine{00056\ \ \ \ \ glAttachShader(\mbox{\hyperlink{class_shader_afce507f5013e82f7a62b47bbfb2fb048}{programID}},\ shader);}
 \DoxyCodeLine{00057\ \ \ \ \ \mbox{\hyperlink{class_shader_abee5659be2adbe034550900126e911b0}{attachedShaders}}.push\_back(shader);}
@@ -217,7 +213,7 @@ Definition at line \mbox{\hyperlink{_shader_8cpp_source_l00203}{203}} of file \m
 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{00204\ \{}
-\DoxyCodeLine{00205\ \ \ \ \ \mbox{\hyperlink{_shader_8h_a7efd7809e1632cdae75603fd1fee61c0}{GLenum}}\ glStage\ =\ ConvertShaderStageToGLenum(stage);}
+\DoxyCodeLine{00205\ \ \ \ \ \mbox{\hyperlink{_shader_8h_aabcf3e059d4bfe03f96c378d2533c3ba}{GLenum}}\ glStage\ =\ ConvertShaderStageToGLenum(stage);}
 \DoxyCodeLine{00206\ \ \ \ \ \mbox{\hyperlink{_material_8h_a9b79d6d8dc8627e68412974748f1c08c}{GLuint}}\ shader\ =\ glCreateShader(glStage);}
 \DoxyCodeLine{00207\ }
 \DoxyCodeLine{00208\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ src\ =\ source.c\_str();}
@@ -252,11 +248,11 @@ Open\+GL \doxylink{_material_8h_a9b79d6d8dc8627e68412974748f1c08c}{GLuint} progr
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{_shader_8h_source_l00131}{131}} of file \mbox{\hyperlink{_shader_8h_source}{Shader.\+h}}.
+Definition at line \mbox{\hyperlink{_shader_8h_source_l00132}{132}} of file \mbox{\hyperlink{_shader_8h_source}{Shader.\+h}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00131\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_shader_afce507f5013e82f7a62b47bbfb2fb048}{programID}};\ \}}
+\DoxyCodeLine{00132\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_shader_afce507f5013e82f7a62b47bbfb2fb048}{programID}};\ \}}
 
 \end{DoxyCode}
 \Hypertarget{class_shader_af8f02a3a21176e8c9b728661038212eb}\index{Shader@{Shader}!Link@{Link}}
@@ -312,11 +308,11 @@ Definition at line \mbox{\hyperlink{_shader_8cpp_source_l00062}{62}} of file \mb
 \DoxyCodeLine{00095\ \}}
 
 \end{DoxyCode}
-\Hypertarget{class_shader_ae9b4dd4989528feae1aad1e2c5969649}\index{Shader@{Shader}!LoadShaderSource@{LoadShaderSource}}
+\Hypertarget{class_shader_a0c101a970453ff3e82574ec8a86f889d}\index{Shader@{Shader}!LoadShaderSource@{LoadShaderSource}}
 \index{LoadShaderSource@{LoadShaderSource}!Shader@{Shader}}
 \doxysubsubsection{\texorpdfstring{LoadShaderSource()}{LoadShaderSource()}}
-{\footnotesize\ttfamily \label{class_shader_ae9b4dd4989528feae1aad1e2c5969649} 
-std\+::string Shader\+::\+Load\+Shader\+Source (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{filepath}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [nodiscard]}, {\ttfamily [private]}}
+{\footnotesize\ttfamily \label{class_shader_a0c101a970453ff3e82574ec8a86f889d} 
+std\+::string Shader\+::\+Load\+Shader\+Source (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{_render_manager_8h_a1db05f4e4bd57f5e7db00f908dab03be}{File\+Path}} \&}]{filepath}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [nodiscard]}, {\ttfamily [private]}}
 
 
 
@@ -640,8 +636,6 @@ Definition at line \mbox{\hyperlink{_shader_8cpp_source_l00097}{97}} of file \mb
 \end{DoxyCode}
 
 
-\label{doc-variable-members}
-\Hypertarget{class_shader_doc-variable-members}
 \doxysubsection{Member Data Documentation}
 \Hypertarget{class_shader_abee5659be2adbe034550900126e911b0}\index{Shader@{Shader}!attachedShaders@{attachedShaders}}
 \index{attachedShaders@{attachedShaders}!Shader@{Shader}}
@@ -651,7 +645,7 @@ std\+::vector$<$\mbox{\hyperlink{_material_8h_a9b79d6d8dc8627e68412974748f1c08c}
 
 
 
-Definition at line \mbox{\hyperlink{_shader_8h_source_l00217}{217}} of file \mbox{\hyperlink{_shader_8h_source}{Shader.\+h}}.
+Definition at line \mbox{\hyperlink{_shader_8h_source_l00218}{218}} of file \mbox{\hyperlink{_shader_8h_source}{Shader.\+h}}.
 
 \Hypertarget{class_shader_a200490ae8ee22f7b9cf8553cb78576d6}\index{Shader@{Shader}!attachedStages@{attachedStages}}
 \index{attachedStages@{attachedStages}!Shader@{Shader}}
@@ -661,7 +655,7 @@ std\+::vector$<$\mbox{\hyperlink{_shader_8h_a22fa67f5720e9bfbd075bd088285c531}{S
 
 
 
-Definition at line \mbox{\hyperlink{_shader_8h_source_l00218}{218}} of file \mbox{\hyperlink{_shader_8h_source}{Shader.\+h}}.
+Definition at line \mbox{\hyperlink{_shader_8h_source_l00219}{219}} of file \mbox{\hyperlink{_shader_8h_source}{Shader.\+h}}.
 
 \Hypertarget{class_shader_a821763f22b88dfc27ef72c0eec1a8b8c}\index{Shader@{Shader}!isSupportInstancing@{isSupportInstancing}}
 \index{isSupportInstancing@{isSupportInstancing}!Shader@{Shader}}
@@ -671,7 +665,7 @@ bool Shader\+::is\+Support\+Instancing\hspace{0.3cm}{\ttfamily [private]}}
 
 
 
-Definition at line \mbox{\hyperlink{_shader_8h_source_l00220}{220}} of file \mbox{\hyperlink{_shader_8h_source}{Shader.\+h}}.
+Definition at line \mbox{\hyperlink{_shader_8h_source_l00221}{221}} of file \mbox{\hyperlink{_shader_8h_source}{Shader.\+h}}.
 
 \Hypertarget{class_shader_abd90567f8b213f3bf1b40200a4257ae1}\index{Shader@{Shader}!Material@{Material}}
 \index{Material@{Material}!Shader@{Shader}}
@@ -681,7 +675,7 @@ friend Shader\+::\+Material\hspace{0.3cm}{\ttfamily [private]}}
 
 
 
-Definition at line \mbox{\hyperlink{_shader_8h_source_l00040}{40}} of file \mbox{\hyperlink{_shader_8h_source}{Shader.\+h}}.
+Definition at line \mbox{\hyperlink{_shader_8h_source_l00041}{41}} of file \mbox{\hyperlink{_shader_8h_source}{Shader.\+h}}.
 
 \Hypertarget{class_shader_afce507f5013e82f7a62b47bbfb2fb048}\index{Shader@{Shader}!programID@{programID}}
 \index{programID@{programID}!Shader@{Shader}}
@@ -691,7 +685,7 @@ Definition at line \mbox{\hyperlink{_shader_8h_source_l00040}{40}} of file \mbox
 
 
 
-Definition at line \mbox{\hyperlink{_shader_8h_source_l00216}{216}} of file \mbox{\hyperlink{_shader_8h_source}{Shader.\+h}}.
+Definition at line \mbox{\hyperlink{_shader_8h_source_l00217}{217}} of file \mbox{\hyperlink{_shader_8h_source}{Shader.\+h}}.
 
 \Hypertarget{class_shader_a2cbf5adc5d868219094df11bab36009b}\index{Shader@{Shader}!RenderManager@{RenderManager}}
 \index{RenderManager@{RenderManager}!Shader@{Shader}}
@@ -701,7 +695,7 @@ friend Shader\+::\+Render\+Manager\hspace{0.3cm}{\ttfamily [private]}}
 
 
 
-Definition at line \mbox{\hyperlink{_shader_8h_source_l00041}{41}} of file \mbox{\hyperlink{_shader_8h_source}{Shader.\+h}}.
+Definition at line \mbox{\hyperlink{_shader_8h_source_l00042}{42}} of file \mbox{\hyperlink{_shader_8h_source}{Shader.\+h}}.
 
 
 

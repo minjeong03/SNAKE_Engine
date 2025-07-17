@@ -38,7 +38,7 @@ void \mbox{\hyperlink{class_material_a68598fd0aa4da2c7db0e045b2352204d}{Update\+
 \doxysubsubsection*{Private Attributes}
 \begin{DoxyCompactItemize}
 \item 
-friend \mbox{\hyperlink{class_material_a1656f49b618ab5ed54aa4672a210435a}{Object\+Manager}}
+friend \mbox{\hyperlink{class_material_ac45dc348bf7022593d789b6bf7b407cb}{Render\+Manager}}
 \item 
 \mbox{\hyperlink{class_shader}{Shader}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_material_abaac6082ee6cf042b2d4da4f6e6fe403}{shader}}
 \item 
@@ -66,12 +66,10 @@ A \doxylink{class_material}{Material} encapsulates a \doxylink{class_shader}{Sha
 
 Used internally by \doxylink{class_object_manager}{Object\+Manager} and \doxylink{class_render_manager}{Render\+Manager} to prepare draw submissions. 
 
-Definition at line \mbox{\hyperlink{_material_8h_source_l00034}{34}} of file \mbox{\hyperlink{_material_8h_source}{Material.\+h}}.
+Definition at line \mbox{\hyperlink{_material_8h_source_l00035}{35}} of file \mbox{\hyperlink{_material_8h_source}{Material.\+h}}.
 
 
 
-\label{doc-constructors}
-\Hypertarget{class_material_doc-constructors}
 \doxysubsection{Constructor \& Destructor Documentation}
 \Hypertarget{class_material_a60bb6242b4556b0823fd96bd5bf7436a}\index{Material@{Material}!Material@{Material}}
 \index{Material@{Material}!Material@{Material}}
@@ -90,17 +88,15 @@ Constructs a material using the given shader.
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{_material_8h_source_l00043}{43}} of file \mbox{\hyperlink{_material_8h_source}{Material.\+h}}.
+Definition at line \mbox{\hyperlink{_material_8h_source_l00044}{44}} of file \mbox{\hyperlink{_material_8h_source}{Material.\+h}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00043\ :\ \mbox{\hyperlink{class_material_abaac6082ee6cf042b2d4da4f6e6fe403}{shader}}(\_shader),\ \mbox{\hyperlink{class_material_aacc07f549272b14fdd1471b897d38150}{instanceVBO}}(0),\ \mbox{\hyperlink{class_material_a88e57329587a1d1d2852d926890e2c4f}{isInstancingEnabled}}(\textcolor{keyword}{false})\ \{\}}
+\DoxyCodeLine{00044\ :\ \mbox{\hyperlink{class_material_abaac6082ee6cf042b2d4da4f6e6fe403}{shader}}(\_shader),\ \mbox{\hyperlink{class_material_aacc07f549272b14fdd1471b897d38150}{instanceVBO}}(0),\ \mbox{\hyperlink{class_material_a88e57329587a1d1d2852d926890e2c4f}{isInstancingEnabled}}(\textcolor{keyword}{false})\ \{\}}
 
 \end{DoxyCode}
 
 
-\label{doc-func-members}
-\Hypertarget{class_material_doc-func-members}
 \doxysubsection{Member Function Documentation}
 \Hypertarget{class_material_a1fd6c6c16d1f04e747470a2cc0c52fa1}\index{Material@{Material}!Bind@{Bind}}
 \index{Bind@{Bind}!Material@{Material}}
@@ -182,11 +178,11 @@ Pointer to the \doxylink{class_shader}{Shader}.
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{_material_8h_source_l00160}{160}} of file \mbox{\hyperlink{_material_8h_source}{Material.\+h}}.
+Definition at line \mbox{\hyperlink{_material_8h_source_l00161}{161}} of file \mbox{\hyperlink{_material_8h_source}{Material.\+h}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00160\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_material_abaac6082ee6cf042b2d4da4f6e6fe403}{shader}};\ \}}
+\DoxyCodeLine{00161\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_material_abaac6082ee6cf042b2d4da4f6e6fe403}{shader}};\ \}}
 
 \end{DoxyCode}
 \Hypertarget{class_material_a7a9c710b2d7a286c1349315b6fd6ab7a}\index{Material@{Material}!IsInstancingSupported@{IsInstancingSupported}}
@@ -283,13 +279,13 @@ The uniform name must match a sampler2D (or similar) declared in the shader.
 \end{DoxyCode}
  
 
-Definition at line \mbox{\hyperlink{_material_8h_source_l00062}{62}} of file \mbox{\hyperlink{_material_8h_source}{Material.\+h}}.
+Definition at line \mbox{\hyperlink{_material_8h_source_l00063}{63}} of file \mbox{\hyperlink{_material_8h_source}{Material.\+h}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00063\ \ \ \ \ \{}
-\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_material_a73c44b66bc920571726bfd6dbdeeec26}{textures}}[uniformName]\ =\ texture;}
-\DoxyCodeLine{00065\ \ \ \ \ \}}
+\DoxyCodeLine{00064\ \ \ \ \ \{}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_material_a73c44b66bc920571726bfd6dbdeeec26}{textures}}[uniformName]\ =\ texture;}
+\DoxyCodeLine{00066\ \ \ \ \ \}}
 
 \end{DoxyCode}
 \Hypertarget{class_material_a6c49cb3082a29e0d412577dad3cfde5f}\index{Material@{Material}!SetUniform@{SetUniform}}
@@ -328,13 +324,13 @@ Supported types include\+:
 \end{DoxyCode}
  
 
-Definition at line \mbox{\hyperlink{_material_8h_source_l00090}{90}} of file \mbox{\hyperlink{_material_8h_source}{Material.\+h}}.
+Definition at line \mbox{\hyperlink{_material_8h_source_l00091}{91}} of file \mbox{\hyperlink{_material_8h_source}{Material.\+h}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00091\ \ \ \ \ \{}
-\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_material_ac18d1c428804aef46a8ec751989e0677}{uniforms}}[name]\ =\ value;}
-\DoxyCodeLine{00093\ \ \ \ \ \}}
+\DoxyCodeLine{00092\ \ \ \ \ \{}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_material_ac18d1c428804aef46a8ec751989e0677}{uniforms}}[name]\ =\ value;}
+\DoxyCodeLine{00094\ \ \ \ \ \}}
 
 \end{DoxyCode}
 \Hypertarget{class_material_abe3526386e44d6a10fec0e6859dd564a}\index{Material@{Material}!UnBind@{UnBind}}
@@ -401,8 +397,6 @@ Definition at line \mbox{\hyperlink{_material_8cpp_source_l00025}{25}} of file \
 \end{DoxyCode}
 
 
-\label{doc-variable-members}
-\Hypertarget{class_material_doc-variable-members}
 \doxysubsection{Member Data Documentation}
 \Hypertarget{class_material_aacc07f549272b14fdd1471b897d38150}\index{Material@{Material}!instanceVBO@{instanceVBO}}
 \index{instanceVBO@{instanceVBO}!Material@{Material}}
@@ -412,7 +406,7 @@ Definition at line \mbox{\hyperlink{_material_8cpp_source_l00025}{25}} of file \
 
 
 
-Definition at line \mbox{\hyperlink{_material_8h_source_l00166}{166}} of file \mbox{\hyperlink{_material_8h_source}{Material.\+h}}.
+Definition at line \mbox{\hyperlink{_material_8h_source_l00167}{167}} of file \mbox{\hyperlink{_material_8h_source}{Material.\+h}}.
 
 \Hypertarget{class_material_a88e57329587a1d1d2852d926890e2c4f}\index{Material@{Material}!isInstancingEnabled@{isInstancingEnabled}}
 \index{isInstancingEnabled@{isInstancingEnabled}!Material@{Material}}
@@ -422,17 +416,17 @@ bool Material\+::is\+Instancing\+Enabled\hspace{0.3cm}{\ttfamily [private]}}
 
 
 
-Definition at line \mbox{\hyperlink{_material_8h_source_l00167}{167}} of file \mbox{\hyperlink{_material_8h_source}{Material.\+h}}.
+Definition at line \mbox{\hyperlink{_material_8h_source_l00168}{168}} of file \mbox{\hyperlink{_material_8h_source}{Material.\+h}}.
 
-\Hypertarget{class_material_a1656f49b618ab5ed54aa4672a210435a}\index{Material@{Material}!ObjectManager@{ObjectManager}}
-\index{ObjectManager@{ObjectManager}!Material@{Material}}
-\doxysubsubsection{\texorpdfstring{ObjectManager}{ObjectManager}}
-{\footnotesize\ttfamily \label{class_material_a1656f49b618ab5ed54aa4672a210435a} 
-friend Material\+::\+Object\+Manager\hspace{0.3cm}{\ttfamily [private]}}
+\Hypertarget{class_material_ac45dc348bf7022593d789b6bf7b407cb}\index{Material@{Material}!RenderManager@{RenderManager}}
+\index{RenderManager@{RenderManager}!Material@{Material}}
+\doxysubsubsection{\texorpdfstring{RenderManager}{RenderManager}}
+{\footnotesize\ttfamily \label{class_material_ac45dc348bf7022593d789b6bf7b407cb} 
+friend Material\+::\+Render\+Manager\hspace{0.3cm}{\ttfamily [private]}}
 
 
 
-Definition at line \mbox{\hyperlink{_material_8h_source_l00035}{35}} of file \mbox{\hyperlink{_material_8h_source}{Material.\+h}}.
+Definition at line \mbox{\hyperlink{_material_8h_source_l00036}{36}} of file \mbox{\hyperlink{_material_8h_source}{Material.\+h}}.
 
 \Hypertarget{class_material_abaac6082ee6cf042b2d4da4f6e6fe403}\index{Material@{Material}!shader@{shader}}
 \index{shader@{shader}!Material@{Material}}
@@ -442,7 +436,7 @@ Definition at line \mbox{\hyperlink{_material_8h_source_l00035}{35}} of file \mb
 
 
 
-Definition at line \mbox{\hyperlink{_material_8h_source_l00162}{162}} of file \mbox{\hyperlink{_material_8h_source}{Material.\+h}}.
+Definition at line \mbox{\hyperlink{_material_8h_source_l00163}{163}} of file \mbox{\hyperlink{_material_8h_source}{Material.\+h}}.
 
 \Hypertarget{class_material_a73c44b66bc920571726bfd6dbdeeec26}\index{Material@{Material}!textures@{textures}}
 \index{textures@{textures}!Material@{Material}}
@@ -452,7 +446,7 @@ std\+::unordered\+\_\+map$<$std\+::string, \mbox{\hyperlink{class_texture}{Textu
 
 
 
-Definition at line \mbox{\hyperlink{_material_8h_source_l00163}{163}} of file \mbox{\hyperlink{_material_8h_source}{Material.\+h}}.
+Definition at line \mbox{\hyperlink{_material_8h_source_l00164}{164}} of file \mbox{\hyperlink{_material_8h_source}{Material.\+h}}.
 
 \Hypertarget{class_material_ac18d1c428804aef46a8ec751989e0677}\index{Material@{Material}!uniforms@{uniforms}}
 \index{uniforms@{uniforms}!Material@{Material}}
@@ -462,7 +456,7 @@ std\+::unordered\+\_\+map$<$std\+::string, \mbox{\hyperlink{_material_8h_a06229a
 
 
 
-Definition at line \mbox{\hyperlink{_material_8h_source_l00164}{164}} of file \mbox{\hyperlink{_material_8h_source}{Material.\+h}}.
+Definition at line \mbox{\hyperlink{_material_8h_source_l00165}{165}} of file \mbox{\hyperlink{_material_8h_source}{Material.\+h}}.
 
 
 

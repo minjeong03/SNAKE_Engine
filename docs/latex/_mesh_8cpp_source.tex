@@ -28,7 +28,7 @@
 \DoxyCodeLine{\Hypertarget{_mesh_8cpp_source_l00024}00024\ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{_mesh_8cpp_source_l00025}00025\ \}}
 \DoxyCodeLine{\Hypertarget{_mesh_8cpp_source_l00026}00026\ }
-\DoxyCodeLine{\Hypertarget{_mesh_8cpp_source_l00027}\mbox{\hyperlink{class_mesh_ae2933e498cc249ab798bbf265dace77b}{00027}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mesh_ae2933e498cc249ab798bbf265dace77b}{Mesh::DrawInstanced}}(\mbox{\hyperlink{_mesh_8h_a9289d5b99dc1f27f01480360f2e18ae0}{GLsizei}}\ instanceCount)\textcolor{keyword}{\ const}}
+\DoxyCodeLine{\Hypertarget{_mesh_8cpp_source_l00027}\mbox{\hyperlink{class_mesh_ae2933e498cc249ab798bbf265dace77b}{00027}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mesh_ae2933e498cc249ab798bbf265dace77b}{Mesh::DrawInstanced}}(\mbox{\hyperlink{_mesh_8h_a2d467e230729e9194068528ee1985327}{GLsizei}}\ instanceCount)\textcolor{keyword}{\ const}}
 \DoxyCodeLine{\Hypertarget{_mesh_8cpp_source_l00028}00028\ \textcolor{keyword}{}\{}
 \DoxyCodeLine{\Hypertarget{_mesh_8cpp_source_l00029}00029\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{class_mesh_a3153eeca2bbde0037c365662bbeb52f1}{useIndex}})}
 \DoxyCodeLine{\Hypertarget{_mesh_8cpp_source_l00030}00030\ \ \ \ \ \ \ \ \ glDrawElementsInstanced(GL\_TRIANGLES,\ \mbox{\hyperlink{class_mesh_ae89f95e85ae7fa157545324aa5f5db7d}{indexCount}},\ GL\_UNSIGNED\_INT,\ \textcolor{keyword}{nullptr},\ instanceCount);}
@@ -66,7 +66,7 @@
 \DoxyCodeLine{\Hypertarget{_mesh_8cpp_source_l00062}\mbox{\hyperlink{class_mesh_a4516fe3f6af8d82f55fdb0e3b4206fb0}{00062}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mesh_a4516fe3f6af8d82f55fdb0e3b4206fb0}{Mesh::SetupMesh}}(\textcolor{keyword}{const}\ std::vector<float>\&\ vertices,\ \textcolor{keyword}{const}\ std::vector<unsigned\ int>\&\ indices)}
 \DoxyCodeLine{\Hypertarget{_mesh_8cpp_source_l00063}00063\ \{}
 \DoxyCodeLine{\Hypertarget{_mesh_8cpp_source_l00064}00064\ \ \ \ \ \mbox{\hyperlink{class_mesh_a3153eeca2bbde0037c365662bbeb52f1}{useIndex}}\ =\ !indices.empty();}
-\DoxyCodeLine{\Hypertarget{_mesh_8cpp_source_l00065}00065\ \ \ \ \ \mbox{\hyperlink{class_mesh_ae89f95e85ae7fa157545324aa5f5db7d}{indexCount}}\ =\ \mbox{\hyperlink{class_mesh_a3153eeca2bbde0037c365662bbeb52f1}{useIndex}}\ ?\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{_mesh_8h_a9289d5b99dc1f27f01480360f2e18ae0}{GLsizei}}\textcolor{keyword}{>}(indices.size())\ :\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{_mesh_8h_a9289d5b99dc1f27f01480360f2e18ae0}{GLsizei}}\textcolor{keyword}{>}(vertices.size()\ /\ 3);}
+\DoxyCodeLine{\Hypertarget{_mesh_8cpp_source_l00065}00065\ \ \ \ \ \mbox{\hyperlink{class_mesh_ae89f95e85ae7fa157545324aa5f5db7d}{indexCount}}\ =\ \mbox{\hyperlink{class_mesh_a3153eeca2bbde0037c365662bbeb52f1}{useIndex}}\ ?\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{_mesh_8h_a2d467e230729e9194068528ee1985327}{GLsizei}}\textcolor{keyword}{>}(indices.size())\ :\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{_mesh_8h_a2d467e230729e9194068528ee1985327}{GLsizei}}\textcolor{keyword}{>}(vertices.size()\ /\ 3);}
 \DoxyCodeLine{\Hypertarget{_mesh_8cpp_source_l00066}00066\ }
 \DoxyCodeLine{\Hypertarget{_mesh_8cpp_source_l00067}00067\ \ \ \ \ \textcolor{comment}{//\ Create\ VAO}}
 \DoxyCodeLine{\Hypertarget{_mesh_8cpp_source_l00068}00068\ \ \ \ \ glCreateVertexArrays(1,\ \&\mbox{\hyperlink{class_mesh_a101a39d88bc5c8d33f0ebd6e77a60129}{vao}});}

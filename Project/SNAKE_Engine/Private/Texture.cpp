@@ -35,7 +35,7 @@ namespace
     }
 }
 
-Texture::Texture(const std::string& path, const TextureSettings& settings):id(0),width(0),height(0),channels(0)
+Texture::Texture(const std::string& path, const TextureSettings& settings) :id(0), width(0), height(0), channels(0)
 {
     stbi_set_flip_vertically_on_load(true);
     unsigned char* data = stbi_load(path.c_str(), &width, &height, &channels, 0);

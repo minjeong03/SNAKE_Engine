@@ -1,5 +1,4 @@
 #include "Player.h"
-#include <iostream>
 #include <random>
 
 #include "Bullet.h"
@@ -26,7 +25,7 @@ void Player::Update(float dt, const EngineContext& engineContext)
 {
     if (engineContext.inputManager->IsKeyDown(KEY_W))
     {
-        transform2D.AddPosition(glm::vec2(0, 150*dt));
+        transform2D.AddPosition(glm::vec2(0, 150 * dt));
     }
     if (engineContext.inputManager->IsKeyDown(KEY_A))
     {
@@ -43,15 +42,15 @@ void Player::Update(float dt, const EngineContext& engineContext)
 
     if (engineContext.inputManager->IsKeyDown(KEY_SPACE))
     {
-	SNAKE_LOG("player shot the bullet");
+        SNAKE_LOG("player shot the bullet");
 
-	static std::random_device rd;
-	static std::mt19937 gen(rd());
-	static std::uniform_real_distribution<float> angleDist(0.0f, 2.0f * glm::pi<float>());
+        static std::random_device rd;
+        static std::mt19937 gen(rd());
+        static std::uniform_real_distribution<float> angleDist(0.0f, 2.0f * glm::pi<float>());
 
-	float angle = angleDist(gen);
-	std::unique_ptr<Bullet> b = std::make_unique<Bullet>(transform2D.GetPosition(), glm::vec2(std::cos(angle), std::sin(angle)));
-    engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::move(b));
+        float angle = angleDist(gen);
+        std::unique_ptr<Bullet> b = std::make_unique<Bullet>(transform2D.GetPosition(), glm::vec2(std::cos(angle), std::sin(angle)));
+        engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::move(b));
     }
 }
 

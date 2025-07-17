@@ -27,7 +27,7 @@ void \mbox{\hyperlink{class_mesh_aded7f91ba518a9599070b78b892791ec}{Setup\+Insta
 \begin{DoxyCompactList}\small\item\em Configures instance matrix attributes in the VAO. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_mesh_abf84fe4ef735490769268685087e0e32}{Draw}} () const
 \begin{DoxyCompactList}\small\item\em Draws the mesh using either gl\+Draw\+Arrays or gl\+Draw\+Elements. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_mesh_ae2933e498cc249ab798bbf265dace77b}{Draw\+Instanced}} (\mbox{\hyperlink{_mesh_8h_a9289d5b99dc1f27f01480360f2e18ae0}{GLsizei}} instance\+Count) const
+void \mbox{\hyperlink{class_mesh_ae2933e498cc249ab798bbf265dace77b}{Draw\+Instanced}} (\mbox{\hyperlink{_mesh_8h_a2d467e230729e9194068528ee1985327}{GLsizei}} instance\+Count) const
 \begin{DoxyCompactList}\small\item\em Draws this mesh multiple times using instanced rendering. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_mesh_a4516fe3f6af8d82f55fdb0e3b4206fb0}{Setup\+Mesh}} (const std\+::vector$<$ float $>$ \&vertices, const std\+::vector$<$ unsigned int $>$ \&indices)
 \begin{DoxyCompactList}\small\item\em Initializes Open\+GL buffers (VAO, VBO, and optionally EBO). \end{DoxyCompactList}\item 
@@ -38,7 +38,7 @@ void \mbox{\hyperlink{class_mesh_ad365ff3ca915cc989524253a42c00b2b}{Compute\+Loc
 \item 
 friend \mbox{\hyperlink{class_mesh_aa36ea23707449cf3c872cafa9068a4de}{Material}}
 \item 
-friend \mbox{\hyperlink{class_mesh_a4081c525076281d0fdd8f46f992fea34}{Object\+Manager}}
+friend \mbox{\hyperlink{class_mesh_a99cf3d4862433af3b73292a510a6a179}{Render\+Manager}}
 \item 
 \mbox{\hyperlink{_material_8h_a9b79d6d8dc8627e68412974748f1c08c}{GLuint}} \mbox{\hyperlink{class_mesh_a101a39d88bc5c8d33f0ebd6e77a60129}{vao}}
 \item 
@@ -46,7 +46,7 @@ friend \mbox{\hyperlink{class_mesh_a4081c525076281d0fdd8f46f992fea34}{Object\+Ma
 \item 
 \mbox{\hyperlink{_material_8h_a9b79d6d8dc8627e68412974748f1c08c}{GLuint}} \mbox{\hyperlink{class_mesh_a17bb0f1901ce2f3bc62e7d6d2ca9e2f7}{ebo}}
 \item 
-\mbox{\hyperlink{_mesh_8h_a9289d5b99dc1f27f01480360f2e18ae0}{GLsizei}} \mbox{\hyperlink{class_mesh_ae89f95e85ae7fa157545324aa5f5db7d}{index\+Count}}
+\mbox{\hyperlink{_mesh_8h_a2d467e230729e9194068528ee1985327}{GLsizei}} \mbox{\hyperlink{class_mesh_ae89f95e85ae7fa157545324aa5f5db7d}{index\+Count}}
 \item 
 bool \mbox{\hyperlink{class_mesh_a3153eeca2bbde0037c365662bbeb52f1}{use\+Index}}
 \item 
@@ -61,12 +61,10 @@ Represents a GPU-\/side 2D mesh including vertex and optional index data.
 
 \doxylink{class_mesh}{Mesh} instances are owned and drawn by \doxylink{class_render_manager}{Render\+Manager}. 
 
-Definition at line \mbox{\hyperlink{_mesh_8h_source_l00019}{19}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
+Definition at line \mbox{\hyperlink{_mesh_8h_source_l00021}{21}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
 
 
 
-\label{doc-constructors}
-\Hypertarget{class_mesh_doc-constructors}
 \doxysubsection{Constructor \& Destructor Documentation}
 \Hypertarget{class_mesh_a2764366600e55b6d872dad8f5bb97bb5}\index{Mesh@{Mesh}!Mesh@{Mesh}}
 \index{Mesh@{Mesh}!Mesh@{Mesh}}
@@ -125,8 +123,6 @@ Definition at line \mbox{\hyperlink{_mesh_8cpp_source_l00040}{40}} of file \mbox
 \end{DoxyCode}
 
 
-\label{doc-func-members}
-\Hypertarget{class_mesh_doc-func-members}
 \doxysubsection{Member Function Documentation}
 \Hypertarget{class_mesh_a1287e6ec00a9c684640a67fac6bc8199}\index{Mesh@{Mesh}!BindVAO@{BindVAO}}
 \index{BindVAO@{BindVAO}!Mesh@{Mesh}}
@@ -168,31 +164,31 @@ Only the x and y components of each vertex are considered. If vertex data is mal
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{_mesh_8h_source_l00097}{97}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
+Definition at line \mbox{\hyperlink{_mesh_8h_source_l00099}{99}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00098\ \ \ \ \ \{}
-\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (vertices.empty()\ ||\ vertices.size()\ \%\ 3\ !=\ 0)}
-\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mesh_ab9d13fdb38eedf8e33aefa9f61056e95}{localHalfSize}}\ =\ glm::vec2(0.5f);\ \textcolor{comment}{//\ fallback}}
-\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00104\ }
-\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ glm::vec2\ minPos(vertices[0],\ vertices[1]);}
-\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ glm::vec2\ maxPos(vertices[0],\ vertices[1]);}
-\DoxyCodeLine{00107\ }
-\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ vertices.size();\ i\ +=\ 3)}
-\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ glm::vec2\ pos(vertices[i],\ vertices[i\ +\ 1]);}
-\DoxyCodeLine{00111\ }
-\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ minPos\ =\ glm::min(minPos,\ pos);}
-\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ maxPos\ =\ glm::max(maxPos,\ pos);}
-\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00115\ }
-\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ glm::vec2\ size\ =\ maxPos\ -\/\ minPos;}
-\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mesh_ab9d13fdb38eedf8e33aefa9f61056e95}{localHalfSize}}\ =\ size\ *\ 0.5f;}
-\DoxyCodeLine{00118\ \ \ \ \ \}}
+\DoxyCodeLine{00100\ \ \ \ \ \{}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (vertices.empty()\ ||\ vertices.size()\ \%\ 3\ !=\ 0)}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mesh_ab9d13fdb38eedf8e33aefa9f61056e95}{localHalfSize}}\ =\ glm::vec2(0.5f);\ \textcolor{comment}{//\ fallback}}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ glm::vec2\ minPos(vertices[0],\ vertices[1]);}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ glm::vec2\ maxPos(vertices[0],\ vertices[1]);}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ vertices.size();\ i\ +=\ 3)}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ glm::vec2\ pos(vertices[i],\ vertices[i\ +\ 1]);}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ minPos\ =\ glm::min(minPos,\ pos);}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ maxPos\ =\ glm::max(maxPos,\ pos);}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ glm::vec2\ size\ =\ maxPos\ -\/\ minPos;}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mesh_ab9d13fdb38eedf8e33aefa9f61056e95}{localHalfSize}}\ =\ size\ *\ 0.5f;}
+\DoxyCodeLine{00120\ \ \ \ \ \}}
 
 \end{DoxyCode}
 \Hypertarget{class_mesh_abf84fe4ef735490769268685087e0e32}\index{Mesh@{Mesh}!Draw@{Draw}}
@@ -229,7 +225,7 @@ Definition at line \mbox{\hyperlink{_mesh_8cpp_source_l00013}{13}} of file \mbox
 \index{DrawInstanced@{DrawInstanced}!Mesh@{Mesh}}
 \doxysubsubsection{\texorpdfstring{DrawInstanced()}{DrawInstanced()}}
 {\footnotesize\ttfamily \label{class_mesh_ae2933e498cc249ab798bbf265dace77b} 
-void Mesh\+::\+Draw\+Instanced (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{_mesh_8h_a9289d5b99dc1f27f01480360f2e18ae0}{GLsizei}}}]{instance\+Count}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [private]}}
+void Mesh\+::\+Draw\+Instanced (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{_mesh_8h_a2d467e230729e9194068528ee1985327}{GLsizei}}}]{instance\+Count}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [private]}}
 
 
 
@@ -269,11 +265,11 @@ Half extents of the mesh bounds (used for culling).
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{_mesh_8h_source_l00047}{47}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
+Definition at line \mbox{\hyperlink{_mesh_8h_source_l00049}{49}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00047\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_mesh_ab9d13fdb38eedf8e33aefa9f61056e95}{localHalfSize}};\ \}}
+\DoxyCodeLine{00049\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_mesh_ab9d13fdb38eedf8e33aefa9f61056e95}{localHalfSize}};\ \}}
 
 \end{DoxyCode}
 \Hypertarget{class_mesh_aded7f91ba518a9599070b78b892791ec}\index{Mesh@{Mesh}!SetupInstanceAttributes@{SetupInstanceAttributes}}
@@ -338,7 +334,7 @@ Definition at line \mbox{\hyperlink{_mesh_8cpp_source_l00062}{62}} of file \mbox
 \begin{DoxyCode}{0}
 \DoxyCodeLine{00063\ \{}
 \DoxyCodeLine{00064\ \ \ \ \ \mbox{\hyperlink{class_mesh_a3153eeca2bbde0037c365662bbeb52f1}{useIndex}}\ =\ !indices.empty();}
-\DoxyCodeLine{00065\ \ \ \ \ \mbox{\hyperlink{class_mesh_ae89f95e85ae7fa157545324aa5f5db7d}{indexCount}}\ =\ \mbox{\hyperlink{class_mesh_a3153eeca2bbde0037c365662bbeb52f1}{useIndex}}\ ?\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{_mesh_8h_a9289d5b99dc1f27f01480360f2e18ae0}{GLsizei}}\textcolor{keyword}{>}(indices.size())\ :\ static\_cast<\mbox{\hyperlink{_mesh_8h_a9289d5b99dc1f27f01480360f2e18ae0}{GLsizei}}>(vertices.size()\ /\ 3);}
+\DoxyCodeLine{00065\ \ \ \ \ \mbox{\hyperlink{class_mesh_ae89f95e85ae7fa157545324aa5f5db7d}{indexCount}}\ =\ \mbox{\hyperlink{class_mesh_a3153eeca2bbde0037c365662bbeb52f1}{useIndex}}\ ?\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{_mesh_8h_a2d467e230729e9194068528ee1985327}{GLsizei}}\textcolor{keyword}{>}(indices.size())\ :\ static\_cast<\mbox{\hyperlink{_mesh_8h_a2d467e230729e9194068528ee1985327}{GLsizei}}>(vertices.size()\ /\ 3);}
 \DoxyCodeLine{00066\ }
 \DoxyCodeLine{00067\ \ \ \ \ \textcolor{comment}{//\ Create\ VAO}}
 \DoxyCodeLine{00068\ \ \ \ \ glCreateVertexArrays(1,\ \&\mbox{\hyperlink{class_mesh_a101a39d88bc5c8d33f0ebd6e77a60129}{vao}});}
@@ -372,8 +368,6 @@ Definition at line \mbox{\hyperlink{_mesh_8cpp_source_l00062}{62}} of file \mbox
 \end{DoxyCode}
 
 
-\label{doc-variable-members}
-\Hypertarget{class_mesh_doc-variable-members}
 \doxysubsection{Member Data Documentation}
 \Hypertarget{class_mesh_a17bb0f1901ce2f3bc62e7d6d2ca9e2f7}\index{Mesh@{Mesh}!ebo@{ebo}}
 \index{ebo@{ebo}!Mesh@{Mesh}}
@@ -383,17 +377,17 @@ Definition at line \mbox{\hyperlink{_mesh_8cpp_source_l00062}{62}} of file \mbox
 
 
 
-Definition at line \mbox{\hyperlink{_mesh_8h_source_l00122}{122}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
+Definition at line \mbox{\hyperlink{_mesh_8h_source_l00124}{124}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
 
 \Hypertarget{class_mesh_ae89f95e85ae7fa157545324aa5f5db7d}\index{Mesh@{Mesh}!indexCount@{indexCount}}
 \index{indexCount@{indexCount}!Mesh@{Mesh}}
 \doxysubsubsection{\texorpdfstring{indexCount}{indexCount}}
 {\footnotesize\ttfamily \label{class_mesh_ae89f95e85ae7fa157545324aa5f5db7d} 
-\mbox{\hyperlink{_mesh_8h_a9289d5b99dc1f27f01480360f2e18ae0}{GLsizei}} Mesh\+::index\+Count\hspace{0.3cm}{\ttfamily [private]}}
+\mbox{\hyperlink{_mesh_8h_a2d467e230729e9194068528ee1985327}{GLsizei}} Mesh\+::index\+Count\hspace{0.3cm}{\ttfamily [private]}}
 
 
 
-Definition at line \mbox{\hyperlink{_mesh_8h_source_l00123}{123}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
+Definition at line \mbox{\hyperlink{_mesh_8h_source_l00125}{125}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
 
 \Hypertarget{class_mesh_ab9d13fdb38eedf8e33aefa9f61056e95}\index{Mesh@{Mesh}!localHalfSize@{localHalfSize}}
 \index{localHalfSize@{localHalfSize}!Mesh@{Mesh}}
@@ -403,7 +397,7 @@ glm\+::vec2 Mesh\+::local\+Half\+Size\hspace{0.3cm}{\ttfamily [private]}}
 
 
 
-Definition at line \mbox{\hyperlink{_mesh_8h_source_l00125}{125}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
+Definition at line \mbox{\hyperlink{_mesh_8h_source_l00127}{127}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
 
 \Hypertarget{class_mesh_aa36ea23707449cf3c872cafa9068a4de}\index{Mesh@{Mesh}!Material@{Material}}
 \index{Material@{Material}!Mesh@{Mesh}}
@@ -413,17 +407,17 @@ friend Mesh\+::\+Material\hspace{0.3cm}{\ttfamily [private]}}
 
 
 
-Definition at line \mbox{\hyperlink{_mesh_8h_source_l00020}{20}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
+Definition at line \mbox{\hyperlink{_mesh_8h_source_l00022}{22}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
 
-\Hypertarget{class_mesh_a4081c525076281d0fdd8f46f992fea34}\index{Mesh@{Mesh}!ObjectManager@{ObjectManager}}
-\index{ObjectManager@{ObjectManager}!Mesh@{Mesh}}
-\doxysubsubsection{\texorpdfstring{ObjectManager}{ObjectManager}}
-{\footnotesize\ttfamily \label{class_mesh_a4081c525076281d0fdd8f46f992fea34} 
-friend Mesh\+::\+Object\+Manager\hspace{0.3cm}{\ttfamily [private]}}
+\Hypertarget{class_mesh_a99cf3d4862433af3b73292a510a6a179}\index{Mesh@{Mesh}!RenderManager@{RenderManager}}
+\index{RenderManager@{RenderManager}!Mesh@{Mesh}}
+\doxysubsubsection{\texorpdfstring{RenderManager}{RenderManager}}
+{\footnotesize\ttfamily \label{class_mesh_a99cf3d4862433af3b73292a510a6a179} 
+friend Mesh\+::\+Render\+Manager\hspace{0.3cm}{\ttfamily [private]}}
 
 
 
-Definition at line \mbox{\hyperlink{_mesh_8h_source_l00021}{21}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
+Definition at line \mbox{\hyperlink{_mesh_8h_source_l00023}{23}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
 
 \Hypertarget{class_mesh_a3153eeca2bbde0037c365662bbeb52f1}\index{Mesh@{Mesh}!useIndex@{useIndex}}
 \index{useIndex@{useIndex}!Mesh@{Mesh}}
@@ -433,7 +427,7 @@ bool Mesh\+::use\+Index\hspace{0.3cm}{\ttfamily [private]}}
 
 
 
-Definition at line \mbox{\hyperlink{_mesh_8h_source_l00124}{124}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
+Definition at line \mbox{\hyperlink{_mesh_8h_source_l00126}{126}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
 
 \Hypertarget{class_mesh_a101a39d88bc5c8d33f0ebd6e77a60129}\index{Mesh@{Mesh}!vao@{vao}}
 \index{vao@{vao}!Mesh@{Mesh}}
@@ -443,7 +437,7 @@ Definition at line \mbox{\hyperlink{_mesh_8h_source_l00124}{124}} of file \mbox{
 
 
 
-Definition at line \mbox{\hyperlink{_mesh_8h_source_l00120}{120}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
+Definition at line \mbox{\hyperlink{_mesh_8h_source_l00122}{122}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
 
 \Hypertarget{class_mesh_ad8eff04c857fc1f1f42584af599f8267}\index{Mesh@{Mesh}!vbo@{vbo}}
 \index{vbo@{vbo}!Mesh@{Mesh}}
@@ -453,7 +447,7 @@ Definition at line \mbox{\hyperlink{_mesh_8h_source_l00120}{120}} of file \mbox{
 
 
 
-Definition at line \mbox{\hyperlink{_mesh_8h_source_l00121}{121}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
+Definition at line \mbox{\hyperlink{_mesh_8h_source_l00123}{123}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
 
 
 

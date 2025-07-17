@@ -39,7 +39,7 @@
 \DoxyCodeLine{\Hypertarget{_texture_8cpp_source_l00035}00035\ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{_texture_8cpp_source_l00036}00036\ \}}
 \DoxyCodeLine{\Hypertarget{_texture_8cpp_source_l00037}00037\ }
-\DoxyCodeLine{\Hypertarget{_texture_8cpp_source_l00038}\mbox{\hyperlink{class_texture_ae935fb0d9d7a1f8e9e2a30f53412c6bf}{00038}}\ \mbox{\hyperlink{class_texture_ae935fb0d9d7a1f8e9e2a30f53412c6bf}{Texture::Texture}}(\textcolor{keyword}{const}\ std::string\&\ path,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_texture_settings}{TextureSettings}}\&\ settings):\mbox{\hyperlink{class_texture_aed42161a5c00b6020c85833401da6da6}{id}}(0),\mbox{\hyperlink{class_texture_a06a0246cb31343557c3441c5733349cd}{width}}(0),\mbox{\hyperlink{class_texture_ad37c395c65ff8bde86230908027a6fcd}{height}}(0),\mbox{\hyperlink{class_texture_a69c58068e4b82a86d24e8c797705d515}{channels}}(0)}
+\DoxyCodeLine{\Hypertarget{_texture_8cpp_source_l00038}\mbox{\hyperlink{class_texture_aa475e60a29a6cadbe10a3e8e96bdf6f5}{00038}}\ \mbox{\hyperlink{class_texture_aa475e60a29a6cadbe10a3e8e96bdf6f5}{Texture::Texture}}(\textcolor{keyword}{const}\ std::string\&\ path,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_texture_settings}{TextureSettings}}\&\ settings):\mbox{\hyperlink{class_texture_aed42161a5c00b6020c85833401da6da6}{id}}(0),\mbox{\hyperlink{class_texture_a06a0246cb31343557c3441c5733349cd}{width}}(0),\mbox{\hyperlink{class_texture_ad37c395c65ff8bde86230908027a6fcd}{height}}(0),\mbox{\hyperlink{class_texture_a69c58068e4b82a86d24e8c797705d515}{channels}}(0)}
 \DoxyCodeLine{\Hypertarget{_texture_8cpp_source_l00039}00039\ \{}
 \DoxyCodeLine{\Hypertarget{_texture_8cpp_source_l00040}00040\ \ \ \ \ stbi\_set\_flip\_vertically\_on\_load(\textcolor{keyword}{true});}
 \DoxyCodeLine{\Hypertarget{_texture_8cpp_source_l00041}00041\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*\ data\ =\ stbi\_load(path.c\_str(),\ \&\mbox{\hyperlink{class_texture_a06a0246cb31343557c3441c5733349cd}{width}},\ \&\mbox{\hyperlink{class_texture_ad37c395c65ff8bde86230908027a6fcd}{height}},\ \&\mbox{\hyperlink{class_texture_a69c58068e4b82a86d24e8c797705d515}{channels}},\ 0);}
@@ -49,7 +49,7 @@
 \DoxyCodeLine{\Hypertarget{_texture_8cpp_source_l00045}00045\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
 \DoxyCodeLine{\Hypertarget{_texture_8cpp_source_l00046}00046\ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{_texture_8cpp_source_l00047}00047\ }
-\DoxyCodeLine{\Hypertarget{_texture_8cpp_source_l00048}00048\ \ \ \ \ \mbox{\hyperlink{_shader_8h_a7efd7809e1632cdae75603fd1fee61c0}{GLenum}}\ format\ =\ (\mbox{\hyperlink{class_texture_a69c58068e4b82a86d24e8c797705d515}{channels}}\ ==\ 4)\ ?\ GL\_RGBA\ :}
+\DoxyCodeLine{\Hypertarget{_texture_8cpp_source_l00048}00048\ \ \ \ \ \mbox{\hyperlink{_shader_8h_aabcf3e059d4bfe03f96c378d2533c3ba}{GLenum}}\ format\ =\ (\mbox{\hyperlink{class_texture_a69c58068e4b82a86d24e8c797705d515}{channels}}\ ==\ 4)\ ?\ GL\_RGBA\ :}
 \DoxyCodeLine{\Hypertarget{_texture_8cpp_source_l00049}00049\ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{class_texture_a69c58068e4b82a86d24e8c797705d515}{channels}}\ ==\ 3)\ ?\ GL\_RGB\ :}
 \DoxyCodeLine{\Hypertarget{_texture_8cpp_source_l00050}00050\ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{class_texture_a69c58068e4b82a86d24e8c797705d515}{channels}}\ ==\ 1)\ ?\ GL\_RED\ :\ GL\_RGB;}
 \DoxyCodeLine{\Hypertarget{_texture_8cpp_source_l00051}00051\ }

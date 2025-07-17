@@ -2,11 +2,11 @@
 \hypertarget{_state_manager_8cpp_source}{}\label{_state_manager_8cpp_source}\index{Project/SNAKE\_Engine/Private/StateManager.cpp@{Project/SNAKE\_Engine/Private/StateManager.cpp}}
 \mbox{\hyperlink{_state_manager_8cpp}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
-\DoxyCodeLine{\Hypertarget{_state_manager_8cpp_source_l00001}00001\ }
-\DoxyCodeLine{\Hypertarget{_state_manager_8cpp_source_l00002}00002\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_state_manager_8h}{StateManager.h}}"{}}}
-\DoxyCodeLine{\Hypertarget{_state_manager_8cpp_source_l00003}00003\ }
-\DoxyCodeLine{\Hypertarget{_state_manager_8cpp_source_l00004}00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_engine_context_8h}{EngineContext.h}}"{}}}
-\DoxyCodeLine{\Hypertarget{_state_manager_8cpp_source_l00005}00005\ }
+\DoxyCodeLine{\Hypertarget{_state_manager_8cpp_source_l00001}00001\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_state_manager_8h}{StateManager.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{_state_manager_8cpp_source_l00002}00002\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_game_state_8h}{GameState.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{_state_manager_8cpp_source_l00003}00003\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_engine_context_8h}{EngineContext.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{_state_manager_8cpp_source_l00004}00004\ \textcolor{preprocessor}{\#include"{}\mbox{\hyperlink{_window_manager_8h}{WindowManager.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{_state_manager_8cpp_source_l00005}00005\ \textcolor{preprocessor}{\#include"{}\mbox{\hyperlink{_render_manager_8h}{RenderManager.h}}"{}}}
 \DoxyCodeLine{\Hypertarget{_state_manager_8cpp_source_l00006}\mbox{\hyperlink{class_state_manager_aeb24049cbe185fe0faec5c771e34c2bb}{00006}}\ \mbox{\hyperlink{class_game_state}{GameState}}*\ \mbox{\hyperlink{class_state_manager_aeb24049cbe185fe0faec5c771e34c2bb}{StateManager::GetCurrentState}}()\textcolor{keyword}{\ const}}
 \DoxyCodeLine{\Hypertarget{_state_manager_8cpp_source_l00007}00007\ \textcolor{keyword}{}\{}
 \DoxyCodeLine{\Hypertarget{_state_manager_8cpp_source_l00008}00008\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_state_manager_a23b9db8ba856509ed476ed1144247b83}{currentState}}\ ?\ \mbox{\hyperlink{class_state_manager_a23b9db8ba856509ed476ed1144247b83}{currentState}}.get()\ :\ \textcolor{keyword}{nullptr};}

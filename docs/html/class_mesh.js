@@ -13,7 +13,7 @@ var class_mesh =
     [ "indexCount", "class_mesh.html#ae89f95e85ae7fa157545324aa5f5db7d", null ],
     [ "localHalfSize", "class_mesh.html#ab9d13fdb38eedf8e33aefa9f61056e95", null ],
     [ "Material", "class_mesh.html#aa36ea23707449cf3c872cafa9068a4de", null ],
-    [ "ObjectManager", "class_mesh.html#a4081c525076281d0fdd8f46f992fea34", null ],
+    [ "RenderManager", "class_mesh.html#a99cf3d4862433af3b73292a510a6a179", null ],
     [ "useIndex", "class_mesh.html#a3153eeca2bbde0037c365662bbeb52f1", null ],
     [ "vao", "class_mesh.html#a101a39d88bc5c8d33f0ebd6e77a60129", null ],
     [ "vbo", "class_mesh.html#ad8eff04c857fc1f1f42584af599f8267", null ]

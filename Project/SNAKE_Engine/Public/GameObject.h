@@ -123,32 +123,35 @@ public:
     [[nodiscard]] const uint8_t& GetRenderLayer() const;
 
     /**
- * @brief Sets the render layer of the GameObject using a named tag.
- *
- * @details
- * Retrieves the numeric layer ID associated with the provided tag from the engine's RenderLayerManager.
- * If the tag is not registered, it defaults to layer 0.
- *
- * This allows objects to be grouped into rendering layers (e.g., background, UI).
- * Higher layers are rendered in front of lower layers.
- *
- * Example usage:
- * @code
- * player->SetRenderLayer(engineContext, "UI");
- * @endcode
- *
- * @param engineContext Reference to the engine-wide context.
- * @param tag Name of the render layer previously registered (e.g., "Background", "UI").
- */
+     * @brief Sets the render layer of the GameObject using a named tag.
+     *
+     * @details
+     * Retrieves the numeric layer ID associated with the provided tag from the engine's RenderLayerManager.
+     * If the tag is not registered, it defaults to layer 0.
+     *
+     * This allows objects to be grouped into rendering layers (e.g., background, UI).
+     * Higher layers are rendered in front of lower layers.
+     *
+     * @param engineContext Reference to the engine-wide context.
+     * @param tag Name of the render layer previously registered (e.g., "Background", "UI").
+     */
 
     void SetRenderLayer(const EngineContext& engineContext, const std::string& tag);
 
     /**
-     * @brief Sets the Material used by this object when rendered.
+     * @brief Sets the material of this GameObject using a tag.
      *
-     * @param _material Pointer to Material instance.
+     * @details
+     * Looks up a Material previously registered in the RenderManager using the given tag.
+     * If no material is found, the internal pointer remains unchanged.
+     *
+     * This is useful for swapping visual appearance dynamically (e.g. changing textures).
+     *
+     * @param engineContext The global engine context providing access to RenderManager.
+     * @param tag The tag used to retrieve the Material.
      */
     void SetMaterial(const EngineContext& engineContext, const std::string& tag);
+
 
     /**
      * @brief Gets the current Material used by this object.
@@ -158,9 +161,16 @@ public:
     [[nodiscard]] Material* GetMaterial() const;
 
     /**
-     * @brief Sets the Mesh for this object.
+     * @brief Sets the mesh of this GameObject using a tag.
      *
-     * @param _mesh Pointer to Mesh.
+     * @details
+     * Looks up a Mesh previously registered in the RenderManager using the given tag.
+     * If no mesh is found, the internal pointer remains unchanged.
+     *
+     * This is useful for swapping visual appearance dynamically (e.g. changing textures).
+     *
+     * @param engineContext The global engine context providing access to RenderManager.
+     * @param tag The tag used to retrieve the Mesh.
      */
     void SetMesh(const EngineContext& engineContext, const std::string& tag);
 

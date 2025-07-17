@@ -58,7 +58,7 @@ using RenderMap = std::array<ShaderMap, RenderLayerManager::MAX_LAYERS>;
  * and issuing render commands to the GPU.
  *
  * The rendering flow consists of:
- * - Submit(): collects draw calls 
+ * - Submit(): collects draw calls
  * - FlushDrawCommands(): executes all sorted draw calls
  */
 class RenderManager
@@ -155,20 +155,20 @@ public:
     void RegisterMaterial(const std::string& tag, std::unique_ptr<Material> material);
 
     /**
-	 * @brief Registers a new custom render layer by name.
-	 *
-	 * @details
-	 * Adds a new named layer to the internal RenderLayerManager. This allows
-	 * GameObjects to specify which layer they belong to for rendering order.
-	 * Layers are drawn in increasing order (layer 0 drawn first).
-	 *
-	 * @param tag String identifier for the new render layer (max 16 layers).
-	 *
-	 * @code
-	 * renderManager.RegisterRenderLayer("UI"); // layer 0 
-	 * renderManager.RegisterRenderLayer("Enemies"); // layer 1
-	 * @endcode
-	 */
+     * @brief Registers a new custom render layer by name.
+     *
+     * @details
+     * Adds a new named layer to the internal RenderLayerManager. This allows
+     * GameObjects to specify which layer they belong to for rendering order.
+     * Layers are drawn in increasing order (layer 0 drawn first).
+     *
+     * @param tag String identifier for the new render layer (max 16 layers).
+     *
+     * @code
+     * renderManager.RegisterRenderLayer("UI"); // layer 0
+     * renderManager.RegisterRenderLayer("Enemies"); // layer 1
+     * @endcode
+     */
     void RegisterRenderLayer(const std::string& tag);
 
     /**
@@ -255,36 +255,36 @@ public:
     void ClearBackground(int x, int y, int width, int height, glm::vec4 color);
 
     /**
-	 * @brief Provides access to the internal render layer manager.
-	 *
-	 * @details
-	 * Returns a reference to the RenderLayerManager, which can be used to
-	 * query existing layer indices or manually assign layers to GameObjects.
-	 *
-	 * @return Reference to the RenderLayerManager instance.
-	 *
-	 * @code
-	 * std::string layerName = renderManager.GetLayerManager().GetLayerName(0);
-	 * @endcode
-	 */
+     * @brief Provides access to the internal render layer manager.
+     *
+     * @details
+     * Returns a reference to the RenderLayerManager, which can be used to
+     * query existing layer indices or manually assign layers to GameObjects.
+     *
+     * @return Reference to the RenderLayerManager instance.
+     *
+     * @code
+     * std::string layerName = renderManager.GetLayerManager().GetLayerName(0);
+     * @endcode
+     */
     RenderLayerManager& GetRenderLayerManager();
 
 private:
 
     /**
-	 * @brief Organizes GameObjects into a batched render map based on layer, shader, and instancing key.
-	 *
-	 * @details
-	 * Groups all visible GameObjects into a hierarchical map structure:
-	 * - First by render layer (int)
-	 * - Then by Shader*
-	 * - Then by (Mesh + Material) key
-	 *
-	 * Used for efficient render submission and instancing.
-	 *
-	 * @param source List of visible GameObjects to include in the batch.
-	 * @return RenderMap structure used for sorting and submission.
-	 */
+     * @brief Organizes GameObjects into a batched render map based on layer, shader, and instancing key.
+     *
+     * @details
+     * Groups all visible GameObjects into a hierarchical map structure:
+     * - First by render layer (int)
+     * - Then by Shader*
+     * - Then by (Mesh + Material) key
+     *
+     * Used for efficient render submission and instancing.
+     *
+     * @param source List of visible GameObjects to include in the batch.
+     * @return RenderMap structure used for sorting and submission.
+     */
     [[nodiscard]] RenderMap BuildRenderMap(const std::vector<GameObject*>& source);
 
     /**
@@ -340,7 +340,7 @@ private:
 class FrustumCuller
 {
 public:
-	/**
+    /**
      * @brief Filters out invisible GameObjects from a list.
      *
      * @details

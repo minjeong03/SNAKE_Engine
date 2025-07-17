@@ -7,7 +7,7 @@ var class_game_object =
     [ "GetBoundingRadius", "class_game_object.html#a9bec05f684a784f6da53950ed88bcc43", null ],
     [ "GetMaterial", "class_game_object.html#a5fab1116913ca2421e31d33c6d6f925a", null ],
     [ "GetMesh", "class_game_object.html#a5debb3dcdeeacde859c04516dd2863f7", null ],
-    [ "GetRenderLayer", "class_game_object.html#ab81d9a0bce740e8b12da4933bbc302ea", null ],
+    [ "GetRenderLayer", "class_game_object.html#aa50f7248bebf40ffe7d4fc6eb3c1cafd", null ],
     [ "GetTag", "class_game_object.html#a6ec65a8b875cfcf7d9155390579fcaab", null ],
     [ "GetTransform2D", "class_game_object.html#abed0ca920d14e75b4bbbf0eedc2a9a6b", null ],
     [ "GetTransform2DMatrix", "class_game_object.html#a4b51d385623a23e4365c0871f5ddf8e0", null ],
@@ -17,8 +17,9 @@ var class_game_object =
     [ "Kill", "class_game_object.html#aa6dbb50deac7be1d693871a6aad6d3cf", null ],
     [ "LateFree", "class_game_object.html#aeb5e2de10ad0afc74a5cedec5673b0e1", null ],
     [ "LateInit", "class_game_object.html#a69148215e3765d3c2e75ee09df7c0e6e", null ],
-    [ "SetMaterial", "class_game_object.html#a9dec83c46b56367032cab5672e7ab1f5", null ],
-    [ "SetMesh", "class_game_object.html#aa8ae4cf4049bab264346fd7e8a4afad0", null ],
+    [ "SetMaterial", "class_game_object.html#ae21ed126abb71d96f76873f101722803", null ],
+    [ "SetMesh", "class_game_object.html#a09e2681a7d362d680c13a00540093261", null ],
+    [ "SetRenderLayer", "class_game_object.html#acf09f4ab2946a65e379470199c02ce0e", null ],
     [ "SetTag", "class_game_object.html#acec27028c01bbfef737cdca1da52138d", null ],
     [ "SetVisibility", "class_game_object.html#a275d2ace9954c1318c5948f8f00f6619", null ],
     [ "Update", "class_game_object.html#a5e5d39ae8bf189946dc372a5b8895006", null ],
@@ -28,6 +29,6 @@ var class_game_object =
     [ "material", "class_game_object.html#ae96b21c69e34f42fbe118f526331a701", null ],
     [ "mesh", "class_game_object.html#acccd1ae1f4cf9f9436d25f6cb9399380", null ],
     [ "objectTag", "class_game_object.html#a497ce047dd995ccde4fea1b8e0f4336e", null ],
-    [ "renderLayer", "class_game_object.html#a0f3b832dce59a6dfd661283a46de028f", null ],
+    [ "renderLayer", "class_game_object.html#a6abcc84dbe5e41cf42832aa3aa430afa", null ],
     [ "transform2D", "class_game_object.html#acfa40a49a23acb179b2867416f88081c", null ]
 ];

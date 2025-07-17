@@ -15,6 +15,7 @@ var annotated_dup =
     [ "Material", "class_material.html", "class_material" ],
     [ "Mesh", "class_mesh.html", "class_mesh" ],
     [ "ObjectManager", "class_object_manager.html", "class_object_manager" ],
+    [ "RenderLayerManager", "class_render_layer_manager.html", "class_render_layer_manager" ],
     [ "RenderManager", "class_render_manager.html", "class_render_manager" ],
     [ "Shader", "class_shader.html", "class_shader" ],
     [ "SNAKE_Engine", "class_s_n_a_k_e___engine.html", "class_s_n_a_k_e___engine" ],

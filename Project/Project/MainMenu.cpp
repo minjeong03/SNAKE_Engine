@@ -11,7 +11,7 @@ void MainMenu::Load(const EngineContext& engineContext)
 {
     SNAKE_LOG("[MainMenu] load called");
 
-  }
+}
 
 void MainMenu::Init(const EngineContext& engineContext)
 {

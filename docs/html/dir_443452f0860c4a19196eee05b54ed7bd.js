@@ -12,6 +12,7 @@ var dir_443452f0860c4a19196eee05b54ed7bd =
     [ "Material.h", "_material_8h.html", "_material_8h" ],
     [ "Mesh.h", "_mesh_8h.html", "_mesh_8h" ],
     [ "ObjectManager.h", "_object_manager_8h.html", "_object_manager_8h" ],
+    [ "RenderLayerManager.h", "_render_layer_manager_8h.html", "_render_layer_manager_8h" ],
     [ "RenderManager.h", "_render_manager_8h.html", "_render_manager_8h" ],
     [ "Shader.h", "_shader_8h.html", "_shader_8h" ],
     [ "SNAKE_Engine.h", "_s_n_a_k_e___engine_8h.html", "_s_n_a_k_e___engine_8h" ],

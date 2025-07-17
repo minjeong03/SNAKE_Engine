@@ -5,7 +5,7 @@
 class Bullet : public GameObject
 {
 public:
-    Bullet(glm::vec2 _pos,glm::vec2 _dir);
+    Bullet(glm::vec2 _pos, glm::vec2 _dir);
     void Init(const EngineContext& engineContext) override;
     void LateInit(const EngineContext& engineContext) override;
     void Update(float dt, const EngineContext& engineContext) override;
