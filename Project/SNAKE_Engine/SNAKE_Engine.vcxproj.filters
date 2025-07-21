@@ -9,15 +9,114 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="public\test.h">
+    <ClInclude Include="Public\StateManager.h">
       <Filter>public</Filter>
     </ClInclude>
-    <ClInclude Include="Private\includes.h">
+    <ClInclude Include="Public\GameState.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\SNAKE_Engine.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\EngineContext.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Engine.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\InputManager.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\WindowManager.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\ObjectManager.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\RenderManager.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\GameObject.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Texture.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Shader.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Debug.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Material.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Mesh.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\InstanceBatchKey.h">
       <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Transform.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\EngineTimer.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\CameraManager.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Camera2D.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\RenderLayerManager.h">
+      <Filter>public</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="private\test.cpp">
+    <ClCompile Include="Private\StateManager.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\SNAKE_Engine.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\InputManager.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\WindowManager.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\ObjectManager.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\RenderManager.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\Texture.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\Shader.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\Material.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\Mesh.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\Transform.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\EngineTimer.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\CameraManager.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\Camera2D.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\GameObject.cpp">
       <Filter>private</Filter>
     </ClCompile>
   </ItemGroup>
