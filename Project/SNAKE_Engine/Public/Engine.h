@@ -8,6 +8,8 @@
 #include "StateManager.h"
 #include "ObjectManager.h"
 #include "RenderManager.h"
+#include "SoundManager.h"
+#include "CameraManager.h"
 
 #include "Texture.h"
 #include "Shader.h"
@@ -16,7 +18,7 @@
 #include "Mesh.h"
 
 #include "EngineTimer.h"
-#include "CameraManager.h"
+
 #include "Camera2D.h"
 
 #include "../ThirdParty/glm/glm.hpp"

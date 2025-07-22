@@ -17,6 +17,7 @@ void SNAKE_Engine::SetEngineContext()
     engineContext.windowManager = &windowManager;
     engineContext.inputManager = &inputManager;
     engineContext.renderManager = &renderManager;
+    engineContext.soundManager = &soundManager;
     engineContext.engine = this;
 }
 
@@ -29,6 +30,7 @@ bool SNAKE_Engine::Init(int windowWidth, int windowHeight)
         return false;
     }
     inputManager.Init(windowManager.GetHandle());
+    soundManager.Init();
     SetEngineContext();
     return true;
 }
@@ -56,9 +58,12 @@ void SNAKE_Engine::Run()
         stateManager.Update(dt, engineContext);
         stateManager.Draw(engineContext);
 
+        soundManager.Update();
+
         windowManager.SwapBuffers();
     }
 
+    soundManager.Free();
     stateManager.Free(engineContext);
     windowManager.Free();
     Free();

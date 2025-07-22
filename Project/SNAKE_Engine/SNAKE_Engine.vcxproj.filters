@@ -72,6 +72,9 @@
     <ClInclude Include="Public\RenderLayerManager.h">
       <Filter>public</Filter>
     </ClInclude>
+    <ClInclude Include="Public\SoundManager.h">
+      <Filter>public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Private\StateManager.cpp">
@@ -117,6 +120,9 @@
       <Filter>private</Filter>
     </ClCompile>
     <ClCompile Include="Private\GameObject.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\SoundManager.cpp">
       <Filter>private</Filter>
     </ClCompile>
   </ItemGroup>

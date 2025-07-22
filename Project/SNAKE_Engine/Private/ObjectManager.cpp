@@ -108,13 +108,7 @@ void ObjectManager::DrawObjects(const EngineContext& engineContext, Camera2D* ca
 void ObjectManager::DrawObjectsWithTag(const EngineContext& engineContext, Camera2D* camera, const std::string& tag)
 {
     std::vector<GameObject*> filteredObjects;
-    for (GameObject* obj : rawPtrObjects)
-    {
-        if (obj && obj->IsAlive() && obj->GetTag() == tag)
-        {
-            filteredObjects.push_back(obj);
-        }
-    }
+    FindByTag(tag, filteredObjects);
     engineContext.renderManager->Submit(engineContext, filteredObjects, camera);
 }
 
@@ -133,10 +127,21 @@ void ObjectManager::FreeAll(const EngineContext& engineContext)
     objectMap.clear();
 }
 
-GameObject* ObjectManager::FindByID(const std::string& id) const
+GameObject* ObjectManager::FindByTag(const std::string& tag) const
 {
-    auto it = objectMap.find(id);
+    auto it = objectMap.find(tag);
     if (it != objectMap.end())
         return it->second;
     return nullptr;
+}
+
+void ObjectManager::FindByTag(const std::string& tag, std::vector<GameObject*>& gameObjects)
+{
+    for (GameObject* obj : rawPtrObjects)
+    {
+        if (obj && obj->IsAlive() && obj->GetTag() == tag)
+        {
+            gameObjects.push_back(obj);
+        }
+    }
 }

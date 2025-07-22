@@ -44,6 +44,7 @@
     <ClInclude Include="Public\RenderManager.h" />
     <ClInclude Include="Public\Shader.h" />
     <ClInclude Include="Public\SNAKE_Engine.h" />
+    <ClInclude Include="Public\SoundManager.h" />
     <ClInclude Include="Public\StateManager.h" />
     <ClInclude Include="Public\Texture.h" />
     <ClInclude Include="Public\Transform.h" />
@@ -61,6 +62,7 @@
     <ClCompile Include="Private\RenderManager.cpp" />
     <ClCompile Include="Private\Shader.cpp" />
     <ClCompile Include="Private\SNAKE_Engine.cpp" />
+    <ClCompile Include="Private\SoundManager.cpp" />
     <ClCompile Include="Private\StateManager.cpp" />
     <ClCompile Include="Private\Texture.cpp" />
     <ClCompile Include="Private\Transform.cpp" />
@@ -151,7 +153,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);GLFW_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Public;$(ProjectDir)ThirdParty;$(ProjectDir)Private</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)ThirdParty\fmod\inc;$(ProjectDir)Public;$(ProjectDir)ThirdParty;$(ProjectDir)Private</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -161,12 +163,11 @@
       <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy /Y /D "$(ProjectDir)\ThirdParty\fmod\lib\x86\fmodL.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <Lib>
-      <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)ThirdParty\glfw3;$(ProjectDir)ThirdParty\glad</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)ThirdParty\glfw3;$(ProjectDir)ThirdParty\fmod\lib\x86;$(ProjectDir)ThirdParty\glad</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='EngineOnly|Win32'">
@@ -175,7 +176,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_CONSOLE;%(PreprocessorDefinitions);GLFW_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Public;$(ProjectDir)ThirdParty;$(ProjectDir)Private</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)ThirdParty\fmod\inc;$(ProjectDir)Public;$(ProjectDir)ThirdParty;$(ProjectDir)Private</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <Optimization>MaxSpeed</Optimization>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
@@ -191,12 +192,11 @@
       <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy /Y /D "$(ProjectDir)\ThirdParty\fmod\lib\x86\fmod.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <Lib>
-      <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)ThirdParty\glfw3;$(ProjectDir)ThirdParty\glad</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib,fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)ThirdParty\glfw3;$(ProjectDir)ThirdParty\fmod\lib\x86;$(ProjectDir)ThirdParty\glad</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -207,7 +207,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);GLFW_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Public;$(ProjectDir)ThirdParty;$(ProjectDir)Private</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)ThirdParty\fmod\inc;$(ProjectDir)Public;$(ProjectDir)ThirdParty;$(ProjectDir)Private</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -217,12 +217,11 @@
       <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy /Y /D "$(ProjectDir)\ThirdParty\fmod\lib\x86\fmod.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <Lib>
-      <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)ThirdParty\glfw3;$(ProjectDir)ThirdParty\glad</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib,fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)ThirdParty\glfw3;$(ProjectDir)ThirdParty\fmod\lib\x86;$(ProjectDir)ThirdParty\glad</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -231,7 +230,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);GLFW_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Public;$(ProjectDir)ThirdParty;$(ProjectDir)Private</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)ThirdParty\fmod\inc;$(ProjectDir)Public;$(ProjectDir)ThirdParty;$(ProjectDir)Private</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -241,12 +240,11 @@
       <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy /Y /D "$(ProjectDir)\ThirdParty\fmod\lib\x64\fmodL.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <Lib>
-      <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)ThirdParty\glfw3;$(ProjectDir)ThirdParty\glad</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)ThirdParty\fmod\lib\x64;$(ProjectDir)ThirdParty\glfw3;$(ProjectDir)ThirdParty\glad</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='EngineOnly|x64'">
@@ -255,7 +253,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CONSOLE;%(PreprocessorDefinitions);GLFW_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Public;$(ProjectDir)ThirdParty;$(ProjectDir)Private</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)ThirdParty\fmod\inc;$(ProjectDir)Public;$(ProjectDir)ThirdParty;$(ProjectDir)Private</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <Optimization>MaxSpeed</Optimization>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
@@ -271,12 +269,11 @@
       <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy /Y /D "$(ProjectDir)\ThirdParty\fmod\lib\x64\fmod.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <Lib>
-      <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)ThirdParty\glfw3;$(ProjectDir)ThirdParty\glad</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)ThirdParty\fmod\lib\x64;$(ProjectDir)ThirdParty\glfw3;$(ProjectDir)ThirdParty\glad</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -287,7 +284,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);GLFW_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Public;$(ProjectDir)ThirdParty;$(ProjectDir)Private</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)ThirdParty\fmod\inc;$(ProjectDir)Public;$(ProjectDir)ThirdParty;$(ProjectDir)Private</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -297,12 +294,11 @@
       <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy /Y /D "$(ProjectDir)\ThirdParty\fmod\lib\x64\fmod.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <Lib>
-      <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)ThirdParty\glfw3;$(ProjectDir)ThirdParty\glad</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)ThirdParty\fmod\lib\x64;$(ProjectDir)ThirdParty\glfw3;$(ProjectDir)ThirdParty\glad</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

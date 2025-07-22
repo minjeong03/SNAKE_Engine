@@ -24,5 +24,6 @@ private:
     WindowManager windowManager;
     InputManager inputManager;
     RenderManager renderManager;
+    SoundManager soundManager;
     bool shouldRun = true;
 };

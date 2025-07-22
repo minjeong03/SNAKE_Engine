@@ -32,7 +32,8 @@ public:
 
     void FreeAll(const EngineContext& engineContext);
 
-    [[nodiscard]] GameObject* FindByID(const std::string& id) const;
+    [[nodiscard]] GameObject* FindByTag(const std::string& tag) const;
+    void FindByTag(const std::string& tag, std::vector<GameObject*>& gameObjects);
 
 private:
     std::vector<std::unique_ptr<GameObject>> objects;

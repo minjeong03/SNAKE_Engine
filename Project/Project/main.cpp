@@ -80,6 +80,11 @@ int main(int argc, char* argv[])
     snakeEngine.GetEngineContext().renderManager->RegisterRenderLayer("Player");
     snakeEngine.GetEngineContext().renderManager->RegisterRenderLayer("UI");
 
+    snakeEngine.GetEngineContext().soundManager->LoadSound("bgm", "Sounds/test.mp3");
+    snakeEngine.GetEngineContext().soundManager->LoadSound("click", "Sounds/mouse.mp3");
+    snakeEngine.GetEngineContext().soundManager->LoadSound("beep", "Sounds/beep.mp3");
+
+
     snakeEngine.GetEngineContext().stateManager->ChangeState(std::make_unique<MainMenu>());
 
     snakeEngine.Run();
