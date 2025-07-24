@@ -38,7 +38,7 @@ void StateManager::Draw(const EngineContext& engineContext)
 	if (currentState != nullptr)
 	{
 		currentState->Draw(engineContext);
-		engineContext.renderManager->FlushDrawCommands();
+		engineContext.renderManager->FlushDrawCommands(engineContext);
 	}
 }
 

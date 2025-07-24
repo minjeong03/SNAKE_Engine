@@ -14,9 +14,9 @@
 #include "Texture.h"
 #include "Camera2D.h"
 #include "GameObject.h"
+#include "../Private/InstanceBatchKey.h"
 #include "RenderLayerManager.h"
 
-struct InstanceBatchKey;
 class StateManager;
 
 using TextureTag = std::string;
@@ -24,7 +24,7 @@ using UniformName = std::string;
 using FilePath = std::string;
 using RenderCommand = std::function<void()>;
 
-using ShaderMap = std::map<Shader*, std::map<InstanceBatchKey, std::vector<GameObject*>>>;
+using ShaderMap = std::map<Shader*, std::map<InstanceBatchKey, std::vector<std::pair<GameObject*, Camera2D*>>>>;
 using RenderMap = std::array<ShaderMap, RenderLayerManager::MAX_LAYERS>;
 
 class RenderManager
@@ -63,7 +63,7 @@ public:
 
     void ClearDrawCommands();
 
-    void FlushDrawCommands();
+    void FlushDrawCommands(const EngineContext& engineContext);
 
     void SetViewport(int x, int y, int width, int height);
 
@@ -72,9 +72,9 @@ public:
     RenderLayerManager& GetRenderLayerManager();
 
 private:
-    [[nodiscard]] RenderMap BuildRenderMap(const std::vector<GameObject*>& source);
+    void BuildRenderMap(const std::vector<GameObject*>& source, Camera2D* camera);
 
-    void SubmitRenderMap(const EngineContext& engineContext, Camera2D* camera, const RenderMap& renderMap);
+    void SubmitRenderMap(const EngineContext& engineContext);
 
     void Submit(const EngineContext& engineContext, const std::vector<GameObject*>& allObjects, Camera2D* camera);
 
@@ -83,7 +83,7 @@ private:
     std::unordered_map<std::string, std::unique_ptr<Mesh>> meshMap;
     std::unordered_map<std::string, std::unique_ptr<Material>> materialMap;
     std::vector<RenderCommand> renderQueue;
-
+    RenderMap renderMap;
     RenderLayerManager renderLayerManager;
 };
 

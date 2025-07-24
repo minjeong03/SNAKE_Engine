@@ -26,15 +26,19 @@ void RenderManager::Submit(const EngineContext& engineContext, const std::vector
 {
     std::vector<GameObject*> visibleObjects;
     FrustumCuller::CullVisible(*camera, objects, visibleObjects, glm::vec2(engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight()));
-    RenderMap renderMap = BuildRenderMap(visibleObjects);
-    SubmitRenderMap(engineContext, camera, renderMap);
+    BuildRenderMap(visibleObjects,camera);
 }
 
-void RenderManager::FlushDrawCommands()
+void RenderManager::FlushDrawCommands(const EngineContext& engineContext)
 {
+    SubmitRenderMap(engineContext);
     for (const auto& cmd : renderQueue)
     {
         cmd();
+    }
+    for (auto& shdrMap :renderMap)
+    {
+        shdrMap.clear();
     }
     renderQueue.clear();
 }
@@ -62,10 +66,8 @@ RenderLayerManager& RenderManager::GetRenderLayerManager()
     return renderLayerManager;
 }
 
-RenderMap RenderManager::BuildRenderMap(const std::vector<GameObject*>& source)
+void RenderManager::BuildRenderMap(const std::vector<GameObject*>& source, Camera2D* camera)
 {
-    RenderMap renderMap;
-
     for (auto* obj : source)
     {
         if (!obj || !obj->IsVisible())
@@ -86,13 +88,11 @@ RenderMap RenderManager::BuildRenderMap(const std::vector<GameObject*>& source)
         }
 
         InstanceBatchKey key{ mesh, material };
-        renderMap[layer][shader][key].push_back(obj);
+        renderMap[layer][shader][key].emplace_back(obj,camera);
     }
-
-    return renderMap;
 }
 
-void RenderManager::SubmitRenderMap(const EngineContext& engineContext, Camera2D* camera, const RenderMap& renderMap)
+void RenderManager::SubmitRenderMap(const EngineContext& engineContext)
 {
     Material* lastMaterial = nullptr;
     Shader* lastShader = nullptr;
@@ -105,12 +105,12 @@ void RenderManager::SubmitRenderMap(const EngineContext& engineContext, Camera2D
         {
             for (const auto& [key, batch] : batchMap)
             {
-                if (batch.front()->CanBeInstanced())
+                if (batch.front().first->CanBeInstanced())
                 {
                     Submit([=]() mutable {
                         std::vector<glm::mat4> transforms;
                         transforms.reserve(batch.size());
-                        for (auto* obj : batch)
+                        for (const auto& [obj, camera] : batch)
                             transforms.push_back(obj->GetTransform2DMatrix());
 
                         Material* material = key.material;
@@ -124,11 +124,11 @@ void RenderManager::SubmitRenderMap(const EngineContext& engineContext, Camera2D
 
                         if (currentShader != lastShader)
                         {
-                            material->SetUniform("u_Projection", camera->GetProjectionMatrix());
+                            material->SetUniform("u_Projection", batch.front().second->GetProjectionMatrix());
                             lastShader = currentShader;
                         }
 
-                        batch.front()->Draw(engineContext);
+                        batch.front().first->Draw(engineContext);
                         material->SendUniforms();
 
                         key.mesh->BindVAO();
@@ -139,7 +139,7 @@ void RenderManager::SubmitRenderMap(const EngineContext& engineContext, Camera2D
                 }
                 else
                 {
-                    for (auto* obj : batch)
+                    for (const auto& [obj, camera] : batch)
                     {
                         Submit([=]() mutable {
                             Material* mat = key.material;

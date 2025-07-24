@@ -1,48 +1,51 @@
-#include "Player.h"
+#include "Enemy.h"
+
 #include <random>
 
 #include "Bullet.h"
 #include "Debug.h"
 #include "Engine.h"
 
-
-void Player::Init(const EngineContext& engineContext)
+Enemy::Enemy(glm::vec2 pos)
 {
-    transform2D.SetPosition(glm::vec2(0, 0));
+    transform2D.SetPosition(pos);
     transform2D.SetScale(glm::vec2(50.f));
+}
 
+void Enemy::Init(const EngineContext& engineContext)
+{
     SetMesh(engineContext, "default");
     SetMaterial(engineContext, "m_default");
-    SetRenderLayer(engineContext, "Player");
+    SetRenderLayer(engineContext, "Enemy");
 }
 
-void Player::LateInit(const EngineContext& engineContext)
+void Enemy::LateInit(const EngineContext& engineContext)
 {
 
 }
 
-void Player::Update(float dt, const EngineContext& engineContext)
+void Enemy::Update(float dt, const EngineContext& engineContext)
 {
-    if (engineContext.inputManager->IsKeyDown(KEY_W))
+    if (engineContext.inputManager->IsKeyDown(KEY_UP))
     {
         transform2D.AddPosition(glm::vec2(0, 150 * dt));
     }
-    if (engineContext.inputManager->IsKeyDown(KEY_A))
+    if (engineContext.inputManager->IsKeyDown(KEY_LEFT))
     {
         transform2D.AddPosition(glm::vec2(-150 * dt, 0));
     }
-    if (engineContext.inputManager->IsKeyDown(KEY_S))
+    if (engineContext.inputManager->IsKeyDown(KEY_DOWN))
     {
         transform2D.AddPosition(glm::vec2(0, -150 * dt));
     }
-    if (engineContext.inputManager->IsKeyDown(KEY_D))
+    if (engineContext.inputManager->IsKeyDown(KEY_RIGHT))
     {
         transform2D.AddPosition(glm::vec2(150 * dt, 0));
     }
 
-    if (engineContext.inputManager->IsKeyDown(KEY_SPACE))
+    if (engineContext.inputManager->IsKeyDown(KEY_RIGHT_CONTROL))
     {
-        SNAKE_LOG("player shot the bullet");
+        SNAKE_LOG("enemy shot the bullet");
 
         static std::random_device rd;
         static std::mt19937 gen(rd());
@@ -54,18 +57,18 @@ void Player::Update(float dt, const EngineContext& engineContext)
     }
 }
 
-void Player::Draw(const EngineContext& engineContext)
+void Enemy::Draw(const EngineContext& engineContext)
 {
-    GetMaterial()->SetUniform("u_Color", glm::vec4(1.0, 1.0, 1.0, 1.0));
+    GetMaterial()->SetUniform("u_Color", glm::vec4(1.0, 0.0, 1.0, 1.0));
     GetMaterial()->SetUniform("u_Model", transform2D.GetMatrix());
 }
 
-void Player::Free(const EngineContext& engineContext)
+void Enemy::Free(const EngineContext& engineContext)
 {
     SNAKE_LOG("Player Free Called");
 }
 
-void Player::LateFree(const EngineContext& engineContext)
+void Enemy::LateFree(const EngineContext& engineContext)
 {
     SNAKE_LOG("Player LateFree Called");
 }

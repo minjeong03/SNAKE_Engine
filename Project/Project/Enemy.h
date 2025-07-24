@@ -2,9 +2,10 @@
 #include "ObjectManager.h"
 #include "Engine.h"
 
-class Player : public GameObject
+class Enemy : public GameObject
 {
 public:
+    Enemy(glm::vec2 pos);
     void Init(const EngineContext& engineContext) override;
     void LateInit(const EngineContext& engineContext) override;
     void Update(float dt, const EngineContext& engineContext) override;

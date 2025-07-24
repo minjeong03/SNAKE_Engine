@@ -3,6 +3,7 @@
 #include "../ThirdParty/glad/gl.h"
 
 #include "Debug.h"
+#include "Enemy.h"
 #include "Level1.h"
 
 #include "Engine.h"
@@ -21,8 +22,11 @@ void MainMenu::Init(const EngineContext& engineContext)
     SNAKE_LOG("[MainMenu] init called");
     objectManager.AddObject(std::make_unique<Player>(), "mainmenu player");
 
+    objectManager.AddObject(std::make_unique<Enemy>(glm::vec2(50,50)), "enemy");
+    objectManager.AddObject(std::make_unique<Enemy>(glm::vec2(0, 0)), "enemy");
+
     auto minimapCam = std::make_unique<Camera2D>(engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
-    minimapCam->SetZoom(0.05f);
+    minimapCam->SetZoom(5.05f);
     cameraManager.RegisterCamera("minimap", std::move(minimapCam));
     cameraManager.SetActiveCamera("minimap");
 
@@ -69,12 +73,12 @@ void MainMenu::Update(float dt, const EngineContext& engineContext)
         else
             engineContext.soundManager->ControlByID(SoundManager::SoundControlType::Resume, id);
     }
-    if (engineContext.inputManager->IsKeyPressed(KEY_UP))
+    if (engineContext.inputManager->IsKeyPressed(KEY_1))
     {
         volume += 0.1f;
         engineContext.soundManager->SetVolumeByID(id, volume);
     }
-    if (engineContext.inputManager->IsKeyPressed(KEY_DOWN))
+    if (engineContext.inputManager->IsKeyPressed(KEY_2))
     {
         volume -= 0.1f;
         engineContext.soundManager->SetVolumeByID(id, volume);
@@ -90,22 +94,23 @@ void MainMenu::Draw(const EngineContext& engineContext)
 {
     auto& rm = *engineContext.renderManager;
 
-    rm.SetViewport(0, 0, engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
+    //rm.SetViewport(0, 0, engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
     cameraManager.SetActiveCamera("main");
-    objectManager.DrawAll(engineContext, cameraManager.GetActiveCamera());
-    rm.FlushDrawCommands();
-
-    rm.ClearBackground(10, 10, 200, 200, glm::vec4(0.3, 0.3, 1, 0));
-    rm.SetViewport(10, 10, 200, 200);
-    rm.FlushDrawCommands();
-
-    cameraManager.SetActiveCamera("minimap");
-    cameraManager.SetScreenSize("minimap", 200, 200);
     objectManager.DrawObjectsWithTag(engineContext, cameraManager.GetActiveCamera(), "bullet");
-    rm.FlushDrawCommands();
+    //rm.FlushDrawCommands(engineContext);
+    objectManager.DrawObjectsWithTag(engineContext, cameraManager.GetActiveCamera(), "mainmenu player");
+    //rm.ClearBackground(10, 10, 200, 200, glm::vec4(0.3, 0.3, 1, 0));
+    //rm.SetViewport(10, 10, 200, 200);
+    //rm.FlushDrawCommands(engineContext);
+    objectManager.DrawObjectsWithTag(engineContext, cameraManager.GetActiveCamera(), "enemy");
+    //cameraManager.SetActiveCamera("minimap");
+	//cameraManager.SetScreenSize("minimap", 200, 200);
 
-    rm.SetViewport(0, 0, engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
-    rm.FlushDrawCommands();
+
+    //rm.FlushDrawCommands(engineContext);
+
+    //rm.SetViewport(0, 0, engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
+    rm.FlushDrawCommands(engineContext);
 }
 
 
