@@ -13,10 +13,12 @@
 #include "Shader.h"
 #include "Texture.h"
 #include "Camera2D.h"
+#include "Font.h"
 #include "GameObject.h"
 #include "../Private/InstanceBatchKey.h"
 #include "RenderLayerManager.h"
 
+class SNAKE_Engine;
 class StateManager;
 
 using TextureTag = std::string;
@@ -31,6 +33,7 @@ class RenderManager
 {
     friend ObjectManager;
     friend StateManager;
+    friend SNAKE_Engine;
 
 public:
     void RegisterShader(const std::string& tag, const std::vector<std::pair<ShaderStage, FilePath>>& sources);
@@ -49,6 +52,10 @@ public:
 
     void RegisterMaterial(const std::string& tag, std::unique_ptr<Material> material);
 
+	void RegisterFont(const std::string& tag, const std::string& ttfPath, uint32_t pixelSize);
+
+    void RegisterFont(const std::string& tag, std::unique_ptr<Font> font);
+
     void RegisterRenderLayer(const std::string& tag);
 
     [[nodiscard]] Shader* GetShaderByTag(const std::string& tag) { return shaderMap[tag].get(); }
@@ -61,6 +68,8 @@ public:
 
     void Submit(std::function<void()>&& drawFunc);
 
+    void SubmitText(const TextInstance& textInstance, const std::string& layerTag);
+
     void ClearDrawCommands();
 
     void FlushDrawCommands(const EngineContext& engineContext);
@@ -70,8 +79,9 @@ public:
     void ClearBackground(int x, int y, int width, int height, glm::vec4 color);
 
     RenderLayerManager& GetRenderLayerManager();
-
 private:
+    void Init(const EngineContext& engineContext);
+
     void BuildRenderMap(const std::vector<GameObject*>& source, Camera2D* camera);
 
     void SubmitRenderMap(const EngineContext& engineContext);
@@ -82,6 +92,8 @@ private:
     std::unordered_map<std::string, std::unique_ptr<Texture>> textureMap;
     std::unordered_map<std::string, std::unique_ptr<Mesh>> meshMap;
     std::unordered_map<std::string, std::unique_ptr<Material>> materialMap;
+    std::unordered_map<std::string, std::unique_ptr<Font>> fontMap;
+    std::unordered_map<std::string, std::unique_ptr<Mesh>> textMeshCache;
     std::vector<RenderCommand> renderQueue;
     RenderMap renderMap;
     RenderLayerManager renderLayerManager;
@@ -91,19 +103,5 @@ class FrustumCuller
 {
 public:
     static void CullVisible(const Camera2D& camera, const std::vector<GameObject*>& allObjects,
-        std::vector<GameObject*>& outVisibleList, glm::vec2 viewportSize)
-    {
-        outVisibleList.clear();
-        for (GameObject* obj : allObjects)
-        {
-            if (!obj->IsAlive() && !obj->IsVisible())
-                continue;
-
-            const glm::vec2& pos = obj->GetTransform2D().GetPosition();
-            float radius = obj->GetBoundingRadius();
-
-            if (camera.IsInView(pos, radius, viewportSize / camera.GetZoom()))
-                outVisibleList.push_back(obj);
-        }
-    }
+        std::vector<GameObject*>& outVisibleList, glm::vec2 viewportSize);
 };

@@ -1,6 +1,8 @@
 #include "RenderManager.h"
 #include <algorithm>
 #include <iostream>
+#include <glm/ext/matrix_clip_space.hpp>
+#include <glm/ext/matrix_transform.hpp>
 
 #include "Camera2D.h"
 #include "../ThirdParty/glad/gl.h"
@@ -22,11 +24,58 @@ void RenderManager::Submit(std::function<void()>&& drawFunc)
     renderQueue.push_back({ std::move(drawFunc) });
 }
 
+void RenderManager::SubmitText(const TextInstance& textInstance, const std::string& layerTag)
+{
+    std::string cacheKey = textInstance.fontTag + "|" + textInstance.text;
+
+    Mesh* mesh = nullptr;
+    auto it = textMeshCache.find(cacheKey);
+    if (it != textMeshCache.end())
+    {
+        mesh = it->second.get();
+    }
+    else
+    {
+        auto fontIt = fontMap.find(textInstance.fontTag);
+        if (fontIt == fontMap.end())
+            return;
+
+        std::unique_ptr<Mesh> newMesh(fontIt->second->GenerateTextMesh(textInstance.text, 1.0f));
+        mesh = newMesh.get();
+        textMeshCache[cacheKey] = std::move(newMesh);
+    }
+
+    Material* material = fontMap[textInstance.fontTag]->GetMaterial();
+    Shader* shader = material->GetShader();
+    InstanceBatchKey key{ mesh, material };
+
+    uint8_t uiLayer = GetRenderLayerManager().GetLayerID(layerTag).value_or(0);
+    renderMap[uiLayer][shader][key].emplace_back(nullptr, nullptr);
+}
+
+
 void RenderManager::Submit(const EngineContext& engineContext, const std::vector<GameObject*>& objects, Camera2D* camera)
 {
     std::vector<GameObject*> visibleObjects;
     FrustumCuller::CullVisible(*camera, objects, visibleObjects, glm::vec2(engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight()));
     BuildRenderMap(visibleObjects,camera);
+}
+
+void FrustumCuller::CullVisible(const Camera2D& camera, const std::vector<GameObject*>& allObjects,
+	std::vector<GameObject*>& outVisibleList, glm::vec2 viewportSize)
+{
+    outVisibleList.clear();
+    for (GameObject* obj : allObjects)
+    {
+        if (!obj->IsAlive() && !obj->IsVisible())
+            continue;
+
+        const glm::vec2& pos = obj->GetTransform2D().GetPosition();
+        float radius = obj->GetBoundingRadius();
+
+        if (camera.IsInView(pos, radius, viewportSize / camera.GetZoom()))
+            outVisibleList.push_back(obj);
+    }
 }
 
 void RenderManager::FlushDrawCommands(const EngineContext& engineContext)
@@ -41,6 +90,8 @@ void RenderManager::FlushDrawCommands(const EngineContext& engineContext)
         shdrMap.clear();
     }
     renderQueue.clear();
+    if (textMeshCache.size()<500)
+		textMeshCache.clear();
 }
 
 void RenderManager::SetViewport(int x, int y, int width, int height)
@@ -64,6 +115,48 @@ void RenderManager::ClearBackground(int x, int y, int width, int height, glm::ve
 RenderLayerManager& RenderManager::GetRenderLayerManager()
 {
     return renderLayerManager;
+}
+
+void RenderManager::Init(const EngineContext& engineContext)
+{
+    auto shader = std::make_unique<Shader>();
+
+	shader->AttachFromSource(ShaderStage::Vertex, R"(
+		#version 330 core
+		layout (location = 0) in vec2 aPos;
+		layout (location = 1) in vec2 aUV;
+
+		uniform mat4 u_Model;
+		uniform mat4 u_Projection;
+
+		out vec2 v_TexCoord;
+
+		void main()
+		{
+		    v_TexCoord = aUV;
+		    gl_Position = u_Projection * u_Model * vec4(aPos, 0.0, 1.0);
+		}
+)");
+    shader->AttachFromSource(ShaderStage::Fragment, R"(
+	    #version 330 core
+	    in vec2 v_TexCoord;
+	    out vec4 FragColor;
+
+	    uniform sampler2D u_FontTexture;
+	    uniform vec4 u_Color;
+
+	    void main()
+	    {
+	        float alpha = texture(u_FontTexture, v_TexCoord).r;
+	        FragColor = vec4(u_Color.rgb, alpha * u_Color.a);
+	    }
+)");
+
+    shader->Link();
+    shaderMap["internal_text"] = std::move(shader);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void RenderManager::BuildRenderMap(const std::vector<GameObject*>& source, Camera2D* camera)
@@ -105,7 +198,7 @@ void RenderManager::SubmitRenderMap(const EngineContext& engineContext)
         {
             for (const auto& [key, batch] : batchMap)
             {
-                if (batch.front().first->CanBeInstanced())
+                if (batch.front().first && batch.front().first->CanBeInstanced())
                 {
                     Submit([=]() mutable {
                         std::vector<glm::mat4> transforms;
@@ -141,27 +234,63 @@ void RenderManager::SubmitRenderMap(const EngineContext& engineContext)
                 {
                     for (const auto& [obj, camera] : batch)
                     {
-                        Submit([=]() mutable {
-                            Material* mat = key.material;
-                            Shader* currentShader = mat->GetShader();
+                        if (obj)
+                        {
+                            Submit([=]() mutable {
+                                Material* mat = key.material;
+                                Shader* currentShader = mat->GetShader();
 
-                            if (mat != lastMaterial)
-                            {
-                                mat->Bind();
-                                lastMaterial = mat;
-                            }
+                                if (mat != lastMaterial)
+                                {
+                                    mat->Bind();
+                                    lastMaterial = mat;
+                                }
 
-                            if (currentShader != lastShader)
-                            {
-                                mat->SetUniform("u_Projection", camera->GetProjectionMatrix());
-                                lastShader = currentShader;
-                            }
+                                if (currentShader != lastShader)
+                                {
+                                    mat->SetUniform("u_Projection", camera->GetProjectionMatrix());
+                                    lastShader = currentShader;
+                                }
 
-                            obj->Draw(engineContext);
-                            mat->SendUniforms();
-                            key.mesh->Draw();
-                            mat->UnBind();
-                            });
+                                obj->Draw(engineContext);
+                                mat->SendUniforms();
+                                key.mesh->Draw();
+                                mat->UnBind();
+                                });
+                        }
+                        else
+                        {
+                            Submit([=]() mutable {
+                                Material* mat = key.material;
+                                Shader* currentShader = mat->GetShader();
+
+                                if (mat != lastMaterial)
+                                {
+                                    mat->Bind();
+                                    lastMaterial = mat;
+                                }
+
+                                if (currentShader != lastShader)
+                                {
+                                    glm::mat4 projection = glm::ortho(
+                                        0.0f,
+                                        static_cast<float>(engineContext.windowManager->GetWidth()),
+                                        0.0f,
+                                        static_cast<float>(engineContext.windowManager->GetHeight())
+                                    );
+                                    glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(300,200, 0.0f));;
+                                    mat->SetUniform("u_Model", transform);
+                                    mat->SetUniform("u_Projection", projection);
+                                    mat->SetUniform("u_Color", glm::vec4(1.0));
+                                    lastShader = currentShader;
+                                }
+
+                                mat->SendUniforms();
+                                key.mesh->BindVAO();
+                                key.mesh->Draw();
+                                mat->UnBind();
+                                });
+                        }
                     }
                 }
             }
@@ -281,6 +410,28 @@ void RenderManager::RegisterMaterial(const std::string& tag, std::unique_ptr<Mat
         return;
     }
     materialMap[tag] = std::move(material);
+}
+
+void RenderManager::RegisterFont(const std::string& tag, const std::string& ttfPath, uint32_t pixelSize)
+{
+    if (fontMap.find(tag) != fontMap.end())
+    {
+        SNAKE_WRN("Font tag already registered: " << tag);
+        return;
+    }
+    auto font = std::make_unique<Font>(*this,ttfPath,pixelSize);
+
+    fontMap[tag] = std::move(font);
+}
+
+void RenderManager::RegisterFont(const std::string& tag, std::unique_ptr<Font> font)
+{
+    if (fontMap.find(tag) != fontMap.end())
+    {
+        SNAKE_WRN("Font tag already registered: " << tag);
+        return;
+    }
+    fontMap[tag] = std::move(font);
 }
 
 void RenderManager::RegisterRenderLayer(const std::string& tag)

@@ -29,9 +29,11 @@ bool SNAKE_Engine::Init(int windowWidth, int windowHeight)
         SNAKE_ERR("Window Initialization failed.");
         return false;
     }
+    SetEngineContext();
     inputManager.Init(windowManager.GetHandle());
     soundManager.Init();
-    SetEngineContext();
+    renderManager.Init(engineContext);
+
     return true;
 }
 

@@ -58,6 +58,14 @@ void Shader::AttachFromFile(ShaderStage stage, const FilePath& path)
     attachedStages.push_back(stage);
 }
 
+void Shader::AttachFromSource(ShaderStage stage, const std::string& source)
+{
+    GLuint shader = CompileShader(stage, source);
+    glAttachShader(programID, shader);
+    attachedShaders.push_back(shader);
+    attachedStages.push_back(stage);
+}
+
 
 void Shader::Link()
 {

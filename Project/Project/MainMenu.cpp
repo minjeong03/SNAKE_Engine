@@ -15,6 +15,12 @@ void MainMenu::Load(const EngineContext& engineContext)
 {
     SNAKE_LOG("[MainMenu] load called");
 
+    engineContext.renderManager->RegisterFont("default","Fonts/font.ttf", 99);
+    text.fontTag = "default";
+    text.text = "test";
+    text.camera = nullptr;
+    text.transform = glm::translate(glm::mat4(1.0f), glm::vec3(100, 200, 0.0f));
+
 }
 
 void MainMenu::Init(const EngineContext& engineContext)
@@ -40,6 +46,7 @@ void MainMenu::LateInit(const EngineContext& engineContext)
 
 void MainMenu::Update(float dt, const EngineContext& engineContext)
 {
+
     if (engineContext.inputManager->IsKeyPressed(KEY_N))
     {
         SNAKE_LOG("[MainMenu] key n pressed , move to mainmenu");
@@ -83,6 +90,10 @@ void MainMenu::Update(float dt, const EngineContext& engineContext)
         volume -= 0.1f;
         engineContext.soundManager->SetVolumeByID(id, volume);
     }
+    if (engineContext.inputManager->IsKeyPressed(KEY_Z))
+    {
+        text.text += "z\n";
+    }
 }
 
 void MainMenu::LateUpdate(float dt, const EngineContext& engineContext)
@@ -94,6 +105,7 @@ void MainMenu::Draw(const EngineContext& engineContext)
 {
     auto& rm = *engineContext.renderManager;
 
+    rm.SubmitText(text, "bullet");
     //rm.SetViewport(0, 0, engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
     cameraManager.SetActiveCamera("main");
     objectManager.DrawObjectsWithTag(engineContext, cameraManager.GetActiveCamera(), "bullet");
@@ -110,7 +122,6 @@ void MainMenu::Draw(const EngineContext& engineContext)
     //rm.FlushDrawCommands(engineContext);
 
     //rm.SetViewport(0, 0, engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
-    rm.FlushDrawCommands(engineContext);
 }
 
 

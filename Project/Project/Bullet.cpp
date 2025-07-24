@@ -35,6 +35,8 @@ void Bullet::Update(float dt, const EngineContext& engineContext)
     transform2D.SetRotation(transform2D.GetRotation() + dt * 2);
     transform2D.AddPosition(glm::vec2(1 * dir.x, 1 * dir.y));
     timer += dt;
+    if (timer > 3.f)
+        Kill();
 }
 
 void Bullet::Draw(const EngineContext& engineContext)

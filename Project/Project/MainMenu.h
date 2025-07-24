@@ -23,5 +23,7 @@ public:
 
 private:
     Player* player;
+    TextInstance text;
+    Font* font;
 };
 

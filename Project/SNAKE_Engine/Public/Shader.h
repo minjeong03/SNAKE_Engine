@@ -55,6 +55,8 @@ private:
 
     void AttachFromFile(ShaderStage stage, const FilePath& filepath);
 
+    void AttachFromSource(ShaderStage stage, const std::string& source);
+
     [[nodiscard]] std::string LoadShaderSource(const FilePath& filepath);
 
     [[nodiscard]] GLuint CompileShader(ShaderStage stage, const std::string& source);
