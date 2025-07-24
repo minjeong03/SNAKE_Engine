@@ -2,6 +2,8 @@
 #include"GameState.h"
 #include "Player.h"
 
+class TextObject;
+
 class MainMenu :public GameState
 {
 public:
@@ -23,7 +25,7 @@ public:
 
 private:
     Player* player;
-    TextInstance text;
     Font* font;
+    TextObject* test;
 };
 

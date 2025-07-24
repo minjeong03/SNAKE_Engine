@@ -1,7 +1,6 @@
 #include "Font.h"
 #include "Debug.h"
 #include "EngineContext.h"
-#include "Shader.h"
 #include "RenderManager.h"
 
 Font::Font(RenderManager& renderManager,const std::string& ttfPath, uint32_t fontSize_)
@@ -15,7 +14,6 @@ Font::~Font()
 {
     FT_Done_Face(face);
     FT_Done_FreeType(ft);
-    delete material;
 }
 
 void Font::LoadFont(const std::string& path, uint32_t fontSize)
@@ -75,7 +73,7 @@ void Font::BakeAtlas(RenderManager& renderManager)
     }
     atlasTexture = std::make_unique<Texture>(pixels.data(), texWidth, texHeight,1);
     Shader* textShader = renderManager.GetShaderByTag("internal_text");
-    material = new Material(textShader);
+    material = std::make_unique<Material>(textShader);
     material->SetTexture("u_FontTexture", atlasTexture.get());
     material->SetUniform("u_Color", glm::vec4(1.0f));
 }
@@ -87,32 +85,58 @@ const Glyph& Font::GetGlyph(char c) const
     return glyphs.at('?'); // fallback
 }
 
+glm::vec2 Font::GetTextSize(const std::string& text) const
+{
+    float maxWidth = 0.0f;
+    float currentLineWidth = 0.0f;
+    float totalHeight = fontSize;
+
+    for (char c : text)
+    {
+        if (c == '\n')
+        {
+            maxWidth = std::max(maxWidth, currentLineWidth);
+            currentLineWidth = 0.0f;
+            totalHeight += fontSize;
+            continue;
+        }
+
+        const Glyph& glyph = GetGlyph(c);
+        currentLineWidth += (glyph.advance >> 6);
+    }
+
+    maxWidth = std::max(maxWidth, currentLineWidth);
+    return { maxWidth, totalHeight };
+}
+
 //TODO: change structure after update mesh constructor  
-Mesh* Font::GenerateTextMesh(const std::string& text, float scale, glm::vec2 origin)
+Mesh* Font::GenerateTextMesh(const std::string& text, glm::vec2 origin)
 {
     std::vector<float> vertices;
     std::vector<uint32_t> indices;
     uint32_t indexOffset = 0;
+    glm::vec2 size = GetTextSize(text);
+    origin -= size * 0.5f;
 
     float xCursor = origin.x;
     float yCursor = origin.y;
 
-    float lineSpacing = fontSize * scale; // lineHeight는 폰트에서 미리 설정된 줄 높이
+    float lineSpacing = fontSize;
 
     for (char c : text)
     {
         if (c == '\n')
         {
             xCursor = origin.x;
-            yCursor -= lineSpacing; // 아래 줄로 이동
+            yCursor -= lineSpacing;
             continue;
         }
 
         const Glyph& glyph = GetGlyph(c);
-        float xpos = xCursor + glyph.bearing.x * scale;
-        float ypos = yCursor - (glyph.size.y - glyph.bearing.y) * scale;
-        float w = glyph.size.x * scale;
-        float h = glyph.size.y * scale;
+        float xpos = xCursor + glyph.bearing.x;
+        float ypos = yCursor - (glyph.size.y - glyph.bearing.y);
+        float w = glyph.size.x;
+        float h = glyph.size.y;
 
         float u0 = glyph.uvTopLeft.x;
         float v0 = glyph.uvTopLeft.y;
@@ -133,7 +157,7 @@ Mesh* Font::GenerateTextMesh(const std::string& text, float scale, glm::vec2 ori
             indexOffset + 0, indexOffset + 2, indexOffset + 3
             });
 
-        xCursor += (glyph.advance >> 6) * scale;
+        xCursor += (glyph.advance >> 6);
         indexOffset += 4;
     }
 

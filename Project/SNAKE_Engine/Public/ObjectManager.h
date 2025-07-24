@@ -1,44 +1,36 @@
 #pragma once
 
-#include <memory>
-#include <string>
-#include <unordered_map>
 #include <vector>
+#include <unordered_map>
+#include <string>
+#include <memory>
 
-#include "Camera2D.h"
-#include "GameObject.h"
-
+class Object;
 struct EngineContext;
 class Camera2D;
 
 class ObjectManager
 {
 public:
-    void AddObject(std::unique_ptr<GameObject> obj, const std::string& tag = "");
+    [[maybe_unused]]Object* AddObject(std::unique_ptr<Object> obj, const std::string& tag = "");
 
     void InitAll(const EngineContext& engineContext);
-
     void UpdateAll(float dt, const EngineContext& engineContext);
-
-    void AddAllPendingObjects(const EngineContext& engineContext);
-
-    void EraseDeadObjects(const EngineContext& engineContext);
-
     void DrawAll(const EngineContext& engineContext, Camera2D* camera);
-
-    void DrawObjects(const EngineContext& engineContext, Camera2D* camera, const std::vector<GameObject*>& gameObjects);
-
+    void DrawObjects(const EngineContext& engineContext, Camera2D* camera, const std::vector<Object*>& objects);
     void DrawObjectsWithTag(const EngineContext& engineContext, Camera2D* camera, const std::string& tag);
 
     void FreeAll(const EngineContext& engineContext);
 
-    [[nodiscard]] GameObject* FindByTag(const std::string& tag) const;
-    void FindByTag(const std::string& tag, std::vector<GameObject*>& gameObjects);
+    [[nodiscard]] Object* FindByTag(const std::string& tag) const;
+    void FindByTag(const std::string& tag, std::vector<Object*>& result);
 
 private:
-    std::vector<std::unique_ptr<GameObject>> objects;
-    std::vector<std::unique_ptr<GameObject>> pendingObjects;
-    std::vector<GameObject*> rawPtrObjects;
+    void AddAllPendingObjects(const EngineContext& engineContext);
+    void EraseDeadObjects(const EngineContext& engineContext);
 
-    std::unordered_map<std::string, GameObject*> objectMap;
+    std::vector<std::unique_ptr<Object>> objects;
+    std::vector<std::unique_ptr<Object>> pendingObjects;
+    std::unordered_map<std::string, Object*> objectMap;
+    std::vector<Object*> rawPtrObjects;
 };

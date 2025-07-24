@@ -8,11 +8,13 @@
 #include "../ThirdParty/glad/gl.h"
 
 #include "Debug.h"
-#include"GameObject.h"
+#include"Object.h"
 #include "Material.h"
 #include "InstanceBatchKey.h"
 #include "EngineContext.h"
+#include "TextObject.h"
 #include "WindowManager.h"
+
 
 void RenderManager::ClearDrawCommands()
 {
@@ -24,48 +26,25 @@ void RenderManager::Submit(std::function<void()>&& drawFunc)
     renderQueue.push_back({ std::move(drawFunc) });
 }
 
-void RenderManager::SubmitText(const TextInstance& textInstance, const std::string& layerTag)
+void RenderManager::Submit(const EngineContext& engineContext, const std::vector<Object*>& objects, Camera2D* camera)
 {
-    std::string cacheKey = textInstance.fontTag + "|" + textInstance.text;
-
-    Mesh* mesh = nullptr;
-    auto it = textMeshCache.find(cacheKey);
-    if (it != textMeshCache.end())
+    std::vector<Object*> visibleObjects;
+    if (camera)
     {
-        mesh = it->second.get();
+        FrustumCuller::CullVisible(*camera, objects, visibleObjects, glm::vec2(engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight()));
+        BuildRenderMap(visibleObjects, camera);
     }
     else
     {
-        auto fontIt = fontMap.find(textInstance.fontTag);
-        if (fontIt == fontMap.end())
-            return;
-
-        std::unique_ptr<Mesh> newMesh(fontIt->second->GenerateTextMesh(textInstance.text, 1.0f));
-        mesh = newMesh.get();
-        textMeshCache[cacheKey] = std::move(newMesh);
+        BuildRenderMap(objects, camera);
     }
-
-    Material* material = fontMap[textInstance.fontTag]->GetMaterial();
-    Shader* shader = material->GetShader();
-    InstanceBatchKey key{ mesh, material };
-
-    uint8_t uiLayer = GetRenderLayerManager().GetLayerID(layerTag).value_or(0);
-    renderMap[uiLayer][shader][key].emplace_back(nullptr, nullptr);
 }
 
-
-void RenderManager::Submit(const EngineContext& engineContext, const std::vector<GameObject*>& objects, Camera2D* camera)
-{
-    std::vector<GameObject*> visibleObjects;
-    FrustumCuller::CullVisible(*camera, objects, visibleObjects, glm::vec2(engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight()));
-    BuildRenderMap(visibleObjects,camera);
-}
-
-void FrustumCuller::CullVisible(const Camera2D& camera, const std::vector<GameObject*>& allObjects,
-	std::vector<GameObject*>& outVisibleList, glm::vec2 viewportSize)
+void FrustumCuller::CullVisible(const Camera2D& camera, const std::vector<Object*>& allObjects,
+    std::vector<Object*>& outVisibleList, glm::vec2 viewportSize)
 {
     outVisibleList.clear();
-    for (GameObject* obj : allObjects)
+    for (Object* obj : allObjects)
     {
         if (!obj->IsAlive() && !obj->IsVisible())
             continue;
@@ -85,13 +64,11 @@ void RenderManager::FlushDrawCommands(const EngineContext& engineContext)
     {
         cmd();
     }
-    for (auto& shdrMap :renderMap)
+    for (auto& shdrMap : renderMap)
     {
         shdrMap.clear();
     }
     renderQueue.clear();
-    if (textMeshCache.size()<500)
-		textMeshCache.clear();
 }
 
 void RenderManager::SetViewport(int x, int y, int width, int height)
@@ -121,7 +98,7 @@ void RenderManager::Init(const EngineContext& engineContext)
 {
     auto shader = std::make_unique<Shader>();
 
-	shader->AttachFromSource(ShaderStage::Vertex, R"(
+    shader->AttachFromSource(ShaderStage::Vertex, R"(
 		#version 330 core
 		layout (location = 0) in vec2 aPos;
 		layout (location = 1) in vec2 aUV;
@@ -154,12 +131,12 @@ void RenderManager::Init(const EngineContext& engineContext)
 
     shader->Link();
     shaderMap["internal_text"] = std::move(shader);
-
+    RegisterMaterial("internal_text", "internal_text",{});
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void RenderManager::BuildRenderMap(const std::vector<GameObject*>& source, Camera2D* camera)
+void RenderManager::BuildRenderMap(const std::vector<Object*>& source, Camera2D* camera)
 {
     for (auto* obj : source)
     {
@@ -181,7 +158,7 @@ void RenderManager::BuildRenderMap(const std::vector<GameObject*>& source, Camer
         }
 
         InstanceBatchKey key{ mesh, material };
-        renderMap[layer][shader][key].emplace_back(obj,camera);
+        renderMap[layer][shader][key].emplace_back(obj, camera);
     }
 }
 
@@ -198,13 +175,13 @@ void RenderManager::SubmitRenderMap(const EngineContext& engineContext)
         {
             for (const auto& [key, batch] : batchMap)
             {
-                if (batch.front().first && batch.front().first->CanBeInstanced())
+                if (batch.front().first->CanBeInstanced())
                 {
                     Submit([=]() mutable {
                         std::vector<glm::mat4> transforms;
                         transforms.reserve(batch.size());
                         for (const auto& [obj, camera] : batch)
-                            transforms.push_back(obj->GetTransform2DMatrix());
+                            transforms.push_back(dynamic_cast<GameObject*>(obj)->GetTransform2DMatrix());
 
                         Material* material = key.material;
                         Shader* currentShader = material->GetShader();
@@ -234,63 +211,41 @@ void RenderManager::SubmitRenderMap(const EngineContext& engineContext)
                 {
                     for (const auto& [obj, camera] : batch)
                     {
-                        if (obj)
-                        {
-                            Submit([=]() mutable {
-                                Material* mat = key.material;
-                                Shader* currentShader = mat->GetShader();
 
-                                if (mat != lastMaterial)
+                        Submit([=]() mutable {
+                            Material* mat = key.material;
+                            Shader* currentShader = mat->GetShader();
+
+                            if (mat != lastMaterial)
+                            {
+                                mat->Bind();
+                                lastMaterial = mat;
+                            }
+
+                            if (currentShader != lastShader)
+                            {
+                                glm::mat4 projection;
+                                if (camera == nullptr)
                                 {
-                                    mat->Bind();
-                                    lastMaterial = mat;
-                                }
-
-                                if (currentShader != lastShader)
-                                {
-                                    mat->SetUniform("u_Projection", camera->GetProjectionMatrix());
-                                    lastShader = currentShader;
-                                }
-
-                                obj->Draw(engineContext);
-                                mat->SendUniforms();
-                                key.mesh->Draw();
-                                mat->UnBind();
-                                });
-                        }
-                        else
-                        {
-                            Submit([=]() mutable {
-                                Material* mat = key.material;
-                                Shader* currentShader = mat->GetShader();
-
-                                if (mat != lastMaterial)
-                                {
-                                    mat->Bind();
-                                    lastMaterial = mat;
-                                }
-
-                                if (currentShader != lastShader)
-                                {
-                                    glm::mat4 projection = glm::ortho(
-                                        0.0f,
-                                        static_cast<float>(engineContext.windowManager->GetWidth()),
-                                        0.0f,
-                                        static_cast<float>(engineContext.windowManager->GetHeight())
+                                    projection = glm::ortho(
+                                        -static_cast<float>(engineContext.windowManager->GetWidth())/2,
+                                        static_cast<float>(engineContext.windowManager->GetWidth())/2,
+                                        -static_cast<float>(engineContext.windowManager->GetHeight())/2,
+                                        static_cast<float>(engineContext.windowManager->GetHeight())/2
                                     );
-                                    glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(300,200, 0.0f));;
-                                    mat->SetUniform("u_Model", transform);
-                                    mat->SetUniform("u_Projection", projection);
-                                    mat->SetUniform("u_Color", glm::vec4(1.0));
-                                    lastShader = currentShader;
                                 }
+                                else
+                                    projection = camera->GetProjectionMatrix();
+                                mat->SetUniform("u_Projection", projection);
+                                mat->SetUniform("u_Model", obj->GetTransform2D().GetMatrix());
+                                lastShader = currentShader;
+                            }
 
-                                mat->SendUniforms();
-                                key.mesh->BindVAO();
-                                key.mesh->Draw();
-                                mat->UnBind();
-                                });
-                        }
+                            obj->Draw(engineContext);
+                            mat->SendUniforms();
+                            key.mesh->Draw();
+                            mat->UnBind();
+                            });
                     }
                 }
             }
@@ -419,7 +374,7 @@ void RenderManager::RegisterFont(const std::string& tag, const std::string& ttfP
         SNAKE_WRN("Font tag already registered: " << tag);
         return;
     }
-    auto font = std::make_unique<Font>(*this,ttfPath,pixelSize);
+    auto font = std::make_unique<Font>(*this, ttfPath, pixelSize);
 
     fontMap[tag] = std::move(font);
 }

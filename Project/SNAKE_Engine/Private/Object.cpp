@@ -1,85 +1,85 @@
-#include "GameObject.h"
+#include "Object.h"
 #include "EngineContext.h"
 #include "RenderManager.h"
 
-const bool& GameObject::IsAlive() const
+const bool& Object::IsAlive() const
 {
     return isAlive;
 }
 
-const bool& GameObject::IsVisible() const
+const bool& Object::IsVisible() const
 {
     return isVisible;
 }
 
-void GameObject::SetVisibility(bool _isVisible)
+void Object::SetVisibility(bool _isVisible)
 {
     isVisible = _isVisible;
 }
 
-void GameObject::Kill()
+void Object::Kill()
 {
     isAlive = false;
 }
 
-void GameObject::SetTag(const std::string& tag)
+void Object::SetTag(const std::string& tag)
 {
     objectTag = tag;
 }
 
-const std::string& GameObject::GetTag() const
+const std::string& Object::GetTag() const
 {
     return objectTag;
 }
 
-const uint8_t& GameObject::GetRenderLayer() const
+const uint8_t& Object::GetRenderLayer() const
 {
     return renderLayer;
 }
 
-void GameObject::SetRenderLayer(const EngineContext& engineContext, const std::string& tag)
+void Object::SetRenderLayer(const EngineContext& engineContext, const std::string& tag)
 {
     renderLayer = engineContext.renderManager->GetRenderLayerManager().GetLayerID(tag).value_or(0);
 }
 
-void GameObject::SetMaterial(const EngineContext& engineContext, const std::string& tag)
+void Object::SetMaterial(const EngineContext& engineContext, const std::string& tag)
 {
     material = engineContext.renderManager->GetMaterialByTag(tag);
 }
 
 
-Material* GameObject::GetMaterial() const
+Material* Object::GetMaterial() const
 {
     return material;
 }
 
-void GameObject::SetMesh(const EngineContext& engineContext, const std::string& tag)
+void Object::SetMesh(const EngineContext& engineContext, const std::string& tag)
 {
     mesh = engineContext.renderManager->GetMeshByTag(tag);
 }
 
-Mesh* GameObject::GetMesh() const
+Mesh* Object::GetMesh() const
 {
     return mesh;
 }
 
-bool GameObject::CanBeInstanced() const
+bool Object::CanBeInstanced() const
 {
     if (!mesh || !material) return false;
     if (!material->IsInstancingSupported()) return false;
     return true;
 }
 
-glm::mat4& GameObject::GetTransform2DMatrix()
+glm::mat4& Object::GetTransform2DMatrix()
 {
     return transform2D.GetMatrix();
 }
 
-Transform2D& GameObject::GetTransform2D()
+Transform2D& Object::GetTransform2D()
 {
     return transform2D;
 }
-float GameObject::GetBoundingRadius() const
+float Object::GetBoundingRadius() const
 {
     glm::vec2 halfSize = mesh ? mesh->GetLocalBoundsHalfSize() : glm::vec2(0.5f);
     glm::vec2 scaled = halfSize * transform2D.GetScale();

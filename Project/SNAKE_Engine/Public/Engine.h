@@ -16,6 +16,10 @@
 #include "Transform.h"
 #include "Material.h"
 #include "Mesh.h"
+#include "Object.h"
+#include "TextObject.h"
+#include "GameObject.h"
+#include "Font.h"
 
 #include "EngineTimer.h"
 

@@ -2,7 +2,7 @@
 #include "glad/gl.h"
 #include"glfw3/glfw3.h"
 #ifdef _DEBUG
-#include<vld.h>//TODO: remove this and directories before release (VC++ Directories -> Include Directories & Library Directories)
+//#include<vld.h>//TODO: remove this and directories before release (VC++ Directories -> Include Directories & Library Directories)
 #endif
 #include "SNAKE_Engine.h"
 

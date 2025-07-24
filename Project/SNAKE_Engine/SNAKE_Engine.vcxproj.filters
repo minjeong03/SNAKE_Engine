@@ -78,6 +78,12 @@
     <ClInclude Include="Public\Font.h">
       <Filter>public</Filter>
     </ClInclude>
+    <ClInclude Include="Public\Object.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\TextObject.h">
+      <Filter>public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Private\StateManager.cpp">
@@ -122,13 +128,16 @@
     <ClCompile Include="Private\Camera2D.cpp">
       <Filter>private</Filter>
     </ClCompile>
-    <ClCompile Include="Private\GameObject.cpp">
+    <ClCompile Include="Private\Object.cpp">
       <Filter>private</Filter>
     </ClCompile>
     <ClCompile Include="Private\SoundManager.cpp">
       <Filter>private</Filter>
     </ClCompile>
     <ClCompile Include="Private\Font.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\TextObject.cpp">
       <Filter>private</Filter>
     </ClCompile>
   </ItemGroup>

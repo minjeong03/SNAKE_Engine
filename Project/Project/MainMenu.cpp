@@ -7,6 +7,7 @@
 #include "Level1.h"
 
 #include "Engine.h"
+#include "TextObject.h"
 std::string tmp = "main";
 uint64_t id = -1;
 bool trigger = false;
@@ -15,11 +16,7 @@ void MainMenu::Load(const EngineContext& engineContext)
 {
     SNAKE_LOG("[MainMenu] load called");
 
-    engineContext.renderManager->RegisterFont("default","Fonts/font.ttf", 99);
-    text.fontTag = "default";
-    text.text = "test";
-    text.camera = nullptr;
-    text.transform = glm::translate(glm::mat4(1.0f), glm::vec3(100, 200, 0.0f));
+    engineContext.renderManager->RegisterFont("default","Fonts/font.ttf", 32);
 
 }
 
@@ -27,6 +24,15 @@ void MainMenu::Init(const EngineContext& engineContext)
 {
     SNAKE_LOG("[MainMenu] init called");
     objectManager.AddObject(std::make_unique<Player>(), "mainmenu player");
+
+    test = static_cast<TextObject*>(objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"), "test"), "ui"));
+
+    test->GetTransform2D().SetPosition({ 100,100 });
+    test->GetTransform2D().SetScale({ 0.5,0.5 });
+
+    test->SetRenderLayer(engineContext, "UI");
+
+    objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"), "hello world!"), "ui")->GetTransform2D().SetPosition({-250,250});
 
     objectManager.AddObject(std::make_unique<Enemy>(glm::vec2(50,50)), "enemy");
     objectManager.AddObject(std::make_unique<Enemy>(glm::vec2(0, 0)), "enemy");
@@ -90,10 +96,11 @@ void MainMenu::Update(float dt, const EngineContext& engineContext)
         volume -= 0.1f;
         engineContext.soundManager->SetVolumeByID(id, volume);
     }
-    if (engineContext.inputManager->IsKeyPressed(KEY_Z))
-    {
-        text.text += "z\n";
-    }
+    std::vector<Object*> list;
+    objectManager.FindByTag("bullet", list);
+    test->SetText(std::to_string(list.size()));
+
+    test->GetTransform2D().SetPosition(objectManager.FindByTag("mainmenu player")->GetTransform2D().GetPosition()+glm::vec2(0,50));
 }
 
 void MainMenu::LateUpdate(float dt, const EngineContext& engineContext)
@@ -105,9 +112,10 @@ void MainMenu::Draw(const EngineContext& engineContext)
 {
     auto& rm = *engineContext.renderManager;
 
-    rm.SubmitText(text, "bullet");
+    //rm.SubmitText(text, "bullet");
     //rm.SetViewport(0, 0, engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
     cameraManager.SetActiveCamera("main");
+    objectManager.DrawObjectsWithTag(engineContext, nullptr, "ui");
     objectManager.DrawObjectsWithTag(engineContext, cameraManager.GetActiveCamera(), "bullet");
     //rm.FlushDrawCommands(engineContext);
     objectManager.DrawObjectsWithTag(engineContext, cameraManager.GetActiveCamera(), "mainmenu player");

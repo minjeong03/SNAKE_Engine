@@ -14,17 +14,6 @@
 
 class Camera2D;
 
-struct TextInstance
-{
-    glm::mat4 transform;
-    std::string fontTag;
-    std::string text;
-    Camera2D* camera;
-    std::string GetCacheKey() const
-    {
-        return fontTag + "|" + text;
-    }
-};
 
 struct EngineContext;
 
@@ -43,10 +32,10 @@ public:
     Font(RenderManager& engineContext, const std::string& ttfPath, uint32_t fontSize);
     ~Font();
 
-    Material* GetMaterial() const { return material; }
-    Mesh* GenerateTextMesh(const std::string& text, float scale = 1.0f, glm::vec2 origin = { 0.0f, 0.0f });
+    Material* GetMaterial() const { return material.get(); }
+    Mesh* GenerateTextMesh(const std::string& text, glm::vec2 origin = { 0.0f, 0.0f });
     const Glyph& GetGlyph(char c) const;
-
+    glm::vec2 GetTextSize(const std::string& text) const;
     uint8_t GetRenderLayer() const { return renderLayer; } 
     void SetRenderLayer(uint8_t layer) { renderLayer = layer; }
 
@@ -62,7 +51,7 @@ private:
 
     std::unordered_map<char, Glyph> glyphs;
     std::unique_ptr<Texture> atlasTexture;
-    Material* material = nullptr;
+    std::unique_ptr<Material> material;
 
     uint32_t atlasWidth = 0;
     uint32_t atlasHeight = 0;

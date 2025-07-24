@@ -16,7 +16,7 @@ void Level1::Init(const EngineContext& engineContext)
 {
     SNAKE_LOG("[level1] init called");
     objectManager.AddObject(std::make_unique<Player>(), "level1 player");
-
+    objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"), "test"), "ui");
     auto mainCam = std::make_unique<Camera2D>(engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
     mainCam->SetZoom(1.0f);
     cameraManager.RegisterCamera("main", std::move(mainCam));
