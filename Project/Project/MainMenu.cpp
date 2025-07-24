@@ -14,7 +14,7 @@ void MainMenu::Load(const EngineContext& engineContext)
 {
     SNAKE_LOG("[MainMenu] load called");
 
-    engineContext.renderManager->RegisterFont("default","Fonts/font.ttf", 32);
+    engineContext.renderManager->RegisterFont("default","Fonts/font.ttf", 100);
 
 }
 
@@ -30,8 +30,8 @@ void MainMenu::Init(const EngineContext& engineContext)
 
     test->SetRenderLayer(engineContext, "UI");
 
-    objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"), "1.hello world!\n2.hello world!\n3.hello world!", TextAlignH::Center, TextAlignV::Top), "ui")->GetTransform2D().SetPosition({-0,0});
-    objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"), "4.hello world!\n5.hello world!\n6.hello world!", TextAlignH::Center, TextAlignV::Bottom), "ui")->GetTransform2D().SetPosition({ -0,0 });
+    objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"), "1.hello world!\n2.hello world!\n3.hello world!", TextAlignH::Center, TextAlignV::Middle), "ui")->GetTransform2D().SetPosition({-0,0});
+   // objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"), "4.hello world!\n5.hello world!\n6.hello world!", TextAlignH::Center, TextAlignV::Bottom), "ui")->GetTransform2D().SetPosition({ -0,0 });
     objectManager.AddObject(std::make_unique<Enemy>(glm::vec2(50,50)), "enemy");
     objectManager.AddObject(std::make_unique<Enemy>(glm::vec2(0, 0)), "enemy");
 

@@ -3,6 +3,7 @@
 #include "EngineContext.h"
 #include "RenderManager.h"
 #include <sstream>
+#include "gl.h"
 
 Font::Font(RenderManager& renderManager,const std::string& ttfPath, uint32_t fontSize_)
 {
@@ -58,7 +59,10 @@ void Font::BakeAtlas(RenderManager& renderManager)
         {
             for (uint32_t x = 0; x < g->bitmap.width; ++x)
             {
-                pixels[(y * texWidth) + offsetX + x] = g->bitmap.buffer[y * g->bitmap.width + x];
+                size_t dstIndex = (texHeight - 1 - y) * texWidth + offsetX + x;
+                size_t srcIndex = y * g->bitmap.width + x;
+                if (dstIndex < pixels.size())
+                    pixels[dstIndex] = g->bitmap.buffer[srcIndex];
             }
         }
 
@@ -66,13 +70,26 @@ void Font::BakeAtlas(RenderManager& renderManager)
         glyph.size = { g->bitmap.width, g->bitmap.rows };
         glyph.bearing = { g->bitmap_left, g->bitmap_top };
         glyph.advance = g->advance.x;
-        glyph.uvTopLeft = { (offsetX + g->bitmap.width) / float(texWidth), 0.0f };
-        glyph.uvBottomRight = { offsetX / float(texWidth), g->bitmap.rows / float(texHeight) };
+
+        glyph.uvTopLeft = {
+            (static_cast<float>(offsetX) + 0.5f) / static_cast<float>(texWidth),
+            1.0f
+        };
+        glyph.uvBottomRight = {
+            (offsetX + g->bitmap.width - 0.5f) / static_cast<float>(texWidth),
+            1.0f - (static_cast<float>(g->bitmap.rows) / static_cast<float>(texHeight))
+        };
+
 
         glyphs[c] = glyph;
         offsetX += g->bitmap.width;
     }
-    atlasTexture = std::make_unique<Texture>(pixels.data(), texWidth, texHeight,1);
+
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1); 
+
+    TextureSettings ts;
+
+    atlasTexture = std::make_unique<Texture>(pixels.data(), texWidth, texHeight, 1, ts);
     Shader* textShader = renderManager.GetShaderByTag("internal_text");
     material = std::make_unique<Material>(textShader);
     material->SetTexture("u_FontTexture", atlasTexture.get());
@@ -189,16 +206,13 @@ Mesh* Font::GenerateTextMesh(const std::string& text, TextAlignH alignH, TextAli
             float u1 = glyph.uvBottomRight.x;
             float v1 = glyph.uvBottomRight.y;
 
-            std::swap(v0, v1);
-            std::swap(u0, u1);
 
             vertices.insert(vertices.end(), {
-                xpos,     ypos + h, 0.0f, u0, v1,
-                xpos,     ypos,     0.0f, u0, v0,
-                xpos + w, ypos,     0.0f, u1, v0,
-                xpos + w, ypos + h, 0.0f, u1, v1
+                xpos,     ypos + h, 0.0f, u0, v0,
+                xpos,     ypos,     0.0f, u0, v1,
+                xpos + w, ypos,     0.0f, u1, v1,
+                xpos + w, ypos + h, 0.0f, u1, v0
                 });
-
             indices.insert(indices.end(), {
                 indexOffset + 0, indexOffset + 1, indexOffset + 2,
                 indexOffset + 0, indexOffset + 2, indexOffset + 3
@@ -213,3 +227,5 @@ Mesh* Font::GenerateTextMesh(const std::string& text, TextAlignH alignH, TextAli
 
     return new Mesh(vertices, indices);
 }
+
+
