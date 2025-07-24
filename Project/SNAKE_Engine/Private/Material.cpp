@@ -1,4 +1,4 @@
-#include "glad/gl.h"
+#include "gl.h"
 #include "Material.h"
 #include "Mesh.h"
 #include "Shader.h"

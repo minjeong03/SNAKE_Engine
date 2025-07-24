@@ -1,7 +1,5 @@
 #include "MainMenu.h"
 #include <iostream>
-#include "../ThirdParty/glad/gl.h"
-
 #include "Debug.h"
 #include "Enemy.h"
 #include "Level1.h"
@@ -32,7 +30,7 @@ void MainMenu::Init(const EngineContext& engineContext)
 
     test->SetRenderLayer(engineContext, "UI");
 
-    objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"), "hello world!"), "ui")->GetTransform2D().SetPosition({-250,250});
+    objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"), "hello world!\nIt supports NEWLINE"), "ui")->GetTransform2D().SetPosition({-250,250});
 
     objectManager.AddObject(std::make_unique<Enemy>(glm::vec2(50,50)), "enemy");
     objectManager.AddObject(std::make_unique<Enemy>(glm::vec2(0, 0)), "enemy");

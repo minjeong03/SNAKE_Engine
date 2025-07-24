@@ -1,5 +1,5 @@
 #include "EngineTimer.h"
-#include <glfw3/glfw3.h>
+#include "glfw3.h"
 
 void EngineTimer::Start()
 {

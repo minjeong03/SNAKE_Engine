@@ -1,5 +1,5 @@
 #include "InputManager.h"
-#include "glfw3/glfw3.h"
+#include "glfw3.h"
 
 void InputManager::Init(GLFWwindow* _window)
 {

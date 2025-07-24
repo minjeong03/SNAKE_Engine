@@ -54,9 +54,6 @@
     <ClInclude Include="Public\Mesh.h">
       <Filter>public</Filter>
     </ClInclude>
-    <ClInclude Include="Private\InstanceBatchKey.h">
-      <Filter>private</Filter>
-    </ClInclude>
     <ClInclude Include="Public\Transform.h">
       <Filter>public</Filter>
     </ClInclude>
@@ -82,6 +79,9 @@
       <Filter>public</Filter>
     </ClInclude>
     <ClInclude Include="Public\TextObject.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\InstanceBatchKey.h">
       <Filter>public</Filter>
     </ClInclude>
   </ItemGroup>

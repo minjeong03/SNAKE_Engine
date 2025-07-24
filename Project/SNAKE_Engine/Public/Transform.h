@@ -1,5 +1,5 @@
 #pragma once
-#include "../ThirdParty/glm/glm.hpp"
+#include "glm.hpp"
 
 class Transform2D
 {
@@ -28,9 +28,21 @@ public:
         isChanged = true;
     }
 
+    void AddRotation(float rot)
+    {
+        rotation += rot;
+        isChanged = true;
+    }
+
     void SetScale(const glm::vec2& scl)
     {
         scale = scl;
+        isChanged = true;
+    }
+
+    void AddScale(const glm::vec2& scl)
+    {
+        scale += scl;
         isChanged = true;
     }
 

@@ -2,7 +2,7 @@
 
 #include <string>
 #include <vector>
-#include "../ThirdParty/glm/glm.hpp"
+#include "glm.hpp"
 
 enum class ShaderStage
 {

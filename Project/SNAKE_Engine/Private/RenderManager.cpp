@@ -1,11 +1,11 @@
 #include "RenderManager.h"
 #include <algorithm>
 #include <iostream>
-#include <glm/ext/matrix_clip_space.hpp>
-#include <glm/ext/matrix_transform.hpp>
+#include "ext/matrix_clip_space.hpp"
+#include "ext/matrix_transform.hpp"
 
 #include "Camera2D.h"
-#include "../ThirdParty/glad/gl.h"
+#include "gl.h"
 
 #include "Debug.h"
 #include"Object.h"
@@ -15,11 +15,6 @@
 #include "TextObject.h"
 #include "WindowManager.h"
 
-
-void RenderManager::ClearDrawCommands()
-{
-    renderQueue.clear();
-}
 
 void RenderManager::Submit(std::function<void()>&& drawFunc)
 {
@@ -132,6 +127,7 @@ void RenderManager::Init(const EngineContext& engineContext)
     shader->Link();
     shaderMap["internal_text"] = std::move(shader);
     RegisterMaterial("internal_text", "internal_text",{});
+
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }

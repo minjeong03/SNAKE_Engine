@@ -8,8 +8,8 @@ class Camera2D;
 
 struct TextInstance
 {
-    Font* font;
-    std::string text;
+    Font* font = nullptr;
+    std::string text = "";
     std::string GetCacheKey() const
     {
         return "|" + text;
@@ -18,27 +18,35 @@ struct TextInstance
 class TextObject : public Object
 {
 public:
-    TextObject(Font* font, std::string text);
+    TextObject(Font* font, const std::string& text);
 
     ~TextObject() override = default;
 
-    void Init(const EngineContext& engineContext) override;
+    void Init([[maybe_unused]] const EngineContext& engineContext) override;
 
-    void LateInit(const EngineContext& engineContext) override;
+    void LateInit([[maybe_unused]] const EngineContext& engineContext) override;
     
-    void Update(float dt, const EngineContext& engineContext) override;
+    void Update([[maybe_unused]] float dt, [[maybe_unused]] const EngineContext& engineContext) override;
     
-    void Draw(const EngineContext& engineContext) override;
+    void Draw([[maybe_unused]] const EngineContext& engineContext) override;
     
-    void Free(const EngineContext& engineContext) override;
+    void Free([[maybe_unused]] const EngineContext& engineContext) override;
     
-    void LateFree(const EngineContext& engineContext) override;
+    void LateFree([[maybe_unused]] const EngineContext& engineContext) override;
 
-    void SetText(const std::string text);
+    void SetText(const std::string& text);
 
     void SetTextInstance(const TextInstance& textInstance_);
 
     TextInstance* GetTextInstance();
+
+    void SetMaterial(const EngineContext& engineContext, const std::string& tag) = delete;
+
+    [[nodiscard]] Material* GetMaterial() const = delete;
+
+    void SetMesh(const EngineContext& engineContext, const std::string& tag) = delete;
+
+    [[nodiscard]] Mesh* GetMesh() const = delete;
 
 protected:
     TextInstance textInstance;

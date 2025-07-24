@@ -2,7 +2,7 @@
 #include "EngineContext.h"
 #include "RenderManager.h"
 
-TextObject::TextObject(Font* font, std::string text): Object(ObjectType::TEXT)
+TextObject::TextObject(Font* font, const std::string& text): Object(ObjectType::TEXT)
 {
 
     std::string cacheKey = textInstance.GetCacheKey();
@@ -49,7 +49,7 @@ void TextObject::LateFree(const EngineContext& engineContext)
 {
 }
 
-void TextObject::SetText(const std::string text)
+void TextObject::SetText(const std::string& text)
 {
     if (textInstance.text == text)
         return;

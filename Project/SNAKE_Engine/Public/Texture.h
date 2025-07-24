@@ -36,8 +36,7 @@ class Texture
     friend class RenderManager;
 public:
     Texture(const FilePath& path, const TextureSettings& settings = {});
-    Texture(const unsigned char* data, int width_, int height_, int channels_,
-        const TextureSettings& settings = {});
+    Texture(const unsigned char* data, int width_, int height_, int channels_, const TextureSettings& settings = {});
     ~Texture();
 private:
     void BindToUnit(unsigned int unit) const;

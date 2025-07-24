@@ -1,5 +1,5 @@
 #pragma once
-#include "../ThirdParty/glm/glm.hpp"
+#include "glm.hpp"
 
 class Camera2D
 {

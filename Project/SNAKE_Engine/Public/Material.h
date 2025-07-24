@@ -2,7 +2,7 @@
 #include <string>
 #include <unordered_map>
 #include <variant>
-#include "../ThirdParty/glm/glm.hpp"
+#include "glm.hpp"
 
 class RenderManager;
 class ObjectManager;

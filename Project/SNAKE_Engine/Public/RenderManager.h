@@ -15,7 +15,7 @@
 #include "Camera2D.h"
 #include "Font.h"
 #include "GameObject.h"
-#include "../Private/InstanceBatchKey.h"
+#include "InstanceBatchKey.h"
 #include "RenderLayerManager.h"
 
 struct TextInstance;
@@ -53,7 +53,7 @@ public:
 
     void RegisterMaterial(const std::string& tag, std::unique_ptr<Material> material);
 
-	void RegisterFont(const std::string& tag, const std::string& ttfPath, uint32_t pixelSize);
+    void RegisterFont(const std::string& tag, const std::string& ttfPath, uint32_t pixelSize);
 
     void RegisterFont(const std::string& tag, std::unique_ptr<Font> font);
 
@@ -70,8 +70,6 @@ public:
     [[nodiscard]] Font* GetFontByTag(const std::string& tag) { return fontMap[tag].get(); }
 
     void Submit(std::function<void()>&& drawFunc);
-
-    void ClearDrawCommands();
 
     void FlushDrawCommands(const EngineContext& engineContext);
 

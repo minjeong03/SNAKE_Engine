@@ -5,8 +5,8 @@
 #include <string>
 
 
-#include "../ThirdParty/glm/glm.hpp"
-#include "../ThirdParty/freetype/include/ft2build.h"
+#include "glm.hpp"
+#include "ft2build.h"
 #include FT_FREETYPE_H
 
 #include "Texture.h"
@@ -32,18 +32,18 @@ public:
     Font(RenderManager& engineContext, const std::string& ttfPath, uint32_t fontSize);
     ~Font();
 
-    Material* GetMaterial() const { return material.get(); }
-    Mesh* GenerateTextMesh(const std::string& text, glm::vec2 origin = { 0.0f, 0.0f });
-    const Glyph& GetGlyph(char c) const;
-    glm::vec2 GetTextSize(const std::string& text) const;
-    uint8_t GetRenderLayer() const { return renderLayer; } 
+    [[nodiscard]] Material* GetMaterial() const { return material.get(); }
+    [[nodiscard]] Mesh* GenerateTextMesh(const std::string& text, glm::vec2 origin = { 0.0f, 0.0f });
+
+    [[nodiscard]] uint8_t GetRenderLayer() const { return renderLayer; }
     void SetRenderLayer(uint8_t layer) { renderLayer = layer; }
 
 private:
     void LoadFont(const std::string& path, uint32_t fontSize);
     void BakeAtlas(RenderManager& renderManager);
+    glm::vec2 GetTextSize(const std::string& text) const;
+    const Glyph& GetGlyph(char c) const;
 
-private:
     FT_Library ft;
     FT_Face face;
 

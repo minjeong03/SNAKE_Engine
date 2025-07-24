@@ -1,8 +1,8 @@
 #include "Mesh.h"
 
 #include <iostream>
-#include <glad/gl.h>
-#include "../ThirdParty/glm/glm.hpp"
+#include "gl.h"
+#include "glm.hpp"
 
 Mesh::Mesh(const std::vector<float>& vertices, const std::vector<unsigned int>& indices) :vao(0), vbo(0), ebo(0), indexCount(0), useIndex(false)
 {

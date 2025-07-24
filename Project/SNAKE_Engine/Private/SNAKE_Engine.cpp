@@ -1,6 +1,6 @@
 #define GLAD_GL_IMPLEMENTATION
-#include "glad/gl.h"
-#include"glfw3/glfw3.h"
+#include "gl.h"
+#include "glfw3.h"
 #ifdef _DEBUG
 //#include<vld.h>//TODO: remove this and directories before release (VC++ Directories -> Include Directories & Library Directories)
 #endif

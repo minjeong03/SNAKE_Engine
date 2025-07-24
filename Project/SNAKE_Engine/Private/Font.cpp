@@ -89,7 +89,7 @@ glm::vec2 Font::GetTextSize(const std::string& text) const
 {
     float maxWidth = 0.0f;
     float currentLineWidth = 0.0f;
-    float totalHeight = fontSize;
+    float totalHeight = static_cast<float>(fontSize);
 
     for (char c : text)
     {
@@ -97,7 +97,7 @@ glm::vec2 Font::GetTextSize(const std::string& text) const
         {
             maxWidth = std::max(maxWidth, currentLineWidth);
             currentLineWidth = 0.0f;
-            totalHeight += fontSize;
+            totalHeight += static_cast<float>(fontSize);
             continue;
         }
 
@@ -121,7 +121,7 @@ Mesh* Font::GenerateTextMesh(const std::string& text, glm::vec2 origin)
     float xCursor = origin.x;
     float yCursor = origin.y;
 
-    float lineSpacing = fontSize;
+    float lineSpacing = static_cast<float>(fontSize);
 
     for (char c : text)
     {
@@ -133,10 +133,10 @@ Mesh* Font::GenerateTextMesh(const std::string& text, glm::vec2 origin)
         }
 
         const Glyph& glyph = GetGlyph(c);
-        float xpos = xCursor + glyph.bearing.x;
-        float ypos = yCursor - (glyph.size.y - glyph.bearing.y);
-        float w = glyph.size.x;
-        float h = glyph.size.y;
+        float xpos = xCursor + static_cast<float>(glyph.bearing.x);
+        float ypos = yCursor - static_cast<float>(glyph.size.y - glyph.bearing.y);
+        float w = static_cast<float>(glyph.size.x);
+        float h = static_cast<float>(glyph.size.y);
 
         float u0 = glyph.uvTopLeft.x;
         float v0 = glyph.uvTopLeft.y;
@@ -157,7 +157,7 @@ Mesh* Font::GenerateTextMesh(const std::string& text, glm::vec2 origin)
             indexOffset + 0, indexOffset + 2, indexOffset + 3
             });
 
-        xCursor += (glyph.advance >> 6);
+        xCursor += static_cast<float>(glyph.advance >> 6);
         indexOffset += 4;
     }
 

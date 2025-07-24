@@ -5,7 +5,7 @@
 #include <vector>
 #include <queue>
 
-#include "../ThirdParty/fmod/inc/fmod.hpp"
+#include "fmod.hpp"
 
 class SNAKE_Engine;
 using SoundInstanceID = uint64_t;

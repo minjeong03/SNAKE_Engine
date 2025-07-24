@@ -1,5 +1,6 @@
 #include "Camera2D.h"
-#include "glm/gtc/matrix_transform.hpp"
+#include "glm.hpp"
+#include "gtc/matrix_transform.hpp"
 
 Camera2D::Camera2D(int screenWidth, int screenHeight)
     : screenWidth(screenWidth), screenHeight(screenHeight)

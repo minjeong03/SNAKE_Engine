@@ -2,8 +2,8 @@
 #include <iostream>
 
 #include "Debug.h"
-#include "glad/gl.h"
-#include "glfw3/glfw3.h"
+#include "gl.h"
+#include "glfw3.h"
 #include "SNAKE_Engine.h"
 #include "GameState.h"
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)

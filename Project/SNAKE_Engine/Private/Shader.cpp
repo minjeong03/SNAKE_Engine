@@ -3,7 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
-#include <glad/gl.h>
+#include "gl.h"
 
 #include "Debug.h"
 

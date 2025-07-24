@@ -25,5 +25,5 @@
 
 #include "Camera2D.h"
 
-#include "../ThirdParty/glm/glm.hpp"
-#include "../ThirdParty/glm/gtc/matrix_transform.hpp"
+#include "glm.hpp"
+#include "gtc/matrix_transform.hpp"

@@ -15,17 +15,17 @@ class Object
     friend FrustumCuller;
 public:
     Object() = delete;
-    virtual void Init(const EngineContext& engineContext) = 0;
+    virtual void Init([[maybe_unused]] const EngineContext& engineContext) = 0;
 
-    virtual void LateInit(const EngineContext& engineContext) = 0;
+    virtual void LateInit([[maybe_unused]] const EngineContext& engineContext) = 0;
 
-    virtual void Update(float dt, const EngineContext& engineContext) = 0;
+    virtual void Update([[maybe_unused]] float dt, [[maybe_unused]] const EngineContext& engineContext) = 0;
 
-    virtual void Draw(const EngineContext& engineContext) = 0;
+    virtual void Draw([[maybe_unused]] const EngineContext& engineContext) = 0;
 
-    virtual void Free(const EngineContext& engineContext) = 0;
+    virtual void Free([[maybe_unused]] const EngineContext& engineContext) = 0;
 
-    virtual void LateFree(const EngineContext& engineContext) = 0;
+    virtual void LateFree([[maybe_unused]] const EngineContext& engineContext) = 0;
 
     virtual ~Object() = default;
 
