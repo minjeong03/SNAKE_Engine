@@ -6,34 +6,33 @@
 #include "stb_image.h"
 
 //used anonymous namespace to hide these functions from other files
-namespace
-{
-    GLint ConvertFilter(TextureFilter filter)
-    {
-        switch (filter)
-        {
-        case TextureFilter::Nearest:              return GL_NEAREST;
-        case TextureFilter::Linear:               return GL_LINEAR;
-        case TextureFilter::NearestMipmapNearest: return GL_NEAREST_MIPMAP_NEAREST;
-        case TextureFilter::LinearMipmapNearest:  return GL_LINEAR_MIPMAP_NEAREST;
-        case TextureFilter::NearestMipmapLinear:  return GL_NEAREST_MIPMAP_LINEAR;
-        case TextureFilter::LinearMipmapLinear:   return GL_LINEAR_MIPMAP_LINEAR;
-        }
-        return GL_LINEAR;
-    }
 
-    GLint ConvertWrap(TextureWrap wrap)
+static GLint ConvertFilter(TextureFilter filter)
+{
+    switch (filter)
     {
-        switch (wrap)
-        {
-        case TextureWrap::ClampToEdge:    return GL_CLAMP_TO_EDGE;
-        case TextureWrap::Repeat:         return GL_REPEAT;
-        case TextureWrap::MirroredRepeat: return GL_MIRRORED_REPEAT;
-        case TextureWrap::ClampToBorder:  return GL_CLAMP_TO_BORDER;
-        }
-        return GL_CLAMP_TO_EDGE;
+    case TextureFilter::Nearest:              return GL_NEAREST;
+    case TextureFilter::Linear:               return GL_LINEAR;
+    case TextureFilter::NearestMipmapNearest: return GL_NEAREST_MIPMAP_NEAREST;
+    case TextureFilter::LinearMipmapNearest:  return GL_LINEAR_MIPMAP_NEAREST;
+    case TextureFilter::NearestMipmapLinear:  return GL_NEAREST_MIPMAP_LINEAR;
+    case TextureFilter::LinearMipmapLinear:   return GL_LINEAR_MIPMAP_LINEAR;
     }
+    return GL_LINEAR;
 }
+
+static GLint ConvertWrap(TextureWrap wrap)
+{
+    switch (wrap)
+    {
+    case TextureWrap::ClampToEdge:    return GL_CLAMP_TO_EDGE;
+    case TextureWrap::Repeat:         return GL_REPEAT;
+    case TextureWrap::MirroredRepeat: return GL_MIRRORED_REPEAT;
+    case TextureWrap::ClampToBorder:  return GL_CLAMP_TO_BORDER;
+    }
+    return GL_CLAMP_TO_EDGE;
+}
+
 
 Texture::Texture(const std::string& path, const TextureSettings& settings) :id(0), width(0), height(0), channels(0)
 {
@@ -44,25 +43,17 @@ Texture::Texture(const std::string& path, const TextureSettings& settings) :id(0
         SNAKE_ERR("Failed to load texture: " << path);
         return;
     }
-
-    GLenum format = (channels == 4) ? GL_RGBA :
-        (channels == 3) ? GL_RGB :
-        (channels == 1) ? GL_RED : GL_RGB;
-
-    glCreateTextures(GL_TEXTURE_2D, 1, &id);
-    glTextureStorage2D(id, 1, format == GL_RGBA ? GL_RGBA8 : GL_RGB8, width, height);
-
-    glTextureParameteri(id, GL_TEXTURE_MIN_FILTER, ConvertFilter(settings.minFilter));
-    glTextureParameteri(id, GL_TEXTURE_MAG_FILTER, ConvertFilter(settings.magFilter));
-    glTextureParameteri(id, GL_TEXTURE_WRAP_S, ConvertWrap(settings.wrapS));
-    glTextureParameteri(id, GL_TEXTURE_WRAP_T, ConvertWrap(settings.wrapT));
-
-    glTextureSubImage2D(id, 0, 0, 0, width, height, format, GL_UNSIGNED_BYTE, data);
-
-    if (settings.generateMipmap)
-        glGenerateTextureMipmap(id);
-
+    GenerateTexture(data, settings);
     stbi_image_free(data);
+}
+
+Texture::Texture(const unsigned char* data, int width_, int height_, int channels_, const TextureSettings& settings)
+{
+    width = width_;
+    height = height_;
+    channels = channels_;
+
+    GenerateTexture(data, settings);
 }
 
 Texture::~Texture()
@@ -81,4 +72,41 @@ void Texture::BindToUnit(unsigned int unit) const
 void Texture::UnBind(unsigned int unit) const
 {
     glBindTextureUnit(unit, 0);
+}
+
+void Texture::GenerateTexture(const unsigned char* data, const TextureSettings& settings)
+{
+    GLenum internalFormat = GL_RGBA8;
+    GLenum pixelFormat = GL_RGBA;
+
+    if (channels == 1)
+    {
+        internalFormat = GL_R8;
+        pixelFormat = GL_RED;
+    }
+    else if (channels == 3)
+    {
+        internalFormat = GL_RGB8;
+        pixelFormat = GL_RGB;
+    }
+    else if (channels == 4)
+    {
+        internalFormat = GL_RGBA8;
+        pixelFormat = GL_RGBA;
+    }
+
+    glCreateTextures(GL_TEXTURE_2D, 1, &id);
+    glTextureStorage2D(id, 1, internalFormat, width, height);
+    glTextureSubImage2D(id, 0, 0, 0, width, height, pixelFormat, GL_UNSIGNED_BYTE, data);
+
+    glTextureParameteri(id, GL_TEXTURE_MIN_FILTER, ConvertFilter(settings.minFilter));
+    glTextureParameteri(id, GL_TEXTURE_MAG_FILTER, ConvertFilter(settings.magFilter));
+    glTextureParameteri(id, GL_TEXTURE_WRAP_S, ConvertWrap(settings.wrapS));
+    glTextureParameteri(id, GL_TEXTURE_WRAP_T, ConvertWrap(settings.wrapT));
+
+
+    if (settings.generateMipmap)
+    {
+        glGenerateTextureMipmap(id);
+    }
 }
