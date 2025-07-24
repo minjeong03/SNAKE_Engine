@@ -17,6 +17,20 @@ class Camera2D;
 
 struct EngineContext;
 
+enum class TextAlignH
+{
+    Left,
+    Center,
+    Right
+};
+
+enum class TextAlignV
+{
+    Top,
+    Middle,
+    Bottom
+};
+
 struct Glyph
 {
     glm::ivec2 size;
@@ -33,7 +47,7 @@ public:
     ~Font();
 
     [[nodiscard]] Material* GetMaterial() const { return material.get(); }
-    [[nodiscard]] Mesh* GenerateTextMesh(const std::string& text, glm::vec2 origin = { 0.0f, 0.0f });
+    [[nodiscard]] Mesh* GenerateTextMesh(const std::string& text, TextAlignH alignH = TextAlignH::Left, TextAlignV alignV = TextAlignV::Top);
 
     [[nodiscard]] uint8_t GetRenderLayer() const { return renderLayer; }
     void SetRenderLayer(uint8_t layer) { renderLayer = layer; }

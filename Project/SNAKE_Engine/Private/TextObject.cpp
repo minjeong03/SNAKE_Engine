@@ -2,26 +2,20 @@
 #include "EngineContext.h"
 #include "RenderManager.h"
 
-TextObject::TextObject(Font* font, const std::string& text): Object(ObjectType::TEXT)
+TextObject::TextObject(Font* font, const std::string& text, TextAlignH alignH_, TextAlignV alignV_) : Object(ObjectType::TEXT)
 {
 
     std::string cacheKey = textInstance.GetCacheKey();
+
+    alignH = alignH_;
+    alignV = alignV_;
 
     textInstance.font = font;
     textInstance.text = text;
     material = font->GetMaterial();
     mesh = nullptr;
-    auto it = textMeshCache.find(textInstance.GetCacheKey());
-    if (it != textMeshCache.end())
-    {
-        mesh = it->second.get();
-    }
-    else
-    {
-        std::unique_ptr<Mesh> newMesh(font->GenerateTextMesh(textInstance.text));
-        mesh = newMesh.get();
-        textMeshCache[cacheKey] = std::move(newMesh);
-    }
+
+    UpdateMesh();
 }
 
 void TextObject::Init(const EngineContext& engineContext)
@@ -56,6 +50,41 @@ void TextObject::SetText(const std::string& text)
 
     textInstance.text = text;
 
+    UpdateMesh();
+}
+
+void TextObject::SetTextInstance(const TextInstance& textInstance_)
+{
+    textInstance = textInstance_;
+}
+
+void TextObject::SetAlignH(TextAlignH alignH_)
+{
+    if (alignH == alignH_)
+        return;
+
+    alignH = alignH_;
+
+    UpdateMesh();
+}
+
+void TextObject::SetAlignV(TextAlignV alignV_)
+{
+    if (alignV == alignV_)
+        return;
+
+    alignV = alignV_;
+
+    UpdateMesh();
+}
+
+TextInstance* TextObject::GetTextInstance()
+{
+    return &textInstance;
+}
+
+void TextObject::UpdateMesh()
+{
     if (textMeshCache.size() < 500)
         textMeshCache.clear();
 
@@ -66,19 +95,8 @@ void TextObject::SetText(const std::string& text)
     }
     else
     {
-        std::unique_ptr<Mesh> newMesh(textInstance.font->GenerateTextMesh(textInstance.text));
+        std::unique_ptr<Mesh> newMesh(textInstance.font->GenerateTextMesh(textInstance.text, alignH, alignV));
         mesh = newMesh.get();
         textMeshCache[textInstance.GetCacheKey()] = std::move(newMesh);
     }
-
-}
-
-void TextObject::SetTextInstance(const TextInstance& textInstance_)
-{
-    textInstance = textInstance_;
-}
-
-TextInstance* TextObject::GetTextInstance()
-{
-    return &textInstance;
 }

@@ -18,7 +18,7 @@ struct TextInstance
 class TextObject : public Object
 {
 public:
-    TextObject(Font* font, const std::string& text);
+    TextObject(Font* font, const std::string& text, TextAlignH alignH = TextAlignH::Left, TextAlignV alignV = TextAlignV::Top);
 
     ~TextObject() override = default;
 
@@ -38,6 +38,10 @@ public:
 
     void SetTextInstance(const TextInstance& textInstance_);
 
+    void SetAlignH(TextAlignH alignH_);
+
+    void SetAlignV(TextAlignV alignV_);
+
     TextInstance* GetTextInstance();
 
     void SetMaterial(const EngineContext& engineContext, const std::string& tag) = delete;
@@ -49,6 +53,11 @@ public:
     [[nodiscard]] Mesh* GetMesh() const = delete;
 
 protected:
+
+    void UpdateMesh();
+    TextAlignH alignH;
+    TextAlignV alignV;
+
     TextInstance textInstance;
     std::unordered_map<std::string, std::unique_ptr<Mesh>> textMeshCache;
 };

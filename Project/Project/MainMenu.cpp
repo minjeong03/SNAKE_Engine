@@ -23,20 +23,20 @@ void MainMenu::Init(const EngineContext& engineContext)
     SNAKE_LOG("[MainMenu] init called");
     objectManager.AddObject(std::make_unique<Player>(), "mainmenu player");
 
-    test = static_cast<TextObject*>(objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"), "test"), "ui"));
+    test = static_cast<TextObject*>(objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"), "test", TextAlignH::Center, TextAlignV::Middle), "ui"));
 
     test->GetTransform2D().SetPosition({ 100,100 });
     test->GetTransform2D().SetScale({ 0.5,0.5 });
 
     test->SetRenderLayer(engineContext, "UI");
 
-    objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"), "hello world!\nIt supports NEWLINE"), "ui")->GetTransform2D().SetPosition({-250,250});
-
+    objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"), "1.hello world!\n2.hello world!\n3.hello world!", TextAlignH::Center, TextAlignV::Top), "ui")->GetTransform2D().SetPosition({-0,0});
+    objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"), "4.hello world!\n5.hello world!\n6.hello world!", TextAlignH::Center, TextAlignV::Bottom), "ui")->GetTransform2D().SetPosition({ -0,0 });
     objectManager.AddObject(std::make_unique<Enemy>(glm::vec2(50,50)), "enemy");
     objectManager.AddObject(std::make_unique<Enemy>(glm::vec2(0, 0)), "enemy");
 
     auto minimapCam = std::make_unique<Camera2D>(engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
-    minimapCam->SetZoom(5.05f);
+    minimapCam->SetZoom(0.2f);
     cameraManager.RegisterCamera("minimap", std::move(minimapCam));
     cameraManager.SetActiveCamera("minimap");
 
@@ -110,24 +110,25 @@ void MainMenu::Draw(const EngineContext& engineContext)
 {
     auto& rm = *engineContext.renderManager;
 
-    //rm.SubmitText(text, "bullet");
-    //rm.SetViewport(0, 0, engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
+    rm.SetViewport(0, 0, engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
     cameraManager.SetActiveCamera("main");
     objectManager.DrawObjectsWithTag(engineContext, nullptr, "ui");
     objectManager.DrawObjectsWithTag(engineContext, cameraManager.GetActiveCamera(), "bullet");
-    //rm.FlushDrawCommands(engineContext);
     objectManager.DrawObjectsWithTag(engineContext, cameraManager.GetActiveCamera(), "mainmenu player");
-    //rm.ClearBackground(10, 10, 200, 200, glm::vec4(0.3, 0.3, 1, 0));
-    //rm.SetViewport(10, 10, 200, 200);
-    //rm.FlushDrawCommands(engineContext);
     objectManager.DrawObjectsWithTag(engineContext, cameraManager.GetActiveCamera(), "enemy");
-    //cameraManager.SetActiveCamera("minimap");
-	//cameraManager.SetScreenSize("minimap", 200, 200);
+    rm.FlushDrawCommands(engineContext);
 
+    rm.ClearBackground(10, 10, 200, 200, glm::vec4(0.3, 0.3, 1, 0));
+    rm.SetViewport(10, 10, 200, 200);
 
-    //rm.FlushDrawCommands(engineContext);
+    cameraManager.SetActiveCamera("minimap");
+    cameraManager.SetScreenSize("minimap", 200, 200);
 
-    //rm.SetViewport(0, 0, engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
+    objectManager.DrawAll(engineContext, cameraManager.GetActiveCamera());
+
+    rm.FlushDrawCommands(engineContext);
+
+    rm.SetViewport(0, 0, engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
 }
 
 

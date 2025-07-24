@@ -57,7 +57,6 @@ void Player::Update(float dt, const EngineContext& engineContext)
 void Player::Draw(const EngineContext& engineContext)
 {
     GetMaterial()->SetUniform("u_Color", glm::vec4(1.0, 1.0, 1.0, 1.0));
-    GetMaterial()->SetUniform("u_Model", transform2D.GetMatrix());
 }
 
 void Player::Free(const EngineContext& engineContext)
