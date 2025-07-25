@@ -30,7 +30,10 @@ void MainMenu::Init(const EngineContext& engineContext)
 
     test->SetRenderLayer(engineContext, "UI");
 
-    objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"), "1.hello world!\n2.hello world!\n3.hello world!", TextAlignH::Center, TextAlignV::Middle), "ui")->GetTransform2D().SetPosition({-0,0});
+
+    objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"), u8"한글도 Support합니다 ^_^\n줄바꿈도 물론 지원합니다", TextAlignH::Left, TextAlignV::Top), "ui")->GetTransform2D().SetPosition({ -200,0 });
+    objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"), u8"정렬도 지원합니다\n특수문자(!@#$%^&*)도 지원합니다", TextAlignH::Right, TextAlignV::Top), "ui")->GetTransform2D().SetPosition({ 250,200 });
+    //objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"), u8"가나다다", TextAlignH::Center, TextAlignV::Middle), "ui")->GetTransform2D().SetPosition({ -200,0 });
    // objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"), "4.hello world!\n5.hello world!\n6.hello world!", TextAlignH::Center, TextAlignV::Bottom), "ui")->GetTransform2D().SetPosition({ -0,0 });
     objectManager.AddObject(std::make_unique<Enemy>(glm::vec2(50,50)), "enemy");
     objectManager.AddObject(std::make_unique<Enemy>(glm::vec2(0, 0)), "enemy");

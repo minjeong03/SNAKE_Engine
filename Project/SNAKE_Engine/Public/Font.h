@@ -56,14 +56,14 @@ private:
     void LoadFont(const std::string& path, uint32_t fontSize);
     void BakeAtlas(RenderManager& renderManager);
     glm::vec2 GetTextSize(const std::string& text) const;
-    const Glyph& GetGlyph(char c) const;
+    const Glyph& GetGlyph(char32_t c) const;
 
     FT_Library ft;
     FT_Face face;
 
     uint32_t fontSize;
 
-    std::unordered_map<char, Glyph> glyphs;
+    std::unordered_map<char32_t, Glyph> glyphs;
     std::unique_ptr<Texture> atlasTexture;
     std::unique_ptr<Material> material;
 
