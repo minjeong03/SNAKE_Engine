@@ -10,6 +10,8 @@ public:
 
     void SetPosition(const glm::vec2& pos);
 
+    void AddPosition(const glm::vec2& pos);
+
     void SetZoom(float z);
 
     [[nodiscard]] const glm::vec2& GetPosition() const;

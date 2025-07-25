@@ -40,7 +40,7 @@ void Player::Update(float dt, const EngineContext& engineContext)
         transform2D.AddPosition(glm::vec2(150 * dt, 0));
     }
 
-    if (engineContext.inputManager->IsKeyDown(KEY_SPACE))
+    if (engineContext.inputManager->IsKeyPressed(KEY_SPACE))
     {
         SNAKE_LOG("player shot the bullet");
 
@@ -50,13 +50,13 @@ void Player::Update(float dt, const EngineContext& engineContext)
 
         float angle = angleDist(gen);
         std::unique_ptr<Bullet> b = std::make_unique<Bullet>(transform2D.GetPosition(), glm::vec2(std::cos(angle), std::sin(angle)));
-        engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::move(b));
+        engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::move(b),"bullet");
     }
 }
 
 void Player::Draw(const EngineContext& engineContext)
 {
-    GetMaterial()->SetUniform("u_Color", glm::vec4(1.0, 1.0, 1.0, 1.0));
+    //GetMaterial()->SetUniform("u_Color", glm::vec4(1.0, 1.0, 1.0, 1.0));
 }
 
 void Player::Free(const EngineContext& engineContext)

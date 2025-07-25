@@ -123,7 +123,7 @@ void ObjectManager::FreeAll(const EngineContext& engineContext)
 Object* ObjectManager::FindByTag(const std::string& tag) const
 {
     auto it = objectMap.find(tag);
-    if (it != objectMap.end())
+    if (it != objectMap.end() && it->second->IsAlive())
         return it->second;
     return nullptr;
 }

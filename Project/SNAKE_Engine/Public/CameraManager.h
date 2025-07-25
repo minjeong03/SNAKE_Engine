@@ -55,5 +55,5 @@ public:
 
 private:
     std::unordered_map<std::string, std::unique_ptr<Camera2D>> cameraMap;
-    std::string activeCameraTag = "main";
+    std::string activeCameraTag;
 };

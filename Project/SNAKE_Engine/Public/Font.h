@@ -52,10 +52,11 @@ public:
     [[nodiscard]] uint8_t GetRenderLayer() const { return renderLayer; }
     void SetRenderLayer(uint8_t layer) { renderLayer = layer; }
 
+    [[nodiscard]] glm::vec2 GetTextSize(const std::string& text) const;
+
 private:
     void LoadFont(const std::string& path, uint32_t fontSize);
     void BakeAtlas(RenderManager& renderManager);
-    glm::vec2 GetTextSize(const std::string& text) const;
     const Glyph& GetGlyph(char32_t c) const;
 
     FT_Library ft;

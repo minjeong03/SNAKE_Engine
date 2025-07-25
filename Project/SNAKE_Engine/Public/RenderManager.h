@@ -30,6 +30,14 @@ using RenderCommand = std::function<void()>;
 using ShaderMap = std::map<Shader*, std::map<InstanceBatchKey, std::vector<std::pair<Object*, Camera2D*>>>>;
 using RenderMap = std::array<ShaderMap, RenderLayerManager::MAX_LAYERS>;
 
+struct LineInstance
+{
+    glm::vec2 from = { 0,0 };
+    glm::vec2 to = {0,0};
+    glm::vec4 color = {1,1,1,1};
+    float lineWidth = 1;
+};
+
 class RenderManager
 {
     friend ObjectManager;
@@ -77,6 +85,10 @@ public:
 
     void ClearBackground(int x, int y, int width, int height, glm::vec4 color);
 
+    void DrawDebugLine(const glm::vec2& from, const glm::vec2& to, Camera2D* camera = nullptr, const glm::vec4& color = { 1,1,1,1 }, float lineWidth = 1.0f);
+
+    void FlushDebugLineDrawCommands(const EngineContext& engineContext);
+
     RenderLayerManager& GetRenderLayerManager();
 private:
     void Init(const EngineContext& engineContext);
@@ -93,6 +105,20 @@ private:
     std::unordered_map<std::string, std::unique_ptr<Material>> materialMap;
     std::unordered_map<std::string, std::unique_ptr<Font>> fontMap;
     std::vector<RenderCommand> renderQueue;
+
+
+    using CameraAndWidth = std::pair<Camera2D*, float>;
+    struct CameraAndWidthHash
+    {
+        std::size_t operator()(const CameraAndWidth& key) const
+        {
+            return std::hash<Camera2D*>()(key.first) ^ std::hash<float>()(key.second);
+        }
+    };
+    std::unordered_map<CameraAndWidth, std::vector<LineInstance>, CameraAndWidthHash> debugLineMap;
+    GLuint debugLineVAO = 0, debugLineVBO = 0;
+    Shader* debugLineShader;
+
     RenderMap renderMap;
     RenderLayerManager renderLayerManager;
 };

@@ -17,6 +17,7 @@ void Enemy::Init(const EngineContext& engineContext)
     SetMesh(engineContext, "default");
     SetMaterial(engineContext, "m_default");
     SetRenderLayer(engineContext, "Enemy");
+    SetColor({ 0.5,0.3,0.1,1 });
 }
 
 void Enemy::LateInit(const EngineContext& engineContext)
@@ -53,14 +54,14 @@ void Enemy::Update(float dt, const EngineContext& engineContext)
 
         float angle = angleDist(gen);
         std::unique_ptr<Bullet> b = std::make_unique<Bullet>(transform2D.GetPosition(), glm::vec2(std::cos(angle), std::sin(angle)));
-        engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::move(b));
+        engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::move(b),"enemyBullet");
     }
 }
 
 void Enemy::Draw(const EngineContext& engineContext)
 {
-    GetMaterial()->SetUniform("u_Color", glm::vec4(1.0, 0.0, 1.0, 1.0));
-    GetMaterial()->SetUniform("u_Model", transform2D.GetMatrix());
+    /*GetMaterial()->SetUniform("u_Color", glm::vec4(1.0, 0.0, 1.0, 1.0));
+    GetMaterial()->SetUniform("u_Model", transform2D.GetMatrix());*/
 }
 
 void Enemy::Free(const EngineContext& engineContext)

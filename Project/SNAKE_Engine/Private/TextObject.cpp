@@ -32,7 +32,7 @@ void TextObject::Update(float dt, const EngineContext& engineContext)
 
 void TextObject::Draw(const EngineContext& engineContext)
 {
-    //material->SetUniform("u_Color", glm::vec4(1));
+    material->SetUniform("u_Color", color);
 }
 
 void TextObject::Free(const EngineContext& engineContext)
@@ -42,6 +42,15 @@ void TextObject::Free(const EngineContext& engineContext)
 void TextObject::LateFree(const EngineContext& engineContext)
 {
 }
+
+float TextObject::GetBoundingRadius() const
+{
+    if (!mesh) return 0.0f;
+    glm::vec2 size = textInstance.font->GetTextSize(textInstance.text); 
+    glm::vec2 scaled = size * transform2D.GetScale();
+    return glm::length(scaled) ;
+}
+
 
 void TextObject::SetText(const std::string& text)
 {

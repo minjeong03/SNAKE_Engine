@@ -59,20 +59,25 @@ public:
 
     [[nodiscard]] Transform2D& GetTransform2D();
 
+    void SetColor(const  glm::vec4& color_);
+
     [[nodiscard]] const glm::vec4& GetColor();
 
-    ObjectType GetType() const { return type; }
+    [[nodiscard]] ObjectType GetType() const { return type; }
 
+    [[nodiscard]] bool ShouldIgnoreCamera();
+
+    void SetIgnoreCamera(bool shouldIgnoreCamera);
 protected:
     Object(ObjectType objectType) : type(objectType) {}
 
     bool isAlive = true;
     bool isVisible = true;
-
+    bool ignoreCamera = false;
     std::string objectTag;
 
     Transform2D transform2D;
-    [[nodiscard]] float GetBoundingRadius() const;
+    [[nodiscard]] virtual float GetBoundingRadius() const;
     uint8_t renderLayer = 0;
     Material* material = nullptr;
     Mesh* mesh = nullptr;

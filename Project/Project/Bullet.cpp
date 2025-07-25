@@ -39,7 +39,6 @@ void Bullet::Init(const EngineContext& engineContext)
     rotAmount = rotDist(gen);
 
     transform2D.SetScale(glm::vec2(scale));
-    objectTag = "bullet";
 }
 
 void Bullet::LateInit(const EngineContext& engineContext)

@@ -41,9 +41,13 @@ void FrustumCuller::CullVisible(const Camera2D& camera, const std::vector<Object
     outVisibleList.clear();
     for (Object* obj : allObjects)
     {
-        if (!obj->IsAlive() && !obj->IsVisible())
+        if (!obj->IsAlive() || !obj->IsVisible())
             continue;
-
+        if (obj->ShouldIgnoreCamera())
+        {
+            outVisibleList.push_back(obj);
+            continue;
+        }
         const glm::vec2& pos = obj->GetTransform2D().GetPosition();
         float radius = obj->GetBoundingRadius();
 
@@ -84,6 +88,70 @@ void RenderManager::ClearBackground(int x, int y, int width, int height, glm::ve
         });
 }
 
+void RenderManager::DrawDebugLine(const glm::vec2& from, const glm::vec2& to, Camera2D* camera, const glm::vec4& color, float lineWidth)
+{
+    debugLineMap[{camera, lineWidth}].push_back({ from, to, color, lineWidth });
+}
+void RenderManager::FlushDebugLineDrawCommands(const EngineContext& engineContext)
+{
+    if (debugLineMap.empty())
+        return;
+
+    if (!debugLineShader)
+    {
+        debugLineShader = GetShaderByTag("internal_debug_line");
+        if (!debugLineShader)
+        {
+            SNAKE_ERR("Missing internal_debug_line shader");
+            return;
+        }
+    }
+
+    debugLineShader->Use();
+
+    for (const auto& [camWidth, lines] : debugLineMap)
+    {
+        Camera2D* camera = camWidth.first;
+        float lineWidth = camWidth.second;
+
+        glLineWidth(lineWidth);
+
+        glm::mat4 proj = camera
+            ? camera->GetProjectionMatrix()
+            : glm::ortho(
+                -static_cast<float>(engineContext.windowManager->GetWidth()) / 2,
+                static_cast<float>(engineContext.windowManager->GetWidth()) / 2,
+                -static_cast<float>(engineContext.windowManager->GetHeight()) / 2,
+                static_cast<float>(engineContext.windowManager->GetHeight()) / 2
+            );
+
+        debugLineShader->SendUniform("u_Projection", proj);
+
+        std::vector<float> vertexData;
+        vertexData.reserve(lines.size() * 12);
+
+        for (const auto& line : lines)
+        {
+            vertexData.insert(vertexData.end(), {
+                line.from.x, line.from.y, line.color.r, line.color.g, line.color.b, line.color.a,
+                line.to.x,   line.to.y,   line.color.r, line.color.g, line.color.b, line.color.a
+                });
+        }
+
+        glBindBuffer(GL_ARRAY_BUFFER, debugLineVBO);
+        glBufferData(GL_ARRAY_BUFFER, vertexData.size() * sizeof(float), vertexData.data(), GL_DYNAMIC_DRAW);
+
+        glBindVertexArray(debugLineVAO);
+        glDrawArrays(GL_LINES, 0, static_cast<GLsizei>(lines.size() * 2));
+        glBindVertexArray(0);
+    }
+
+    glLineWidth(1.0f);
+    debugLineShader->Unuse();
+    debugLineMap.clear();
+}
+
+
 RenderLayerManager& RenderManager::GetRenderLayerManager()
 {
     return renderLayerManager;
@@ -108,25 +176,77 @@ void RenderManager::Init(const EngineContext& engineContext)
 		    v_TexCoord = aUV;
 		    gl_Position = u_Projection * u_Model * vec4(aPos, 0.0, 1.0);
 		}
-)");
+    )");
     shader->AttachFromSource(ShaderStage::Fragment, R"(
-	    #version 330 core
-	    in vec2 v_TexCoord;
-	    out vec4 FragColor;
+	        #version 330 core
+	        in vec2 v_TexCoord;
+	        out vec4 FragColor;
 
-	    uniform sampler2D u_FontTexture;
-	    uniform vec4 u_Color;
+	        uniform sampler2D u_FontTexture;
+	        uniform vec4 u_Color;
 
-	    void main()
-	    {
-	        float alpha = texture(u_FontTexture, v_TexCoord).r;
-	        FragColor = vec4(u_Color.rgb, alpha * u_Color.a);
-	    }
-)");
+	        void main()
+	        {
+	            float alpha = texture(u_FontTexture, v_TexCoord).r;
+	            FragColor = vec4(u_Color.rgb, alpha * u_Color.a);
+	        }
+    )");
 
     shader->Link();
     shaderMap["internal_text"] = std::move(shader);
-    RegisterMaterial("internal_text", "internal_text",{});
+    RegisterMaterial("internal_text", "internal_text", {});
+
+
+    shader = std::make_unique<Shader>();
+    shader->AttachFromSource(ShaderStage::Vertex, R"(
+                #version 330 core
+                layout (location = 0) in vec2 aPos;
+                layout (location = 1) in vec4 aColor;
+
+                uniform mat4 u_Projection;
+                out vec4 vColor;
+
+                void main()
+                {
+                    vColor = aColor;
+                    gl_Position = u_Projection * vec4(aPos, 0.0, 1.0);
+                }
+    )");
+    shader->AttachFromSource(ShaderStage::Fragment, R"(
+                #version 330 core
+                in vec4 vColor;
+                out vec4 FragColor;
+
+                void main()
+                {
+                    FragColor = vColor;
+                }
+    )");
+    shader->Link();
+
+    shaderMap["internal_debug_line"] = std::move(shader);
+
+
+
+    glGenVertexArrays(1, &debugLineVAO);
+    glGenBuffers(1, &debugLineVBO);
+
+    glBindVertexArray(debugLineVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, debugLineVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 10000, nullptr, GL_DYNAMIC_DRAW);
+
+    glEnableVertexAttribArray(0); // vec2 position
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void*)0);
+
+    glEnableVertexAttribArray(1); // vec4 color
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void*)(sizeof(float) * 2));
+
+    glBindVertexArray(0);
+
+
+
+
+
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -195,7 +315,19 @@ void RenderManager::SubmitRenderMap(const EngineContext& engineContext)
 
                         if (currentShader != lastShader)
                         {
-                            material->SetUniform("u_Projection", batch.front().second->GetProjectionMatrix());
+                            glm::mat4 projection;
+                            if (batch.front().first->ShouldIgnoreCamera() || batch.front().second == nullptr)
+                            {
+                                projection = glm::ortho(
+                                    -static_cast<float>(engineContext.windowManager->GetWidth()) / 2,
+                                    static_cast<float>(engineContext.windowManager->GetWidth()) / 2,
+                                    -static_cast<float>(engineContext.windowManager->GetHeight()) / 2,
+                                    static_cast<float>(engineContext.windowManager->GetHeight()) / 2
+                                );
+                            }
+                            else
+                                projection = batch.front().second->GetProjectionMatrix();
+                            material->SetUniform("u_Projection", projection);
                             lastShader = currentShader;
                         }
 
@@ -203,7 +335,7 @@ void RenderManager::SubmitRenderMap(const EngineContext& engineContext)
                         material->SendUniforms();
 
                         key.mesh->BindVAO();
-                        material->UpdateInstanceBuffer(transforms,colors);
+                        material->UpdateInstanceBuffer(transforms, colors);
                         key.mesh->DrawInstanced(static_cast<GLsizei>(transforms.size()));
                         material->UnBind();
                         });
@@ -226,19 +358,21 @@ void RenderManager::SubmitRenderMap(const EngineContext& engineContext)
                             if (currentShader != lastShader)
                             {
                                 glm::mat4 projection;
-                                if (camera == nullptr)
+                                if (obj->ShouldIgnoreCamera() || camera == nullptr)
                                 {
                                     projection = glm::ortho(
-                                        -static_cast<float>(engineContext.windowManager->GetWidth())/2,
-                                        static_cast<float>(engineContext.windowManager->GetWidth())/2,
-                                        -static_cast<float>(engineContext.windowManager->GetHeight())/2,
-                                        static_cast<float>(engineContext.windowManager->GetHeight())/2
+                                        -static_cast<float>(engineContext.windowManager->GetWidth()) / 2,
+                                        static_cast<float>(engineContext.windowManager->GetWidth()) / 2,
+                                        -static_cast<float>(engineContext.windowManager->GetHeight()) / 2,
+                                        static_cast<float>(engineContext.windowManager->GetHeight()) / 2
                                     );
                                 }
                                 else
                                     projection = camera->GetProjectionMatrix();
                                 mat->SetUniform("u_Projection", projection);
                                 mat->SetUniform("u_Model", obj->GetTransform2D().GetMatrix());
+                                mat->SetUniform("u_Color", obj->GetColor());
+
                                 lastShader = currentShader;
                             }
 

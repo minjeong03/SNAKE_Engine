@@ -77,7 +77,8 @@ int main(int argc, char* argv[])
     snakeEngine.GetEngineContext().renderManager->RegisterMaterial("m_default", "s_default", { std::pair<std::string, std::string>("u_Texture","uvchecker") });
     snakeEngine.GetEngineContext().renderManager->RegisterMaterial("m_instancing", "s_instancing", { std::pair<std::string, std::string>("u_Texture","default") });
 
-	snakeEngine.GetEngineContext().renderManager->RegisterRenderLayer("Bullet");
+    snakeEngine.GetEngineContext().renderManager->RegisterRenderLayer("Bullet");
+    snakeEngine.GetEngineContext().renderManager->RegisterRenderLayer("Text");
     snakeEngine.GetEngineContext().renderManager->RegisterRenderLayer("Enemy");
     snakeEngine.GetEngineContext().renderManager->RegisterRenderLayer("Player");
     snakeEngine.GetEngineContext().renderManager->RegisterRenderLayer("UI");

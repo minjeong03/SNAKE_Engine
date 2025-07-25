@@ -80,10 +80,26 @@ Transform2D& Object::GetTransform2D()
     return transform2D;
 }
 
+void Object::SetColor(const  glm::vec4& color_)
+{
+    color = color_;
+}
+
 const glm::vec4& Object::GetColor()
 {
     return color;
 }
+
+bool Object::ShouldIgnoreCamera()
+{
+    return ignoreCamera;
+}
+
+void Object::SetIgnoreCamera(bool shouldIgnoreCamera)
+{
+    ignoreCamera = shouldIgnoreCamera;
+}
+
 
 float Object::GetBoundingRadius() const
 {

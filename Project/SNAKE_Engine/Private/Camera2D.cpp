@@ -18,6 +18,11 @@ void Camera2D::SetPosition(const glm::vec2& pos)
     position = pos;
 }
 
+void Camera2D::AddPosition(const glm::vec2& pos)
+{
+    position += pos;
+}
+
 void Camera2D::SetZoom(float z)
 {
     zoom = z;

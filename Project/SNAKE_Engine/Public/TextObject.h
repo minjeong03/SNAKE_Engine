@@ -34,6 +34,8 @@ public:
     
     void LateFree([[maybe_unused]] const EngineContext& engineContext) override;
 
+    float GetBoundingRadius() const override;
+
     void SetText(const std::string& text);
 
     void SetTextInstance(const TextInstance& textInstance_);

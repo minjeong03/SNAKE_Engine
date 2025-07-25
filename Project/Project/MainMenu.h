@@ -1,4 +1,5 @@
 #pragma once
+#include "Enemy.h"
 #include"GameState.h"
 #include "Player.h"
 
@@ -26,6 +27,7 @@ public:
 private:
     Player* player;
     Font* font;
-    TextObject* test;
+    TextObject* test, *uiText;
+    Enemy* enemy;
 };
 
