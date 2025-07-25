@@ -55,9 +55,11 @@ public:
 
     [[nodiscard]] bool CanBeInstanced() const;
 
-    [[nodiscard]] glm::mat4& GetTransform2DMatrix();
+    [[nodiscard]] glm::mat4 GetTransform2DMatrix();
 
     [[nodiscard]] Transform2D& GetTransform2D();
+
+    [[nodiscard]] const glm::vec4& GetColor();
 
     ObjectType GetType() const { return type; }
 
@@ -74,6 +76,6 @@ protected:
     uint8_t renderLayer = 0;
     Material* material = nullptr;
     Mesh* mesh = nullptr;
-
+    glm::vec4 color = glm::vec4(1);
     ObjectType type;
 };

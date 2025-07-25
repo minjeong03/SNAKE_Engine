@@ -22,10 +22,14 @@ void Material::UnBind() const
     shader->Unuse();
 }
 
-void Material::UpdateInstanceBuffer(const std::vector<glm::mat4>& transforms) const
+void Material::UpdateInstanceBuffer(const std::vector<glm::mat4>& transforms, const std::vector<glm::vec4>& colors) const
 {
-    glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, instanceVBO[0]);
     glBufferData(GL_ARRAY_BUFFER, transforms.size() * sizeof(glm::mat4), transforms.data(), GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, instanceVBO[1]);
+    glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(glm::vec4), colors.data(), GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -45,9 +49,10 @@ void Material::EnableInstancing(bool enable, Mesh* mesh)
         isInstancingEnabled = enable;
         if (mesh)
         {
-            if (!instanceVBO)
-                glGenBuffers(1, &instanceVBO);
+            if (!instanceVBO[0])
+                glGenBuffers(2, instanceVBO);
             mesh->SetupInstanceAttributes(instanceVBO);
+
         }
     }
 }

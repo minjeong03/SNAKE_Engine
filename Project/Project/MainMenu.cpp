@@ -14,7 +14,7 @@ void MainMenu::Load(const EngineContext& engineContext)
 {
     SNAKE_LOG("[MainMenu] load called");
 
-    engineContext.renderManager->RegisterFont("default","Fonts/font.ttf", 100);
+    engineContext.renderManager->RegisterFont("default","Fonts/font.ttf", 50);
 
 }
 

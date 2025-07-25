@@ -21,7 +21,7 @@ public:
 private:
     void BindVAO() const;
 
-    void SetupInstanceAttributes(GLuint instanceVBO) const;
+    void SetupInstanceAttributes(GLuint* instanceVBO) const;
 
     void Draw() const;
 

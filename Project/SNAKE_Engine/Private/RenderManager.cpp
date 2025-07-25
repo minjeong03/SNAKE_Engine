@@ -175,9 +175,14 @@ void RenderManager::SubmitRenderMap(const EngineContext& engineContext)
                 {
                     Submit([=]() mutable {
                         std::vector<glm::mat4> transforms;
+                        std::vector<glm::vec4> colors;
                         transforms.reserve(batch.size());
+                        colors.reserve(batch.size());
                         for (const auto& [obj, camera] : batch)
-                            transforms.push_back(dynamic_cast<GameObject*>(obj)->GetTransform2DMatrix());
+                        {
+                            transforms.push_back(obj->GetTransform2DMatrix());
+                            colors.push_back(obj->GetColor());
+                        }
 
                         Material* material = key.material;
                         Shader* currentShader = material->GetShader();
@@ -198,7 +203,7 @@ void RenderManager::SubmitRenderMap(const EngineContext& engineContext)
                         material->SendUniforms();
 
                         key.mesh->BindVAO();
-                        material->UpdateInstanceBuffer(transforms);
+                        material->UpdateInstanceBuffer(transforms,colors);
                         key.mesh->DrawInstanced(static_cast<GLsizei>(transforms.size()));
                         material->UnBind();
                         });

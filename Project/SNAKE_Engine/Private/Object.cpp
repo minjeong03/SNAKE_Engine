@@ -70,7 +70,7 @@ bool Object::CanBeInstanced() const
     return true;
 }
 
-glm::mat4& Object::GetTransform2DMatrix()
+glm::mat4 Object::GetTransform2DMatrix()
 {
     return transform2D.GetMatrix();
 }
@@ -79,6 +79,12 @@ Transform2D& Object::GetTransform2D()
 {
     return transform2D;
 }
+
+const glm::vec4& Object::GetColor()
+{
+    return color;
+}
+
 float Object::GetBoundingRadius() const
 {
     glm::vec2 halfSize = mesh ? mesh->GetLocalBoundsHalfSize() : glm::vec2(0.5f);
