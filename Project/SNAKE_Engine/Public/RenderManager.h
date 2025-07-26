@@ -53,7 +53,7 @@ public:
 
     void RegisterTexture(const std::string& tag, std::unique_ptr<Texture> texture);
 
-    void RegisterMesh(const std::string& tag, const std::vector<float>& vertices, const std::vector<unsigned int>& indices = {});
+    void RegisterMesh(const std::string& tag, const std::vector<float>& vertices, const std::vector<unsigned int>& indices = {}, PrimitiveType primitiveType = PrimitiveType::Triangles);
 
     void RegisterMesh(const std::string& tag, std::unique_ptr<Mesh> mesh);
 
@@ -67,15 +67,15 @@ public:
 
     void RegisterRenderLayer(const std::string& tag);
 
-    [[nodiscard]] Shader* GetShaderByTag(const std::string& tag) { return shaderMap[tag].get(); }
+    [[nodiscard]] Shader* GetShaderByTag(const std::string& tag);
 
-    [[nodiscard]] Texture* GetTextureByTag(const std::string& tag) { return textureMap[tag].get(); }
+    [[nodiscard]] Texture* GetTextureByTag(const std::string& tag);
 
-    [[nodiscard]] Mesh* GetMeshByTag(const std::string& tag) { return meshMap[tag].get(); }
+        [[nodiscard]] Mesh* GetMeshByTag(const std::string& tag);
 
-    [[nodiscard]] Material* GetMaterialByTag(const std::string& tag) { return materialMap[tag].get(); }
+        [[nodiscard]] Material* GetMaterialByTag(const std::string& tag);
 
-    [[nodiscard]] Font* GetFontByTag(const std::string& tag) { return fontMap[tag].get(); }
+    [[nodiscard]] Font* GetFontByTag(const std::string& tag);
 
     void Submit(std::function<void()>&& drawFunc);
 
@@ -122,6 +122,8 @@ private:
     RenderMap renderMap;
     RenderLayerManager renderLayerManager;
 };
+
+
 
 class FrustumCuller
 {

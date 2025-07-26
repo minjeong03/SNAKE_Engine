@@ -7,12 +7,21 @@ class ObjectManager;
 using GLuint = unsigned int;
 using GLsizei = int;
 
+enum class PrimitiveType
+{
+    Triangles,
+    Lines,
+    Points,
+    TriangleFan,
+    TriangleStrip,
+    LineStrip
+};
 class Mesh {
     friend Material;
     friend RenderManager;
 
 public:
-    Mesh(const std::vector<float>& vertices, const std::vector<unsigned int>& indices = {});
+    Mesh(const std::vector<float>& vertices, const std::vector<unsigned int>& indices = {}, PrimitiveType primitiveType = PrimitiveType::Triangles);
 
     ~Mesh();
 
@@ -57,5 +66,7 @@ private:
     GLuint ebo;
     GLsizei indexCount;
     bool useIndex;
+
+    PrimitiveType primitiveType;
     glm::vec2 localHalfSize;
 };

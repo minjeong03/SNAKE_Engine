@@ -52,7 +52,6 @@ void Material::EnableInstancing(bool enable, Mesh* mesh)
             if (!instanceVBO[0])
                 glGenBuffers(2, instanceVBO);
             mesh->SetupInstanceAttributes(instanceVBO);
-
         }
     }
 }

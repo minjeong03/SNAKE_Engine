@@ -4,7 +4,22 @@
 #include "gl.h"
 #include "glm.hpp"
 
-Mesh::Mesh(const std::vector<float>& vertices, const std::vector<unsigned int>& indices) :vao(0), vbo(0), ebo(0), indexCount(0), useIndex(false)
+
+GLenum ToGL(PrimitiveType type)
+{
+    switch (type)
+    {
+    case PrimitiveType::Triangles: return GL_TRIANGLES;
+    case PrimitiveType::Lines: return GL_LINES;
+    case PrimitiveType::Points: return GL_POINTS;
+    case PrimitiveType::TriangleFan: return GL_TRIANGLE_FAN;
+    case PrimitiveType::TriangleStrip: return GL_TRIANGLE_STRIP;
+    case PrimitiveType::LineStrip: return GL_LINE_STRIP;
+    }
+    return GL_TRIANGLES;
+}
+
+Mesh::Mesh(const std::vector<float>& vertices, const std::vector<unsigned int>& indices, PrimitiveType primitiveType_) :vao(0), vbo(0), ebo(0), indexCount(0), useIndex(false), primitiveType(primitiveType_)
 {
     SetupMesh(vertices, indices);
     ComputeLocalBounds(vertices);
@@ -13,23 +28,29 @@ Mesh::Mesh(const std::vector<float>& vertices, const std::vector<unsigned int>& 
 void Mesh::Draw() const
 {
     glBindVertexArray(vao);
+    GLenum mode = ToGL(primitiveType);
+
+    glBindVertexArray(vao);
 
     if (useIndex)
     {
-        glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0);
+        glDrawElements(mode, indexCount, GL_UNSIGNED_INT, 0);
     }
     else
     {
-        glDrawArrays(GL_TRIANGLES, 0, indexCount);
+        glDrawArrays(mode, 0, indexCount);
     }
 }
 
 void Mesh::DrawInstanced(GLsizei instanceCount) const
 {
+    glBindVertexArray(vao);
+    GLenum mode = ToGL(primitiveType);
+
     if (useIndex)
-        glDrawElementsInstanced(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr, instanceCount);
+        glDrawElementsInstanced(mode, indexCount, GL_UNSIGNED_INT, nullptr, instanceCount);
     else
-        glDrawArraysInstanced(GL_TRIANGLES, 0, indexCount, instanceCount);
+        glDrawArraysInstanced(mode, 0, indexCount, instanceCount);
 }
 
 void Mesh::BindVAO() const

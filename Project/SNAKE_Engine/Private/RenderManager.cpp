@@ -442,14 +442,14 @@ void RenderManager::RegisterTexture(const std::string& tag, std::unique_ptr<Text
 }
 
 void RenderManager::RegisterMesh(const std::string& tag, const std::vector<float>& vertices,
-    const std::vector<unsigned int>& indices)
+    const std::vector<unsigned int>& indices, PrimitiveType primitiveType)
 {
     if (meshMap.find(tag) != meshMap.end())
     {
         SNAKE_WRN("Mesh with tag \"" << tag << "\" already registered.");
         return;
     }
-    meshMap[tag] = std::make_unique<Mesh>(vertices, indices);
+    meshMap[tag] = std::make_unique<Mesh>(vertices, indices, primitiveType);
 }
 
 void RenderManager::RegisterMesh(const std::string& tag, std::unique_ptr<Mesh> mesh)
@@ -527,4 +527,59 @@ void RenderManager::RegisterFont(const std::string& tag, std::unique_ptr<Font> f
 void RenderManager::RegisterRenderLayer(const std::string& tag)
 {
     renderLayerManager.RegisterLayer(tag);
+}
+
+Shader* RenderManager::GetShaderByTag(const std::string& tag)
+{
+    if (shaderMap.find(tag) != shaderMap.end())
+        return shaderMap[tag].get();
+    else
+    {
+        SNAKE_ERR("There is no shader named '" << tag << "'");
+        return nullptr;
+    }
+}
+
+Texture* RenderManager::GetTextureByTag(const std::string& tag)
+{
+    if (textureMap.find(tag) != textureMap.end())
+        return textureMap[tag].get();
+    else
+    {
+        SNAKE_ERR("There is no texture named '" << tag << "'");
+        return nullptr;
+    }
+}
+
+Mesh* RenderManager::GetMeshByTag(const std::string& tag)
+{
+    if (meshMap.find(tag) != meshMap.end())
+        return meshMap[tag].get();
+    else
+    {
+        SNAKE_ERR("There is no mesh named '" << tag << "'");
+        return nullptr;
+    }
+}
+
+Material* RenderManager::GetMaterialByTag(const std::string& tag)
+{
+    if (materialMap.find(tag) != materialMap.end())
+        return materialMap[tag].get();
+    else
+    {
+        SNAKE_ERR("There is no material named '" << tag << "'");
+        return nullptr;
+    }
+}
+
+Font* RenderManager::GetFontByTag(const std::string& tag)
+{
+    if (fontMap.find(tag) != fontMap.end())
+        return fontMap[tag].get();
+    else
+    {
+        SNAKE_ERR("There is no font named '" << tag << "'");
+        return nullptr;
+    }
 }
