@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
     TextureSettings ts;
     snakeEngine.GetEngineContext().renderManager->RegisterTexture("default", "Textures/Default.jpg", ts);
     snakeEngine.GetEngineContext().renderManager->RegisterTexture("uvchecker", "Textures/uvchecker.jpg", ts);
-    snakeEngine.GetEngineContext().renderManager->RegisterTexture("animTest", "Textures/animTest.png", ts);
+    snakeEngine.GetEngineContext().renderManager->RegisterTexture("animTest", "Textures/penguin.png", ts);
 
     snakeEngine.GetEngineContext().renderManager->RegisterSpriteSheet("animTest", "animTest", 128,128);
 

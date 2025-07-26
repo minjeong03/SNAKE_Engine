@@ -18,7 +18,7 @@ void Bullet::Init(const EngineContext& engineContext)
     SetRenderLayer(engineContext, "Bullet");
     GetMaterial()->EnableInstancing(true, GetMesh());
     AttachAnimator(engineContext.renderManager->GetSpriteSheetByTag("animTest"), 0.08f);
-    spriteAnimator->PlayClip(0, 8);
+    spriteAnimator->PlayClip("sidewalk");
 
     static std::random_device rd;
     static std::mt19937 gen(rd());
