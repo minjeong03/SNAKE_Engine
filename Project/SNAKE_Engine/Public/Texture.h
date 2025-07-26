@@ -38,6 +38,8 @@ public:
     Texture(const FilePath& path, const TextureSettings& settings = {});
     Texture(const unsigned char* data, int width_, int height_, int channels_, const TextureSettings& settings = {});
     ~Texture();
+    int GetWidth() const { return width; }
+    int GetHeight() const { return height; }
 private:
     void BindToUnit(unsigned int unit) const;
 

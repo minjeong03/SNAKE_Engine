@@ -12,8 +12,11 @@ void Player::Init(const EngineContext& engineContext)
     transform2D.SetScale(glm::vec2(50.f));
 
     SetMesh(engineContext, "default");
-    SetMaterial(engineContext, "m_default");
+    SetMaterial(engineContext, "m_animation");
     SetRenderLayer(engineContext, "Player");
+
+    AttachAnimator(engineContext.renderManager->GetSpriteSheetByTag("animTest"), 0.08f);
+    spriteAnimator->PlayClip(0, 8);
 }
 
 void Player::LateInit(const EngineContext& engineContext)

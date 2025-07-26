@@ -40,7 +40,11 @@ void ObjectManager::UpdateAll(float dt, const EngineContext& engineContext)
     for (const auto& obj : objects)
     {
         if (obj->IsAlive())
+        {
             obj->Update(dt, engineContext);
+            if (obj->HasAnimation())
+                obj->GetAnimator()->Update(dt);
+        }
     }
 
     EraseDeadObjects(engineContext);

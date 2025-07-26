@@ -1,6 +1,8 @@
 #pragma once
+#include <memory>
 #include <string>
 
+#include "Animation.h"
 #include "Mesh.h"
 #include "Transform.h"
 class FrustumCuller;
@@ -63,11 +65,20 @@ public:
 
     [[nodiscard]] const glm::vec4& GetColor();
 
-    [[nodiscard]] ObjectType GetType() const { return type; }
+    virtual bool HasAnimation() const { return spriteAnimator != nullptr; }
+
+    virtual SpriteAnimator* GetAnimator() { return spriteAnimator.get(); }
+
+    void AttachAnimator(std::unique_ptr<SpriteAnimator> anim) { spriteAnimator = std::move(anim); }
+
+    void AttachAnimator(SpriteSheet* sheet, float frameTime, bool loop = true) { spriteAnimator = std::make_unique<SpriteAnimator>(sheet, frameTime, loop); }
 
     [[nodiscard]] bool ShouldIgnoreCamera();
 
     void SetIgnoreCamera(bool shouldIgnoreCamera);
+
+
+    [[nodiscard]] ObjectType GetType() const { return type; }
 protected:
     Object(ObjectType objectType) : type(objectType) {}
 
@@ -81,6 +92,7 @@ protected:
     uint8_t renderLayer = 0;
     Material* material = nullptr;
     Mesh* mesh = nullptr;
+    std::unique_ptr<SpriteAnimator> spriteAnimator;
     glm::vec4 color = glm::vec4(1);
     ObjectType type;
 };

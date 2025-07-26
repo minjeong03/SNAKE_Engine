@@ -8,6 +8,7 @@
 #include <vector>
 #include <array>
 
+#include "Animation.h"
 #include "Material.h"
 #include "Mesh.h"
 #include "Shader.h"
@@ -33,8 +34,8 @@ using RenderMap = std::array<ShaderMap, RenderLayerManager::MAX_LAYERS>;
 struct LineInstance
 {
     glm::vec2 from = { 0,0 };
-    glm::vec2 to = {0,0};
-    glm::vec4 color = {1,1,1,1};
+    glm::vec2 to = { 0,0 };
+    glm::vec4 color = { 1,1,1,1 };
     float lineWidth = 1;
 };
 
@@ -67,15 +68,21 @@ public:
 
     void RegisterRenderLayer(const std::string& tag);
 
+    void RegisterSpriteSheet(const std::string& tag, const std::string& textureTag, int frameW, int frameH);
+
+
+
     [[nodiscard]] Shader* GetShaderByTag(const std::string& tag);
 
     [[nodiscard]] Texture* GetTextureByTag(const std::string& tag);
 
-        [[nodiscard]] Mesh* GetMeshByTag(const std::string& tag);
+    [[nodiscard]] Mesh* GetMeshByTag(const std::string& tag);
 
-        [[nodiscard]] Material* GetMaterialByTag(const std::string& tag);
+    [[nodiscard]] Material* GetMaterialByTag(const std::string& tag);
 
     [[nodiscard]] Font* GetFontByTag(const std::string& tag);
+
+    SpriteSheet* GetSpriteSheetByTag(const std::string& tag);
 
     void Submit(std::function<void()>&& drawFunc);
 
@@ -104,6 +111,7 @@ private:
     std::unordered_map<std::string, std::unique_ptr<Mesh>> meshMap;
     std::unordered_map<std::string, std::unique_ptr<Material>> materialMap;
     std::unordered_map<std::string, std::unique_ptr<Font>> fontMap;
+    std::unordered_map<std::string, std::unique_ptr<SpriteSheet>> spritesheetMap;
     std::vector<RenderCommand> renderQueue;
 
 

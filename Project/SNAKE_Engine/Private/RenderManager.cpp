@@ -376,6 +376,13 @@ void RenderManager::SubmitRenderMap(const EngineContext& engineContext)
                                 lastShader = currentShader;
                             }
 
+                            if (obj->HasAnimation())
+                            {
+                                SpriteAnimator* anim = obj->GetAnimator();
+                                mat->SetUniform("u_UVOffset", anim->GetUVOffset());
+                                mat->SetUniform("u_UVScale", anim->GetUVScale());
+                            }
+
                             obj->Draw(engineContext);
                             mat->SendUniforms();
                             key.mesh->Draw();
@@ -529,13 +536,42 @@ void RenderManager::RegisterRenderLayer(const std::string& tag)
     renderLayerManager.RegisterLayer(tag);
 }
 
+void RenderManager::RegisterSpriteSheet(const std::string& tag, const std::string& textureTag, int frameW, int frameH)
+{
+    if (spritesheetMap.find(tag) != spritesheetMap.end())
+    {
+        SNAKE_WRN("SpriteSheet already registered: " << tag);
+        return;
+    }
+
+    Texture* texture = GetTextureByTag(textureTag);
+    if (!texture)
+    {
+        SNAKE_ERR("Texture not found for SpriteSheet: " << textureTag);
+        return;
+    }
+
+    spritesheetMap[tag] = std::make_unique<SpriteSheet>(texture, frameW, frameH);
+}
+
+SpriteSheet* RenderManager::GetSpriteSheetByTag(const std::string& tag)
+{
+    if (spritesheetMap.find(tag) != spritesheetMap.end())
+        return spritesheetMap[tag].get();
+    else
+    {
+        SNAKE_ERR("There is no SpriteSheet named '" << tag << "'");
+        return nullptr;
+    }
+}
+
 Shader* RenderManager::GetShaderByTag(const std::string& tag)
 {
     if (shaderMap.find(tag) != shaderMap.end())
         return shaderMap[tag].get();
     else
     {
-        SNAKE_ERR("There is no shader named '" << tag << "'");
+        SNAKE_ERR("There is no Shader named '" << tag << "'");
         return nullptr;
     }
 }
@@ -546,7 +582,7 @@ Texture* RenderManager::GetTextureByTag(const std::string& tag)
         return textureMap[tag].get();
     else
     {
-        SNAKE_ERR("There is no texture named '" << tag << "'");
+        SNAKE_ERR("There is no Texture named '" << tag << "'");
         return nullptr;
     }
 }
@@ -557,7 +593,7 @@ Mesh* RenderManager::GetMeshByTag(const std::string& tag)
         return meshMap[tag].get();
     else
     {
-        SNAKE_ERR("There is no mesh named '" << tag << "'");
+        SNAKE_ERR("There is no Mesh named '" << tag << "'");
         return nullptr;
     }
 }
@@ -568,7 +604,7 @@ Material* RenderManager::GetMaterialByTag(const std::string& tag)
         return materialMap[tag].get();
     else
     {
-        SNAKE_ERR("There is no material named '" << tag << "'");
+        SNAKE_ERR("There is no Material named '" << tag << "'");
         return nullptr;
     }
 }
@@ -579,7 +615,7 @@ Font* RenderManager::GetFontByTag(const std::string& tag)
         return fontMap[tag].get();
     else
     {
-        SNAKE_ERR("There is no font named '" << tag << "'");
+        SNAKE_ERR("There is no Font named '" << tag << "'");
         return nullptr;
     }
 }

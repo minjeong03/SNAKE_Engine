@@ -46,6 +46,10 @@ public:
 
     TextInstance* GetTextInstance();
 
+    bool HasAnimation() const override { return false; }
+
+    SpriteAnimator* GetAnimator() override { return nullptr; }
+
     void SetMaterial(const EngineContext& engineContext, const std::string& tag) = delete;
 
     [[nodiscard]] Material* GetMaterial() const = delete;
@@ -53,6 +57,11 @@ public:
     void SetMesh(const EngineContext& engineContext, const std::string& tag) = delete;
 
     [[nodiscard]] Mesh* GetMesh() const = delete;
+
+    void AttachAnimator(std::unique_ptr<SpriteAnimator> anim) = delete;
+
+    void AttachAnimator(SpriteSheet* sheet, float frameTime, bool loop = true) = delete;
+
 
 protected:
 
