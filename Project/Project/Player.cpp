@@ -10,6 +10,10 @@ void Player::Init(const EngineContext& engineContext)
 {
     transform2D.SetPosition(glm::vec2(0, 0));
     transform2D.SetScale(glm::vec2(50.f));
+    auto collider = std::make_unique<AABBCollider>(this, glm::vec2(0.5,0.5));
+    collider->SetUseTransformScale(true); 
+    SetCollider(std::move(collider));
+    SetCollision(engineContext.stateManager->GetCurrentState()->GetObjectManager(),"player", { "bullet" });
 
     SetMesh(engineContext, "default");
     SetMaterial(engineContext, "m_animation");
@@ -118,4 +122,16 @@ void Player::Free(const EngineContext& engineContext)
 void Player::LateFree(const EngineContext& engineContext)
 {
     SNAKE_LOG("Player LateFree Called");
+}
+
+void Player::OnCollision(Object* other)
+{
+    if (other->GetTag() == "enemyBullet")
+    {
+        other->Kill();
+    }
+    if (other->GetTag() == "enemy")
+    {
+        other->Kill();
+    }
 }

@@ -1,7 +1,7 @@
 #include "Object.h"
 #include "EngineContext.h"
 #include "RenderManager.h"
-
+#include "ObjectManager.h"
 const bool& Object::IsAlive() const
 {
     return isAlive;
@@ -88,6 +88,16 @@ void Object::SetColor(const  glm::vec4& color_)
 const glm::vec4& Object::GetColor()
 {
     return color;
+}
+
+void Object::SetCollision(ObjectManager& objectManager, const std::string& tag, const std::vector<std::string>& checkCollisionList)
+{
+    auto& reg = objectManager.GetCollisionGroupRegistry();
+    collisionCategory = reg.GetGroupBit(tag);
+
+    collisionMask = 0;
+    for (const auto& c : checkCollisionList)
+        collisionMask |= reg.GetGroupBit(c);
 }
 
 bool Object::ShouldIgnoreCamera()

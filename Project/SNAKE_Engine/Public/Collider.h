@@ -1,0 +1,154 @@
+#pragma once
+#include <functional>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+#include "glm.hpp"
+
+
+class SpatialHashGrid;
+class ObjectManager;
+class Camera2D;
+class RenderManager;
+class Object;
+class CircleCollider;
+class AABBCollider;
+
+enum class ColliderType
+{
+    None,
+    Circle,
+    AABB
+};
+
+class Collider
+{
+    friend ObjectManager;
+    friend CircleCollider;
+    friend AABBCollider;
+    friend SpatialHashGrid;
+public:
+    Collider() = delete;
+    Collider(Object* owner_) : owner(owner_) {}
+    virtual ~Collider() = default;
+
+    void SetUseTransformScale(bool use) { useTransformScale = use; }
+    [[nodiscard]] bool IsUsingTransformScale() const { return useTransformScale; }
+
+protected:
+    [[nodiscard]] Object* GetOwner() const { return owner; }
+
+    virtual ColliderType GetType() const = 0;
+    virtual float GetBoundingRadius() const = 0;
+
+    virtual bool CheckCollision(const Collider* other) const = 0;
+    virtual bool CheckPointCollision(const glm::vec2& point) const = 0;
+
+    virtual bool DispatchAgainst(const CircleCollider& other) const = 0;
+    virtual bool DispatchAgainst(const AABBCollider& other) const = 0;
+
+    virtual void SyncWithTransformScale() = 0;
+
+    virtual void DrawDebug(RenderManager* rm, Camera2D* cam, const glm::vec4& color = { 1,0,0,1 }) const = 0;
+
+    Object* owner;
+    bool useTransformScale = false;
+};
+
+
+class CircleCollider : public Collider
+{
+    friend AABBCollider;
+    friend SpatialHashGrid;
+public:
+    CircleCollider(Object* owner, float radius)
+        : Collider(owner), baseRadius(radius), scaledRadius(radius) {
+    }
+
+    [[nodiscard]] float GetRadius() const;
+    void SetRadius(float r);
+
+private:
+    ColliderType GetType() const override { return ColliderType::Circle; }
+    float GetBoundingRadius() const override;
+
+    bool CheckCollision(const Collider* other) const override;
+    bool CheckPointCollision(const glm::vec2& point) const override;
+
+    bool DispatchAgainst(const CircleCollider& other) const override;
+    bool DispatchAgainst(const AABBCollider& other) const override;
+
+    void SyncWithTransformScale() override;
+
+    void DrawDebug(RenderManager* rm, Camera2D* cam, const glm::vec4& color) const override;
+    float baseRadius = 0.5f;
+    float scaledRadius = 0.5f;
+};
+
+
+class AABBCollider : public Collider
+{
+    friend CircleCollider;
+    friend SpatialHashGrid;
+public:
+    AABBCollider(Object* owner, const glm::vec2& halfSize)
+        : Collider(owner), baseHalfSize(halfSize), scaledHalfSize(halfSize) {
+    }
+
+
+    [[nodiscard]] glm::vec2 GetHalfSize() const;
+    void SetHalfSize(const glm::vec2& hs);
+
+private:
+    ColliderType GetType() const override { return ColliderType::AABB; }
+    float GetBoundingRadius() const override;
+
+    bool CheckCollision(const Collider* other) const override;
+    bool CheckPointCollision(const glm::vec2& point) const override;
+
+    bool DispatchAgainst(const CircleCollider& other) const override;
+    bool DispatchAgainst(const AABBCollider& other) const override;
+
+    void SyncWithTransformScale() override;
+
+    void DrawDebug(RenderManager* rm, Camera2D* cam, const glm::vec4& color) const override;
+
+    glm::vec2 baseHalfSize = { 0.5f, 0.5f };
+    glm::vec2 scaledHalfSize = { 0.5f, 0.5f };
+};
+
+struct Vec2Hash
+{
+    size_t operator()(const glm::ivec2& v) const
+    {
+        return std::hash<int>()(v.x * 73856093 ^ v.y * 19349663);
+    }
+};
+
+class SpatialHashGrid
+{
+public:
+    void Clear();
+    void Insert(Object* obj);
+    void ComputeCollisions(std::function<void(Object*, Object*)> onCollision);
+
+private:
+    int cellSize = 256; 
+    std::unordered_map<glm::ivec2, std::vector<Object*>, Vec2Hash> grid;
+
+    glm::ivec2 GetCell(const glm::vec2& pos) const;
+    void InsertToCell(Object* obj, const glm::ivec2& cell);
+};
+
+class CollisionGroupRegistry
+{
+public:
+    uint32_t GetGroupBit(const std::string& tag);
+    std::string GetGroupTag(uint32_t bit) const;
+
+private:
+    std::unordered_map<std::string, uint32_t> tagToBit;
+    std::unordered_map<uint32_t, std::string> bitToTag;
+    uint32_t currentBit = 0;
+};

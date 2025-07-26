@@ -1,6 +1,4 @@
 #include "Mesh.h"
-
-#include <iostream>
 #include "gl.h"
 #include "glm.hpp"
 

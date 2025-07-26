@@ -1,5 +1,4 @@
 #include "WindowManager.h"
-#include <iostream>
 
 #include "Debug.h"
 #include "gl.h"

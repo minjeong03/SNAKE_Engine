@@ -44,7 +44,6 @@ protected:
     void Restart(const EngineContext& engineContext)
     {
         SystemFree(engineContext);
-        engineContext.soundManager->ControlAll(SoundManager::SoundControlType::Stop);
         SystemInit(engineContext);
     }
 
@@ -68,6 +67,10 @@ private:
     {
         Update(dt, engineContext);
         objectManager.UpdateAll(dt, engineContext);
+        objectManager.CheckCollision();
+#ifdef _DEBUG
+        objectManager.DrawColliderDebug(engineContext.renderManager, cameraManager.GetActiveCamera());
+#endif
         LateUpdate(dt, engineContext);
     }
 

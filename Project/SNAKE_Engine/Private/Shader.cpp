@@ -1,6 +1,5 @@
 #include "Shader.h"
 #include <iosfwd>
-#include <iostream>
 #include <sstream>
 #include <fstream>
 #include "gl.h"

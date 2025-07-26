@@ -87,6 +87,9 @@
     <ClInclude Include="Public\Animation.h">
       <Filter>public</Filter>
     </ClInclude>
+    <ClInclude Include="Public\Collider.h">
+      <Filter>public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Private\StateManager.cpp">
@@ -144,6 +147,9 @@
       <Filter>private</Filter>
     </ClCompile>
     <ClCompile Include="Private\Animation.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\Collider.cpp">
       <Filter>private</Filter>
     </ClCompile>
   </ItemGroup>

@@ -3,6 +3,7 @@
 #include <string>
 
 #include "Animation.h"
+#include "Collider.h"
 #include "Mesh.h"
 #include "Transform.h"
 class FrustumCuller;
@@ -30,6 +31,8 @@ public:
     virtual void LateFree([[maybe_unused]] const EngineContext& engineContext) = 0;
 
     virtual ~Object() = default;
+
+    virtual void OnCollision(Object* other) {}
 
     [[nodiscard]] const bool& IsAlive() const;
 
@@ -73,10 +76,19 @@ public:
 
     void AttachAnimator(SpriteSheet* sheet, float frameTime, bool loop = true) { spriteAnimator = std::make_unique<SpriteAnimator>(sheet, frameTime, loop); }
 
+    void SetCollider(std::unique_ptr<Collider> c) { collider = std::move(c); }
+
+    Collider* GetCollider() const { return collider.get(); }
+
+    void SetCollision(ObjectManager& objectManager, const std::string& tag, const std::vector<std::string>& checkCollisionList);
+
+    uint32_t GetCollisionMask() const { return collisionMask; }
+
+    uint32_t GetCollisionCategory() const { return collisionCategory; }
+
     [[nodiscard]] bool ShouldIgnoreCamera();
 
     void SetIgnoreCamera(bool shouldIgnoreCamera);
-
 
     [[nodiscard]] ObjectType GetType() const { return type; }
 protected:
@@ -93,6 +105,10 @@ protected:
     Material* material = nullptr;
     Mesh* mesh = nullptr;
     std::unique_ptr<SpriteAnimator> spriteAnimator;
+    std::unique_ptr<Collider> collider;
     glm::vec4 color = glm::vec4(1);
     ObjectType type;
+
+    uint32_t collisionCategory = 0;
+    uint32_t collisionMask = 0;
 };

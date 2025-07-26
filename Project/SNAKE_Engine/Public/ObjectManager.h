@@ -5,6 +5,8 @@
 #include <string>
 #include <memory>
 
+#include "RenderManager.h"
+
 class Object;
 struct EngineContext;
 class Camera2D;
@@ -24,7 +26,10 @@ public:
 
     [[nodiscard]] Object* FindByTag(const std::string& tag) const;
     void FindByTag(const std::string& tag, std::vector<Object*>& result);
+    void CheckCollision();
+    void DrawColliderDebug(RenderManager* rm, Camera2D* cam);
 
+    CollisionGroupRegistry& GetCollisionGroupRegistry() { return collisionGroupRegistry; }
 private:
     void AddAllPendingObjects(const EngineContext& engineContext);
     void EraseDeadObjects(const EngineContext& engineContext);
@@ -33,4 +38,6 @@ private:
     std::vector<std::unique_ptr<Object>> pendingObjects;
     std::unordered_map<std::string, Object*> objectMap;
     std::vector<Object*> rawPtrObjects;
+    SpatialHashGrid broadPhaseGrid;
+    CollisionGroupRegistry collisionGroupRegistry;
 };

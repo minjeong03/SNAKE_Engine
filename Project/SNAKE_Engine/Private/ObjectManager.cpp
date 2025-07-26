@@ -44,6 +44,8 @@ void ObjectManager::UpdateAll(float dt, const EngineContext& engineContext)
             obj->Update(dt, engineContext);
             if (obj->HasAnimation())
                 obj->GetAnimator()->Update(dt);
+            if (Collider* col = obj->GetCollider())
+                col->SyncWithTransformScale();
         }
     }
 
@@ -138,5 +140,42 @@ void ObjectManager::FindByTag(const std::string& tag, std::vector<Object*>& resu
     {
         if (obj && obj->IsAlive() && obj->GetTag() == tag)
             result.push_back(obj);
+    }
+}
+
+void ObjectManager::CheckCollision()
+{
+    broadPhaseGrid.Clear();
+
+    for (Object* obj : rawPtrObjects)
+    {
+        broadPhaseGrid.Insert(obj);
+    }
+    broadPhaseGrid.ComputeCollisions([&](Object* a, Object* b)
+        {
+ 
+            if ((a->GetCollisionMask() & b->GetCollisionCategory()) == 0 ||
+                (b->GetCollisionMask() & a->GetCollisionCategory()) == 0)
+            {
+                return;
+            }
+            if (a->GetCollider()->CheckCollision(b->GetCollider()))
+            {
+                a->OnCollision(b);
+                b->OnCollision(a);
+            }
+        });
+}
+
+void ObjectManager::DrawColliderDebug(RenderManager* rm, Camera2D* cam)
+{
+    for (auto* obj : rawPtrObjects)
+    {
+        if (!obj->IsAlive() || !obj->IsVisible()) continue;
+
+        if (Collider* col = obj->GetCollider())
+        {
+            col->DrawDebug(rm, cam);
+        }
     }
 }

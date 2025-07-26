@@ -97,9 +97,7 @@ void Font::BakeAtlas(RenderManager& renderManager)
     nextX = 0;
     nextY = 0;
     maxRowHeight = 0;
-
 }
-
 
 bool Font::TryBakeGlyph(char32_t c)
 {

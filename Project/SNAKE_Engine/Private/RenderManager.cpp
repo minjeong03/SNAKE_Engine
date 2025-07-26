@@ -1,6 +1,5 @@
 #include "RenderManager.h"
 #include <algorithm>
-#include <iostream>
 #include "ext/matrix_clip_space.hpp"
 #include "ext/matrix_transform.hpp"
 

@@ -1,5 +1,4 @@
 #include "SoundManager.h"
-#include <iostream>
 #include <algorithm>
 #include "fmod_errors.h"
 #include "Debug.h"

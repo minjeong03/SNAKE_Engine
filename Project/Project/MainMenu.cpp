@@ -21,7 +21,12 @@ void MainMenu::Load(const EngineContext& engineContext)
 void MainMenu::Init(const EngineContext& engineContext)
 {
     SNAKE_LOG("[MainMenu] init called");
+
+    cameraManager.GetActiveCamera()->SetPosition({ 0,0 });
+    cameraManager.GetActiveCamera()->SetZoom(1.0f);
+
     player = static_cast<Player*>(objectManager.AddObject(std::make_unique<Player>(), "mainmenu player"));
+
 
     test = static_cast<TextObject*>(objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"), "test", TextAlignH::Center, TextAlignV::Middle), "text"));
     test->GetTransform2D().SetPosition({ 100,100 });
@@ -150,6 +155,14 @@ void MainMenu::Update(float dt, const EngineContext& engineContext)
     {
         cameraManager.GetActiveCamera()->AddPosition({ 100 * dt,0 });
     }
+    if (engineContext.inputManager->IsKeyDown(KEY_U))
+    {
+        cameraManager.GetActiveCamera()->SetZoom(cameraManager.GetActiveCamera()->GetZoom() + 0.1f *dt);
+    }
+    if (engineContext.inputManager->IsKeyDown(KEY_O))
+    {
+        cameraManager.GetActiveCamera()->SetZoom(cameraManager.GetActiveCamera()->GetZoom() - 0.1f * dt);
+    }
 }
 
 void MainMenu::LateUpdate(float dt, const EngineContext& engineContext)
@@ -185,6 +198,7 @@ void MainMenu::Draw(const EngineContext& engineContext)
 
 void MainMenu::Free(const EngineContext& engineContext)
 {
+    engineContext.soundManager->ControlAll(SoundManager::SoundControlType::Stop);
     SNAKE_LOG("[MainMenu] free called");
 }
 

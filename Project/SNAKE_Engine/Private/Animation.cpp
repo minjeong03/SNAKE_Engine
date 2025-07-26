@@ -1,7 +1,5 @@
 #include "Animation.h"
 
-#include <iostream>
-
 SpriteSheet::SpriteSheet(Texture* texture_, int frameW, int frameH)
     : texture(texture_), frameWidth(frameW), frameHeight(frameH)
 {

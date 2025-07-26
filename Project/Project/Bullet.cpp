@@ -18,6 +18,8 @@ void Bullet::Init(const EngineContext& engineContext)
     SetRenderLayer(engineContext, "Bullet");
     GetMaterial()->EnableInstancing(true, GetMesh());
     AttachAnimator(engineContext.renderManager->GetSpriteSheetByTag("animTest"), 0.08f);
+
+
     spriteAnimator->PlayClip("sidewalk");
 
     static std::random_device rd;
@@ -42,6 +44,10 @@ void Bullet::Init(const EngineContext& engineContext)
     rotAmount = rotDist(gen);
 
     transform2D.SetScale(glm::vec2(scale));
+    auto collider = std::make_unique<CircleCollider>(this, 0.5f);
+    collider->SetUseTransformScale(true);
+    SetCollider(std::move(collider));
+    SetCollision(engineContext.stateManager->GetCurrentState()->GetObjectManager(), "bullet", { "player"});
 }
 
 void Bullet::LateInit(const EngineContext& engineContext)
@@ -53,7 +59,7 @@ void Bullet::Update(float dt, const EngineContext& engineContext)
     transform2D.AddRotation(dt* rotAmount);
     transform2D.AddPosition(glm::vec2(dt*speed* dir.x, dt*speed * dir.y));
     timer += dt;
-    if (timer >10.f)
+    if (timer >5.f)
         Kill();
 }
 

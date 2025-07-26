@@ -1,5 +1,4 @@
 #include "RenderManager.h"
-#include <iostream>
 #include "gl.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "Debug.h"
