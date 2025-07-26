@@ -16,5 +16,6 @@ private:
     glm::vec2 dir;
     float timer = 0;
     float rotAmount = 0;
+    float speed = 1;
 };
 

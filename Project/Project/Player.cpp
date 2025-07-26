@@ -33,6 +33,7 @@ void Player::Update(float dt, const EngineContext& engineContext)
     if (engineContext.inputManager->IsKeyDown(KEY_A))
     {
         transform2D.AddPosition(glm::vec2(-150 * dt, 0));
+        transform2D.SetScale({-50,50});
     }
     if (engineContext.inputManager->IsKeyDown(KEY_S))
     {
@@ -41,6 +42,7 @@ void Player::Update(float dt, const EngineContext& engineContext)
     if (engineContext.inputManager->IsKeyDown(KEY_D))
     {
         transform2D.AddPosition(glm::vec2(150 * dt, 0));
+        transform2D.SetScale({ 50,50 });
     }
 
     if (engineContext.inputManager->IsKeyPressed(KEY_SPACE))

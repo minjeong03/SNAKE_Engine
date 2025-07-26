@@ -37,6 +37,7 @@ public:
     glm::vec2 GetUVOffset() const;
     glm::vec2 GetUVScale() const;
 
+    Texture* GetTexture() { return sheet->GetTexture();}
     void SetFrame(int frame) { currentFrame = frame; }
     int GetCurrentFrame() const { return currentFrame; }
 };

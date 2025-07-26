@@ -52,9 +52,12 @@ void Enemy::Update(float dt, const EngineContext& engineContext)
         static std::mt19937 gen(rd());
         static std::uniform_real_distribution<float> angleDist(0.0f, 2.0f * glm::pi<float>());
 
-        float angle = angleDist(gen);
-        std::unique_ptr<Bullet> b = std::make_unique<Bullet>(transform2D.GetPosition(), glm::vec2(std::cos(angle), std::sin(angle)));
-        engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::move(b),"enemyBullet");
+        for (int i = 0; i < 20; i++)
+        {
+            float angle = angleDist(gen);
+            std::unique_ptr<Bullet> b = std::make_unique<Bullet>(transform2D.GetPosition(), glm::vec2(std::cos(angle), std::sin(angle)));
+            engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::move(b), "enemyBullet");
+        }
     }
 }
 

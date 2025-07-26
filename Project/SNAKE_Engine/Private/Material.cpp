@@ -22,17 +22,6 @@ void Material::UnBind() const
     shader->Unuse();
 }
 
-void Material::UpdateInstanceBuffer(const std::vector<glm::mat4>& transforms, const std::vector<glm::vec4>& colors) const
-{
-    glBindBuffer(GL_ARRAY_BUFFER, instanceVBO[0]);
-    glBufferData(GL_ARRAY_BUFFER, transforms.size() * sizeof(glm::mat4), transforms.data(), GL_DYNAMIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    glBindBuffer(GL_ARRAY_BUFFER, instanceVBO[1]);
-    glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(glm::vec4), colors.data(), GL_DYNAMIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
-
 bool Material::IsInstancingSupported() const
 {
     return isInstancingEnabled && shader && shader->SupportsInstancing();
@@ -50,7 +39,7 @@ void Material::EnableInstancing(bool enable, Mesh* mesh)
         if (mesh)
         {
             if (!instanceVBO[0])
-                glGenBuffers(2, instanceVBO);
+                glGenBuffers(4, instanceVBO);
             mesh->SetupInstanceAttributes(instanceVBO);
         }
     }
@@ -74,4 +63,22 @@ void Material::SendUniforms()
                 shader->SendUniform(name, val);
             }, value);
     }
+}
+
+
+void Material::UpdateInstanceBuffer(const std::vector<glm::mat4>& transforms, const std::vector<glm::vec4>& colors, const std::vector<glm::vec2>& uvOffsets, const std::vector<glm::vec2>& uvScales) const
+{
+    glBindBuffer(GL_ARRAY_BUFFER, instanceVBO[0]);
+    glBufferData(GL_ARRAY_BUFFER, transforms.size() * sizeof(glm::mat4), transforms.data(), GL_DYNAMIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, instanceVBO[1]);
+    glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(glm::vec4), colors.data(), GL_DYNAMIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, instanceVBO[3]);
+    glBufferData(GL_ARRAY_BUFFER, uvOffsets.size() * sizeof(glm::vec2), uvOffsets.data(), GL_DYNAMIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, instanceVBO[4]);
+    glBufferData(GL_ARRAY_BUFFER, uvScales.size() * sizeof(glm::vec2), uvScales.data(), GL_DYNAMIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }

@@ -245,9 +245,6 @@ void RenderManager::Init(const EngineContext& engineContext)
 
 
 
-
-
-
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
@@ -296,12 +293,26 @@ void RenderManager::SubmitRenderMap(const EngineContext& engineContext)
                     Submit([=]() mutable {
                         std::vector<glm::mat4> transforms;
                         std::vector<glm::vec4> colors;
+                        std::vector<glm::vec2> uvOffsets;
+                        std::vector<glm::vec2> uvScales;
                         transforms.reserve(batch.size());
                         colors.reserve(batch.size());
+                        uvOffsets.reserve(batch.size());
+                        uvScales.reserve(batch.size());
                         for (const auto& [obj, camera] : batch)
                         {
                             transforms.push_back(obj->GetTransform2DMatrix());
                             colors.push_back(obj->GetColor());
+                            if (obj->HasAnimation())
+                            {
+                                uvOffsets.push_back(obj->GetAnimator()->GetUVOffset());
+                                uvScales.push_back(obj->GetAnimator()->GetUVScale());
+                            }
+                            else
+                            {
+                                uvOffsets.emplace_back(0.0f, 0.0f);
+                                uvScales.emplace_back(1.0f, 1.0f);
+                            }
                         }
 
                         Material* material = key.material;
@@ -328,6 +339,7 @@ void RenderManager::SubmitRenderMap(const EngineContext& engineContext)
                             else
                                 projection = batch.front().second->GetProjectionMatrix();
                             material->SetUniform("u_Projection", projection);
+                            material->SetTexture("u_Texture", batch.front().first->GetAnimator()->GetTexture());
                             lastShader = currentShader;
                         }
 
@@ -335,7 +347,7 @@ void RenderManager::SubmitRenderMap(const EngineContext& engineContext)
                         material->SendUniforms();
 
                         key.mesh->BindVAO();
-                        material->UpdateInstanceBuffer(transforms, colors);
+                        material->UpdateInstanceBuffer(transforms, colors, uvOffsets, uvScales);
                         key.mesh->DrawInstanced(static_cast<GLsizei>(transforms.size()));
                         material->UnBind();
                         });
@@ -381,6 +393,7 @@ void RenderManager::SubmitRenderMap(const EngineContext& engineContext)
                                 SpriteAnimator* anim = obj->GetAnimator();
                                 mat->SetUniform("u_UVOffset", anim->GetUVOffset());
                                 mat->SetUniform("u_UVScale", anim->GetUVScale());
+                                mat->SetTexture("u_Texture", anim->GetTexture());
                             }
 
                             obj->Draw(engineContext);

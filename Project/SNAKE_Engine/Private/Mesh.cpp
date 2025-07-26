@@ -67,23 +67,38 @@ Mesh::~Mesh()
 
 void Mesh::SetupInstanceAttributes(GLuint* instanceVBO) const
 {
+    GLuint loc;
     glVertexArrayVertexBuffer(vao, 1, instanceVBO[0], 0, sizeof(glm::mat4));
+
     for (int i = 0; i < 4; i++)
     {
-        GLuint loc = 2 + i;
+        loc = 2 + i;
         glEnableVertexArrayAttrib(vao, loc);
         glVertexArrayAttribFormat(vao, loc, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4) * i);
         glVertexArrayAttribBinding(vao, loc, 1);
     }
     glVertexArrayBindingDivisor(vao, 1, 1);
 
-
+    loc = 6;
     glVertexArrayVertexBuffer(vao, 2, instanceVBO[1], 0, sizeof(glm::vec4));
-    GLuint loc = 6;
     glEnableVertexArrayAttrib(vao, loc);
     glVertexArrayAttribFormat(vao, loc, 4, GL_FLOAT, GL_FALSE, 0);
     glVertexArrayAttribBinding(vao, loc, 2);
     glVertexArrayBindingDivisor(vao, 2, 1);
+
+    loc = 7;
+    glVertexArrayVertexBuffer(vao, 3, instanceVBO[3], 0, sizeof(glm::vec2));
+    glEnableVertexArrayAttrib(vao, loc);
+    glVertexArrayAttribFormat(vao, loc, 2, GL_FLOAT, GL_FALSE, 0);
+    glVertexArrayAttribBinding(vao, loc, 3);
+    glVertexArrayBindingDivisor(vao, 3, 1);
+
+    loc = 8;
+    glVertexArrayVertexBuffer(vao, 4, instanceVBO[4], 0, sizeof(glm::vec2));
+    glEnableVertexArrayAttrib(vao, loc);
+    glVertexArrayAttribFormat(vao, loc, 2, GL_FLOAT, GL_FALSE, 0);
+    glVertexArrayAttribBinding(vao, loc, 4);
+    glVertexArrayBindingDivisor(vao, 4, 1);
 }
 
 

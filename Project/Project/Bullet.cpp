@@ -1,6 +1,4 @@
 #include "Bullet.h"
-
-#include <iostream>
 #include <random>
 
 #include "Debug.h"
@@ -9,33 +7,38 @@
 Bullet::Bullet(glm::vec2 pos, glm::vec2 _dir) : dir(_dir)
 {
     transform2D.SetPosition(pos);
+
 }
 
 void Bullet::Init(const EngineContext& engineContext)
 {
     SNAKE_LOG("Bullet initialized");
-    SetMesh(engineContext, "star");
+    SetMesh(engineContext, "default");
     SetMaterial(engineContext, "m_instancing");
     SetRenderLayer(engineContext, "Bullet");
     GetMaterial()->EnableInstancing(true, GetMesh());
+    AttachAnimator(engineContext.renderManager->GetSpriteSheetByTag("animTest"), 0.08f);
+    spriteAnimator->PlayClip(0, 8);
+
     static std::random_device rd;
     static std::mt19937 gen(rd());
-    static std::uniform_real_distribution<float> scaleDist(10.0f, 40.0f);
+    static std::uniform_real_distribution<float> scaleDist(40.0f, 40.0f);
     float scale = scaleDist(gen);
 
 
     std::uniform_real_distribution<float> rDist(0.5f, 1.0f);  
     std::uniform_real_distribution<float> gDist(0.5f, 1.0f);  
     std::uniform_real_distribution<float> bDist(0.5f, 1.0f);  
-    std::uniform_real_distribution<float> aDist(0.1f, 1.0f);
+    std::uniform_real_distribution<float> aDist(0.3f, 0.7f);
     std::uniform_real_distribution<float> rotDist(-5.f, 5.f);
+    std::uniform_real_distribution<float> speedDist(100.f, 150.f);
 
     float a = aDist(gen);
     float r = rDist(gen);
     float g = gDist(gen);
     float b = bDist(gen);
-
-    color = glm::vec4(r, g, b, 1.0);
+    speed = speedDist(gen);
+    color = glm::vec4(r, g, b, a);
     rotAmount = rotDist(gen);
 
     transform2D.SetScale(glm::vec2(scale));
@@ -48,9 +51,9 @@ void Bullet::LateInit(const EngineContext& engineContext)
 void Bullet::Update(float dt, const EngineContext& engineContext)
 {
     transform2D.AddRotation(dt* rotAmount);
-    transform2D.AddPosition(glm::vec2(1 * dir.x, 1 * dir.y));
+    transform2D.AddPosition(glm::vec2(dt*speed* dir.x, dt*speed * dir.y));
     timer += dt;
-    if (timer > 3.f)
+    if (timer >10.f)
         Kill();
 }
 

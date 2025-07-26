@@ -28,6 +28,8 @@ void MainMenu::Init(const EngineContext& engineContext)
     test->GetTransform2D().SetScale({ 1,1 });
     test->SetRenderLayer(engineContext, "UI");
 
+
+    volume = 1.0;
     uiText = static_cast<TextObject*>(objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"), "This is UI / Current Volume: "+std::to_string(volume)+"\nVolume Up: 1 Down: 2", TextAlignH::Left, TextAlignV::Top), "ui"));
     uiText->SetIgnoreCamera(true);
     uiText->GetTransform2D().SetPosition({ -engineContext.windowManager->GetWidth()/3, engineContext.windowManager->GetHeight()/3});

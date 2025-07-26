@@ -47,7 +47,7 @@ private:
 
     void SendUniforms();
 
-    void UpdateInstanceBuffer(const std::vector<glm::mat4>& transforms, const std::vector<glm::vec4>& colors) const;
+    void UpdateInstanceBuffer(const std::vector<glm::mat4>& transforms, const std::vector<glm::vec4>& colors, const std::vector<glm::vec2>& uvOffsets, const std::vector<glm::vec2>& uvScales) const;
 
     [[nodiscard]] Shader* GetShader() const { return shader; }
 
@@ -55,6 +55,6 @@ private:
     std::unordered_map<std::string, Texture*> textures;
     std::unordered_map<std::string, UniformValue> uniforms;
 
-    GLuint instanceVBO[2];
+    GLuint instanceVBO[4];
     bool isInstancingEnabled;
 };
