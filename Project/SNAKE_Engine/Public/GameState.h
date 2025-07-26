@@ -2,7 +2,7 @@
 #include "CameraManager.h"
 #include "EngineContext.h"
 #include "ObjectManager.h"
-
+#include "SNAKE_Engine.h"
 class StateManager;
 struct EngineContext;
 
@@ -68,9 +68,9 @@ private:
         Update(dt, engineContext);
         objectManager.UpdateAll(dt, engineContext);
         objectManager.CheckCollision();
-#ifdef _DEBUG
-        objectManager.DrawColliderDebug(engineContext.renderManager, cameraManager.GetActiveCamera());
-#endif
+        if (engineContext.engine->ShouldRenderDebugDraws())
+            objectManager.DrawColliderDebug(engineContext.renderManager, cameraManager.GetActiveCamera());
+
         LateUpdate(dt, engineContext);
     }
 

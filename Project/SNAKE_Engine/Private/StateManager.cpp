@@ -1,8 +1,9 @@
 #include "StateManager.h"
 #include "GameState.h"
 #include "EngineContext.h"
-#include"WindowManager.h"
-#include"RenderManager.h"
+#include "WindowManager.h"
+#include "RenderManager.h"
+#include "SNAKE_Engine.h"
 GameState* StateManager::GetCurrentState() const
 {
 	return currentState ? currentState.get() : nullptr;
@@ -40,9 +41,8 @@ void StateManager::Draw(const EngineContext& engineContext)
 	{
 		currentState->Draw(engineContext);
 		engineContext.renderManager->FlushDrawCommands(engineContext);
-#ifdef _DEBUG
-		engineContext.renderManager->FlushDebugLineDrawCommands(engineContext);
-#endif
+                if (engineContext.engine->ShouldRenderDebugDraws())
+		    engineContext.renderManager->FlushDebugLineDrawCommands(engineContext);
 	}
 }
 

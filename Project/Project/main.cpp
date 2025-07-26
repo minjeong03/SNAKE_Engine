@@ -37,6 +37,8 @@ int main(int argc, char* argv[])
         SNAKE_ERR("Engine initialization failed.");
         return -1;
     }
+    snakeEngine.RenderDebugDraws(true);
+
     snakeEngine.GetEngineContext().renderManager->RegisterMesh("default", std::vector<float>{
         -0.5f, -0.5f, 0.f, 0.f, 0.f, // vertex 0
             0.5f, -0.5f, 0.f, 1.f, 0.f, // vertex 1
