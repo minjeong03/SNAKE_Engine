@@ -94,7 +94,7 @@ TextInstance* TextObject::GetTextInstance()
 
 void TextObject::UpdateMesh()
 {
-    if (textMeshCache.size() < 500)
+    if (textMeshCache.size() > 500)
         textMeshCache.clear();
 
     auto it = textMeshCache.find(textInstance.GetCacheKey());

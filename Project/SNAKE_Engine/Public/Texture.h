@@ -40,6 +40,7 @@ public:
     ~Texture();
     int GetWidth() const { return width; }
     int GetHeight() const { return height; }
+    unsigned int GetID() const { return id; }
 private:
     void BindToUnit(unsigned int unit) const;
 

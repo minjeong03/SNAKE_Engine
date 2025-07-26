@@ -94,6 +94,10 @@ int main(int argc, char* argv[])
     snakeEngine.GetEngineContext().soundManager->LoadSound("click", "Sounds/mouse.mp3");
     snakeEngine.GetEngineContext().soundManager->LoadSound("beep", "Sounds/beep.mp3");
 
+    snakeEngine.GetEngineContext().renderManager->RegisterFont("default", "Fonts/NotoSans-VariableFont_wdth,wght.ttf", 32);
+    snakeEngine.GetEngineContext().renderManager->RegisterFont("kr", "Fonts/NotoSansKR-VariableFont_wght.ttf", 32);
+    snakeEngine.GetEngineContext().renderManager->RegisterFont("jp", "Fonts/NotoSansJP-VariableFont_wght.ttf", 32);
+    snakeEngine.GetEngineContext().renderManager->RegisterFont("cn", "Fonts/NotoSansTC-VariableFont_wght.ttf", 32);
 
     snakeEngine.GetEngineContext().stateManager->ChangeState(std::make_unique<MainMenu>());
 

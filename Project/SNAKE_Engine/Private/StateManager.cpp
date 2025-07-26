@@ -40,9 +40,9 @@ void StateManager::Draw(const EngineContext& engineContext)
 	{
 		currentState->Draw(engineContext);
 		engineContext.renderManager->FlushDrawCommands(engineContext);
-#ifdef _DEBUG
+//#ifdef _DEBUG
 		engineContext.renderManager->FlushDebugLineDrawCommands(engineContext);
-#endif
+//#endif
 	}
 }
 

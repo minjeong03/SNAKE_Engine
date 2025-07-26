@@ -1,4 +1,4 @@
-#include "MainMenu.h"
+ï»¿#include "MainMenu.h"
 #include <iostream>
 #include "Debug.h"
 #include "Enemy.h"
@@ -14,7 +14,7 @@ void MainMenu::Load(const EngineContext& engineContext)
 {
     SNAKE_LOG("[MainMenu] load called");
 
-    engineContext.renderManager->RegisterFont("default","Fonts/font.ttf", 50);
+
 
 }
 
@@ -32,13 +32,15 @@ void MainMenu::Init(const EngineContext& engineContext)
     volume = 1.0;
     uiText = static_cast<TextObject*>(objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"), "This is UI / Current Volume: "+std::to_string(volume)+"\nVolume Up: 1 Down: 2", TextAlignH::Left, TextAlignV::Top), "ui"));
     uiText->SetIgnoreCamera(true);
-    uiText->GetTransform2D().SetPosition({ -engineContext.windowManager->GetWidth()/3, engineContext.windowManager->GetHeight()/3});
-    uiText->GetTransform2D().SetScale({ 0.5,0.5});
+    uiText->GetTransform2D().SetPosition({ -engineContext.windowManager->GetWidth()/2, engineContext.windowManager->GetHeight()/2});
+    uiText->GetTransform2D().SetScale({ 0.5f,0.5f});
     uiText->SetRenderLayer(engineContext, "UI");
 
 
-    objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"), u8"ÇÑ±Ûµµ SupportÇÕ´Ï´Ù ^_^\nÁÙ¹Ù²Þµµ ¹°·Ð Áö¿øÇÕ´Ï´Ù", TextAlignH::Center, TextAlignV::Middle), "text")->SetColor({0,0,1,1});
-    objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"), u8"Á¤·Äµµ Áö¿øÇÕ´Ï´Ù\nÆ¯¼ö¹®ÀÚ(!@#$%^&*)µµ Áö¿øÇÕ´Ï´Ù", TextAlignH::Right, TextAlignV::Top), "text")->GetTransform2D().SetPosition({ 250,200 });
+    objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("kr"), u8"í•œê¸€ë„ Supportí•©ë‹ˆë‹¤ ^_^\nì¤„ë°”ê¿ˆë„ ë¬¼ë¡  ì§€ì›í•©ë‹ˆë‹¤", TextAlignH::Center, TextAlignV::Middle), "text")->SetColor({0,0,1,1});
+    objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("kr"), u8"ì •ë ¬ë„ ì§€ì›í•©ë‹ˆë‹¤\níŠ¹ìˆ˜ë¬¸ìž(!@#$%^&*)ë„ ì§€ì›í•©ë‹ˆë‹¤", TextAlignH::Center, TextAlignV::Middle), "text")->GetTransform2D().SetPosition({ 0,200 });
+    objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("cn"), u8"ä¹Ÿæ”¯æŒæ±‰å­—", TextAlignH::Center, TextAlignV::Middle), "text")->GetTransform2D().SetPosition({ 0,-100 });
+    objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("jp"), u8"æ¼¢å­—ã«ã‚‚å¯¾å¿œã—ã¦ã„ã¾ã™", TextAlignH::Center, TextAlignV::Middle), "text")->GetTransform2D().SetPosition({ 0,-200 });
    
     enemy = static_cast<Enemy*>(objectManager.AddObject(std::make_unique<Enemy>(glm::vec2(0, 0)), "enemy"));
 
@@ -67,6 +69,10 @@ void MainMenu::Update(float dt, const EngineContext& engineContext)
     if (engineContext.inputManager->IsKeyPressed(KEY_ESCAPE))
     {
         engineContext.engine->RequestQuit();
+    }
+    if (engineContext.inputManager->IsKeyPressed(KEY_R))
+    {
+        Restart(engineContext);
     }
 
 
@@ -125,7 +131,6 @@ void MainMenu::Update(float dt, const EngineContext& engineContext)
 
     engineContext.renderManager->DrawDebugLine(enemy->GetTransform2D().GetPosition(), player->GetTransform2D().GetPosition(), cameraManager.GetActiveCamera(),{ 1, 0, 1, 1 }, 3);
 
-    uiText->GetTransform2D().SetPosition({ -engineContext.windowManager->GetWidth() / 2.f, engineContext.windowManager->GetHeight() / 2.f - 14.f});
 
 
 

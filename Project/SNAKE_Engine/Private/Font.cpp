@@ -82,99 +82,113 @@ void Font::LoadFont(const std::string& path, uint32_t fontSize)
 
 void Font::BakeAtlas(RenderManager& renderManager)
 {
-    std::unordered_set<char32_t> seen;
-
-    for (char32_t c = 0x20; c <= 0x7E; ++c)
-        seen.insert(c);
-
-    for (char32_t c = 0xA0; c <= 0xFF; ++c)
-        seen.insert(c);
-
-    for (char32_t c = 0xAC00; c <= 0xD7A3; ++c)
-        seen.insert(c);
-
-    for (char32_t c = 0x3131; c <= 0x314E; ++c)
-        seen.insert(c);
-
-    for (char32_t c = 0x314F; c <= 0x3163; ++c)
-        seen.insert(c);
-
-    std::vector<char32_t> uniqueCharacters(seen.begin(), seen.end());
-    std::sort(uniqueCharacters.begin(), uniqueCharacters.end());
-
-    const int padding = 1;
-    const int glyphsPerRow = 64;
-    int maxGlyphWidth = 0, maxGlyphHeight = 0;
-
-    for (char32_t c : uniqueCharacters)
-    {
-        if (FT_Load_Char(face, c, FT_LOAD_RENDER)) continue;
-        maxGlyphWidth = std::max(maxGlyphWidth, (int)face->glyph->bitmap.width);
-        maxGlyphHeight = std::max(maxGlyphHeight, (int)face->glyph->bitmap.rows);
-    }
-
-    int cellWidth = maxGlyphWidth + padding * 2;
-    int cellHeight = maxGlyphHeight + padding * 2;
-    int texWidth = glyphsPerRow * cellWidth;
-    int texHeight = ((int)std::ceil(uniqueCharacters.size() / (float)glyphsPerRow)) * cellHeight;
-
+    int texWidth = 512;
+    int texHeight = 512;
     std::vector<unsigned char> pixels(texWidth * texHeight, 0);
-    int offsetX = 0, offsetY = 0;
-
-    for (char32_t codepoint : uniqueCharacters)
-    {
-        if (FT_Load_Char(face, codepoint, FT_LOAD_RENDER)) continue;
-
-        FT_GlyphSlot g = face->glyph;
-        int w = g->bitmap.width;
-        int h = g->bitmap.rows;
-        bool hasBitmap = (w > 0 && h > 0);
-        if (!hasBitmap && g->advance.x == 0)
-            continue; 
-
-        if (offsetX + cellWidth > texWidth)
-        {
-            offsetX = 0;
-            offsetY += cellHeight;
-        }
-
-        int drawX = offsetX + padding;
-        int drawY = offsetY + padding;
-        for (int y = 0; y < h; ++y)
-        {
-            for (int x = 0; x < w; ++x)
-            {
-                int dstX = drawX + x;
-                int dstY = drawY + y;
-                if (dstX < texWidth && dstY < texHeight)
-                {
-                    pixels[dstY * texWidth + dstX] = g->bitmap.buffer[y * g->bitmap.pitch + x];
-                }
-            }
-        }
-
-        Glyph glyph;
-        glyph.size = { w, h };
-        glyph.bearing = { g->bitmap_left, g->bitmap_top };
-        glyph.advance = g->advance.x;
-        glyph.uvTopLeft = { (float)drawX / texWidth, (float)drawY / texHeight };
-        glyph.uvBottomRight = { (float)(drawX + w) / texWidth, (float)(drawY + h) / texHeight };
-
-
-    	glyphs.insert({ codepoint, glyph });
-
-        offsetX += cellWidth;
-    }
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    TextureSettings ts;
-    atlasTexture = std::make_unique<Texture>(pixels.data(), texWidth, texHeight, 1, ts);
+    atlasTexture = std::make_unique<Texture>(pixels.data(), texWidth, texHeight, 1);
 
     Shader* textShader = renderManager.GetShaderByTag("internal_text");
     material = std::make_unique<Material>(textShader);
     material->SetTexture("u_FontTexture", atlasTexture.get());
     material->SetUniform("u_Color", glm::vec4(1.0f));
+
+    nextX = 0;
+    nextY = 0;
+    maxRowHeight = 0;
+
 }
+
+
+bool Font::TryBakeGlyph(char32_t c)
+{
+    if (glyphs.find(c) != glyphs.end())
+        return true;
+
+    if (FT_Load_Char(face, c, FT_LOAD_RENDER))
+    {
+        SNAKE_ERR("FT_Load_Char failed for: U+" << std::hex << (int)c);
+        return false;
+    }
+
+    FT_GlyphSlot g = face->glyph;
+    int w = g->bitmap.width;
+    int h = g->bitmap.rows;
+    bool hasBitmap = (w > 0 && h > 0);
+    bool hasAdvance = (g->advance.x > 0);
+
+    if (!hasBitmap && !hasAdvance)
+    {
+        SNAKE_WRN("Glyph has no bitmap or advance: U+" << std::hex << (int)c);
+        return false;
+    }
+
+    const int padding = 1;
+    const int safeW = std::max(1, w);
+    const int safeH = std::max(1, h);
+    const int cellW = safeW + padding * 2;
+    const int cellH = safeH + padding * 2;
+
+    if (nextX + cellW > atlasTexture->GetWidth())
+    {
+        nextX = 0;
+        nextY += maxRowHeight;
+        maxRowHeight = 0;
+    }
+
+    if (nextY + cellH > atlasTexture->GetHeight())
+    {
+        ExpandAtlas();
+        return TryBakeGlyph(c);
+    }
+
+    int drawX = nextX + padding;
+    int drawY = nextY + padding;
+
+    if (hasBitmap && g->bitmap.buffer)
+    {
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        glTextureSubImage2D(
+            atlasTexture->GetID(), 0,
+            drawX, drawY, w, h,
+            GL_RED, GL_UNSIGNED_BYTE,
+            g->bitmap.buffer
+        );
+    }
+    else
+    {
+        unsigned char dummy = 0;
+        glTextureSubImage2D(
+            atlasTexture->GetID(), 0,
+            drawX, drawY, 1, 1,
+            GL_RED, GL_UNSIGNED_BYTE,
+            &dummy
+        );
+    }
+
+    Glyph glyph;
+    glyph.size = { w, h };
+    glyph.bearing = { g->bitmap_left, g->bitmap_top };
+    glyph.advance = g->advance.x;
+
+    glyph.uvTopLeft = {
+        static_cast<float>(drawX) / atlasTexture->GetWidth(),
+        static_cast<float>(drawY) / atlasTexture->GetHeight()
+    };
+    glyph.uvBottomRight = {
+        static_cast<float>(drawX + safeW) / atlasTexture->GetWidth(),
+        static_cast<float>(drawY + safeH) / atlasTexture->GetHeight()
+    };
+
+    glyphs[c] = glyph;
+
+    nextX += cellW;
+    maxRowHeight = std::max(maxRowHeight, cellH);
+
+    return true;
+}
+
 
 const Glyph& Font::GetGlyph(char32_t c) const
 {
@@ -239,6 +253,10 @@ Mesh* Font::GenerateTextMesh(const std::string& text, TextAlignH alignH, TextAli
     for (const std::string& lineText : lines)
     {
         std::vector<char32_t> u32Line = UTF8ToCodepoints(lineText);
+        //pre-bake for calculating width
+        for (char32_t c : u32Line)
+            TryBakeGlyph(c);
+
         float lineWidth = 0.0f;
         for (char32_t c : u32Line)
             lineWidth += static_cast<float>(GetGlyph(c).advance >> 6);
@@ -253,6 +271,8 @@ Mesh* Font::GenerateTextMesh(const std::string& text, TextAlignH alignH, TextAli
         yStart += totalHeight * 0.5f - lineSpacing;
     else if (alignV == TextAlignV::Bottom)
         yStart += totalHeight - lineSpacing;
+    if (alignV == TextAlignV::Top)
+        yStart -= fontSize;
 
     float yCursor = yStart;
 
@@ -270,6 +290,7 @@ Mesh* Font::GenerateTextMesh(const std::string& text, TextAlignH alignH, TextAli
         std::vector<char32_t> u32 = UTF8ToCodepoints(lineText);
         for (char32_t c : u32)
         {
+            TryBakeGlyph(c);
             const Glyph& glyph = GetGlyph(c);
             float xpos = xCursor + (float)glyph.bearing.x;
             float ypos = yCursor - (float)(glyph.size.y - glyph.bearing.y);
@@ -301,4 +322,22 @@ Mesh* Font::GenerateTextMesh(const std::string& text, TextAlignH alignH, TextAli
     }
 
     return new Mesh(vertices, indices);
+}
+
+
+void Font::ExpandAtlas()
+{
+    int newWidth = atlasTexture->GetWidth() * 2;
+    int newHeight = atlasTexture->GetHeight() * 2;
+
+    std::vector<unsigned char> newPixels(newWidth * newHeight, 0);
+
+    std::unique_ptr<Texture> newAtlas = std::make_unique<Texture>(newPixels.data(), newWidth, newHeight, 1);
+
+    material->SetTexture("u_FontTexture", newAtlas.get());
+
+    atlasTexture = std::move(newAtlas);
+    nextX = 0;
+    nextY = 0;
+    maxRowHeight = 0;
 }

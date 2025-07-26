@@ -1,5 +1,6 @@
 #pragma once
 #include "CameraManager.h"
+#include "EngineContext.h"
 #include "ObjectManager.h"
 
 class StateManager;
@@ -43,6 +44,7 @@ protected:
     void Restart(const EngineContext& engineContext)
     {
         SystemFree(engineContext);
+        engineContext.soundManager->ControlAll(SoundManager::SoundControlType::Stop);
         SystemInit(engineContext);
     }
 

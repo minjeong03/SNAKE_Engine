@@ -529,6 +529,15 @@ void RenderManager::RegisterFont(const std::string& tag, const std::string& ttfP
         SNAKE_WRN("Font tag already registered: " << tag);
         return;
     }
+    const uint32_t minSize = 4;
+    const uint32_t maxSize = 64;
+
+    if (pixelSize < minSize || pixelSize > maxSize)
+    {
+        SNAKE_ERR("Font pixelSize out of bounds: " << pixelSize << " (allowed: " << minSize << " - " << maxSize << ")");
+        return;
+    }
+
     auto font = std::make_unique<Font>(*this, ttfPath, pixelSize);
 
     fontMap[tag] = std::move(font);
