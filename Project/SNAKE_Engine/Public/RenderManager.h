@@ -54,7 +54,7 @@ public:
 
     void RegisterTexture(const std::string& tag, std::unique_ptr<Texture> texture);
 
-    void RegisterMesh(const std::string& tag, const std::vector<float>& vertices, const std::vector<unsigned int>& indices = {}, PrimitiveType primitiveType = PrimitiveType::Triangles);
+    void RegisterMesh(const std::string& tag, const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices = {}, PrimitiveType primitiveType = PrimitiveType::Triangles);
 
     void RegisterMesh(const std::string& tag, std::unique_ptr<Mesh> mesh);
 

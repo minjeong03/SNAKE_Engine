@@ -194,7 +194,7 @@ const Glyph& Font::GetGlyph(char32_t c) const
     if (it != glyphs.end())
         return it->second;
 
-    static const char32_t fallbackCodepoint = U'?'; 
+    static const char32_t fallbackCodepoint = U'?';
 
     auto fallbackIt = glyphs.find(fallbackCodepoint);
     if (fallbackIt != glyphs.end())
@@ -233,7 +233,7 @@ glm::vec2 Font::GetTextSize(const std::string& text) const
 
 Mesh* Font::GenerateTextMesh(const std::string& text, TextAlignH alignH, TextAlignV alignV)
 {
-    std::vector<float> vertices;
+    std::vector<Vertex> vertices;
     std::vector<uint32_t> indices;
     uint32_t indexOffset = 0;
 
@@ -301,11 +301,10 @@ Mesh* Font::GenerateTextMesh(const std::string& text, TextAlignH alignH, TextAli
             float v1 = glyph.uvBottomRight.y;
 
             vertices.insert(vertices.end(), {
-                xpos,     ypos + h, 0.0f, u0, v0,
-                xpos,     ypos,     0.0f, u0, v1,
-                xpos + w, ypos,     0.0f, u1, v1,
-                xpos + w, ypos + h, 0.0f, u1, v0
-                });
+                { {xpos,     ypos + h, 0.0f }, { u0, v0 } },
+                { {xpos,     ypos,     0.0f}, {u0, v1} },
+                { {xpos + w, ypos,     0.0f}, {u1, v1} },
+                { { xpos + w, ypos + h, 0.0f}, {u1, v0} } });
 
             indices.insert(indices.end(), {
                 indexOffset + 0, indexOffset + 1, indexOffset + 2,

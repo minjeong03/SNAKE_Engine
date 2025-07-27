@@ -17,7 +17,7 @@ GLenum ToGL(PrimitiveType type)
     return GL_TRIANGLES;
 }
 
-Mesh::Mesh(const std::vector<float>& vertices, const std::vector<unsigned int>& indices, PrimitiveType primitiveType_) :vao(0), vbo(0), ebo(0), indexCount(0), useIndex(false), primitiveType(primitiveType_)
+Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, PrimitiveType primitiveType_) :vao(0), vbo(0), ebo(0), indexCount(0), useIndex(false), primitiveType(primitiveType_)
 {
     SetupMesh(vertices, indices);
     ComputeLocalBounds(vertices);
@@ -100,30 +100,28 @@ void Mesh::SetupInstanceAttributes(GLuint* instanceVBO) const
 }
 
 
-void Mesh::SetupMesh(const std::vector<float>& vertices, const std::vector<unsigned int>& indices)
+void Mesh::SetupMesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices)
 {
     useIndex = !indices.empty();
-    indexCount = useIndex ? static_cast<GLsizei>(indices.size()) : static_cast<GLsizei>(vertices.size() / 3);
+    indexCount = useIndex ? static_cast<GLsizei>(indices.size()) : static_cast<GLsizei>(vertices.size());
 
     // Create VAO
     glCreateVertexArrays(1, &vao);
 
     // Create and bind VBO
     glCreateBuffers(1, &vbo);
-    glNamedBufferData(vbo, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+    glNamedBufferData(vbo, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
 
     // Bind VBO to VAO
-    glVertexArrayVertexBuffer(vao, 0, vbo, 0, 3 * sizeof(float));
+    glVertexArrayVertexBuffer(vao, 0, vbo, 0,  sizeof(Vertex));
 
     glEnableVertexArrayAttrib(vao, 0); // position
-    glVertexArrayAttribFormat(vao, 0, 3, GL_FLOAT, GL_FALSE, 0);
+    glVertexArrayAttribFormat(vao, 0, 3, GL_FLOAT, GL_FALSE, offsetof(Vertex, position));
     glVertexArrayAttribBinding(vao, 0, 0);
 
     glEnableVertexArrayAttrib(vao, 1); // uv
-    glVertexArrayAttribFormat(vao, 1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 3);
+    glVertexArrayAttribFormat(vao, 1, 2, GL_FLOAT, GL_FALSE, offsetof(Vertex, uv));
     glVertexArrayAttribBinding(vao, 1, 0);
-
-    glVertexArrayVertexBuffer(vao, 0, vbo, 0, sizeof(float) * 5);
 
     // EBO (Element Buffer)
     if (useIndex)

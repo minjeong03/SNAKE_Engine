@@ -163,6 +163,15 @@ void MainMenu::Update(float dt, const EngineContext& engineContext)
     {
         cameraManager.GetActiveCamera()->SetZoom(cameraManager.GetActiveCamera()->GetZoom() - 0.1f * dt);
     }
+
+    if (engineContext.inputManager->IsKeyPressed(KEY_3))
+    {
+        engineContext.engine->RenderDebugDraws(true);
+    }
+    if (engineContext.inputManager->IsKeyPressed(KEY_4))
+    {
+        engineContext.engine->RenderDebugDraws(false);
+    }
 }
 
 void MainMenu::LateUpdate(float dt, const EngineContext& engineContext)

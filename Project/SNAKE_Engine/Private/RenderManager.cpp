@@ -460,7 +460,7 @@ void RenderManager::RegisterTexture(const std::string& tag, std::unique_ptr<Text
     textureMap[tag] = std::move(texture);
 }
 
-void RenderManager::RegisterMesh(const std::string& tag, const std::vector<float>& vertices,
+void RenderManager::RegisterMesh(const std::string& tag, const std::vector<Vertex>& vertices,
     const std::vector<unsigned int>& indices, PrimitiveType primitiveType)
 {
     if (meshMap.find(tag) != meshMap.end())

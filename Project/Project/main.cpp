@@ -37,31 +37,30 @@ int main(int argc, char* argv[])
         SNAKE_ERR("Engine initialization failed.");
         return -1;
     }
-    snakeEngine.RenderDebugDraws(true);
+    snakeEngine.RenderDebugDraws(false);
 
-    snakeEngine.GetEngineContext().renderManager->RegisterMesh("default", std::vector<float>{
-        -0.5f, -0.5f, 0.f, 0.f, 0.f, // vertex 0
-            0.5f, -0.5f, 0.f, 1.f, 0.f, // vertex 1
-            0.5f, 0.5f, 0.f, 1.f, 1.f, // vertex 2
-            -0.5f, 0.5f, 0.f, 0.f, 1.f  // vertex 3
-    }, std::vector<unsigned int>{0, 1, 2,
-        2, 3, 0});
-    static std::vector<float> starVertices = {
-        // pos         // uv (mapped to [0, 1])
-         0.0f,  0.5f, 0.0f,   0.5f, 1.0f,  // top
-         0.2f,  0.1f, 0.0f,   0.7f, 0.6f,
-         0.5f,  0.1f, 0.0f,   1.0f, 0.6f,
-         0.3f, -0.1f, 0.0f,   0.8f, 0.4f,
-         0.4f, -0.5f, 0.0f,   0.9f, 0.0f,
-         0.0f, -0.2f, 0.0f,   0.5f, 0.3f,
-        -0.4f, -0.5f, 0.0f,   0.1f, 0.0f,
-        -0.3f, -0.1f, 0.0f,   0.2f, 0.4f,
-        -0.5f,  0.1f, 0.0f,   0.0f, 0.6f,
-        -0.2f,  0.1f, 0.0f,   0.3f, 0.6f
+    snakeEngine.GetEngineContext().renderManager->RegisterMesh("default", std::vector<Vertex>{
+        {{-0.5f, -0.5f, 0.f}, { 0.f, 0.f }}, // vertex 0
+        { { 0.5f, -0.5f, 0.f }, { 1.f, 0.f } }, // vertex 1
+        { { 0.5f, 0.5f, 0.f }, { 1.f, 1.f } }, // vertex 2
+        { { -0.5f, 0.5f, 0.f }, { 0.f, 1.f } }  // vertex 3
+    }, std::vector<unsigned int>{0, 1, 2, 2, 3, 0});
+
+    static std::vector<Vertex> starVertices = {
+        {{  0.0f,  0.5f, 0.0f }, { 0.5f, 1.0f }},
+        {{  0.2f,  0.1f, 0.0f }, { 0.7f, 0.6f }},
+        {{  0.5f,  0.1f, 0.0f }, { 1.0f, 0.6f }},
+        {{  0.3f, -0.1f, 0.0f }, { 0.8f, 0.4f }},
+        {{  0.4f, -0.5f, 0.0f }, { 0.9f, 0.0f }},
+        {{  0.0f, -0.2f, 0.0f }, { 0.5f, 0.3f }},
+        {{ -0.4f, -0.5f, 0.0f }, { 0.1f, 0.0f }},
+        {{ -0.3f, -0.1f, 0.0f }, { 0.2f, 0.4f }},
+        {{ -0.5f,  0.1f, 0.0f }, { 0.0f, 0.6f }},
+        {{ -0.2f,  0.1f, 0.0f }, { 0.3f, 0.6f }}
     };
 
     static std::vector<unsigned int> starIndices = {
-        0, 1, 9,    // top -> inner right -> inner left
+        0, 1, 9, 
         1, 2, 3,
         1, 3, 5,
         3, 4, 5,
