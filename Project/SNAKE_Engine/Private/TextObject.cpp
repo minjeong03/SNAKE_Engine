@@ -92,6 +92,48 @@ TextInstance* TextObject::GetTextInstance()
     return &textInstance;
 }
 
+glm::vec2 TextObject::GetWorldPosition() const
+{
+    glm::vec2 screenSpace = transform2D.GetPosition();
+    glm::vec2 offset(0.0f);
+
+    if (!(alignH == TextAlignH::Center && alignV == TextAlignV::Middle))
+    {
+        glm::vec2 size = textInstance.font->GetTextSize(textInstance.text) / glm::vec2(2, 2);
+
+        if (alignH == TextAlignH::Left)
+            offset.x = size.x;
+        else if (alignH == TextAlignH::Right)
+            offset.x = -size.x;
+
+        if (alignV == TextAlignV::Top)
+            offset.y = size.y;
+        else if (alignV == TextAlignV::Bottom)
+            offset.y = -size.y;
+    }
+
+    glm::vec2 alignedScreenPos = screenSpace + offset;
+
+    if (ShouldIgnoreCamera() && referenceCamera)
+    {
+        float zoom = referenceCamera->GetZoom();
+        glm::vec2 camPos = referenceCamera->GetPosition();
+        return camPos + alignedScreenPos / zoom;
+    }
+    else
+    {
+        return alignedScreenPos;
+    }
+}
+
+glm::vec2 TextObject::GetWorldScale() const
+{
+    if (ShouldIgnoreCamera() && referenceCamera)
+        return transform2D.GetScale()* textInstance.font->GetTextSize(textInstance.text) / referenceCamera->GetZoom();
+    else
+        return transform2D.GetScale()* textInstance.font->GetTextSize(textInstance.text);
+}
+
 void TextObject::UpdateMesh()
 {
     if (textMeshCache.size() > 500)

@@ -42,7 +42,6 @@ void SNAKE_Engine::Run()
 {
     EngineTimer timer;
     timer.Start();
-
     while (shouldRun && !glfwWindowShouldClose(windowManager.GetHandle()))
     {
         float dt = timer.Tick();

@@ -381,7 +381,7 @@ void RenderManager::SubmitRenderMap(const EngineContext& engineContext)
                                 else
                                     projection = camera->GetProjectionMatrix();
                                 mat->SetUniform("u_Projection", projection);
-                                mat->SetUniform("u_Model", obj->GetTransform2D().GetMatrix());
+                                mat->SetUniform("u_Model", obj->GetTransform2DMatrix());
                                 mat->SetUniform("u_Color", obj->GetColor());
 
                                 lastShader = currentShader;

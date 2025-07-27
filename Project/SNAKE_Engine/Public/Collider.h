@@ -36,6 +36,10 @@ public:
     void SetUseTransformScale(bool use) { useTransformScale = use; }
     [[nodiscard]] bool IsUsingTransformScale() const { return useTransformScale; }
 
+    void SetWorldPosition(const glm::vec2& pos) { worldPosition = pos; }
+    const glm::vec2& GetWorldPosition() const { return worldPosition; }
+    virtual bool CheckPointCollision(const glm::vec2& point) const = 0;
+
 protected:
     [[nodiscard]] Object* GetOwner() const { return owner; }
 
@@ -43,7 +47,7 @@ protected:
     virtual float GetBoundingRadius() const = 0;
 
     virtual bool CheckCollision(const Collider* other) const = 0;
-    virtual bool CheckPointCollision(const glm::vec2& point) const = 0;
+
 
     virtual bool DispatchAgainst(const CircleCollider& other) const = 0;
     virtual bool DispatchAgainst(const AABBCollider& other) const = 0;
@@ -53,7 +57,8 @@ protected:
     virtual void DrawDebug(RenderManager* rm, Camera2D* cam, const glm::vec4& color = { 1,0,0,1 }) const = 0;
 
     Object* owner;
-    bool useTransformScale = false;
+    bool useTransformScale = true;
+    glm::vec2 worldPosition;
 };
 
 
@@ -68,13 +73,13 @@ public:
 
     [[nodiscard]] float GetRadius() const;
     void SetRadius(float r);
-
+    bool CheckPointCollision(const glm::vec2& point) const override;
 private:
     ColliderType GetType() const override { return ColliderType::Circle; }
     float GetBoundingRadius() const override;
 
     bool CheckCollision(const Collider* other) const override;
-    bool CheckPointCollision(const glm::vec2& point) const override;
+
 
     bool DispatchAgainst(const CircleCollider& other) const override;
     bool DispatchAgainst(const AABBCollider& other) const override;
@@ -99,13 +104,13 @@ public:
 
     [[nodiscard]] glm::vec2 GetHalfSize() const;
     void SetHalfSize(const glm::vec2& hs);
-
+    bool CheckPointCollision(const glm::vec2& point) const override;
 private:
     ColliderType GetType() const override { return ColliderType::AABB; }
     float GetBoundingRadius() const override;
 
     bool CheckCollision(const Collider* other) const override;
-    bool CheckPointCollision(const glm::vec2& point) const override;
+
 
     bool DispatchAgainst(const CircleCollider& other) const override;
     bool DispatchAgainst(const AABBCollider& other) const override;

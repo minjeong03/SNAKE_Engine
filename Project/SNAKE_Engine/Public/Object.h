@@ -86,17 +86,27 @@ public:
 
     uint32_t GetCollisionCategory() const { return collisionCategory; }
 
-    [[nodiscard]] bool ShouldIgnoreCamera();
+    [[nodiscard]] bool ShouldIgnoreCamera() const;
 
-    void SetIgnoreCamera(bool shouldIgnoreCamera);
+    void SetIgnoreCamera(bool shouldIgnoreCamera, Camera2D* cameraForTransformCalc = nullptr);
 
     [[nodiscard]] ObjectType GetType() const { return type; }
+
+    [[nodiscard]] Camera2D* GetReferenceCamera() const { return referenceCamera; }
+
+    virtual glm::vec2 GetWorldPosition() const;
+
+    virtual glm::vec2 GetWorldScale() const;
+
 protected:
     Object(ObjectType objectType) : type(objectType) {}
 
     bool isAlive = true;
     bool isVisible = true;
+
     bool ignoreCamera = false;
+    Camera2D* referenceCamera = nullptr;
+
     std::string objectTag;
 
     Transform2D transform2D;

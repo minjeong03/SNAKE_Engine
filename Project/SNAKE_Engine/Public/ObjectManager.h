@@ -7,12 +7,14 @@
 
 #include "RenderManager.h"
 
+class GameState;
 class Object;
 struct EngineContext;
 class Camera2D;
 
 class ObjectManager
 {
+    friend GameState;
 public:
     [[maybe_unused]]Object* AddObject(std::unique_ptr<Object> obj, const std::string& tag = "");
 

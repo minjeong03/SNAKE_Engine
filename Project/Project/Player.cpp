@@ -34,7 +34,10 @@ void Player::LateInit(const EngineContext& engineContext)
 
 void Player::Update(float dt, const EngineContext& engineContext)
 {
-
+    if (engineContext.inputManager->IsKeyDown(KEY_5))
+    {
+        transform2D.SetScale({ 150,150 });
+    }
     if (engineContext.inputManager->IsKeyDown(KEY_W))
     {
         transform2D.AddPosition(glm::vec2(0, 150 * dt));
@@ -104,7 +107,7 @@ void Player::Update(float dt, const EngineContext& engineContext)
         static std::uniform_real_distribution<float> angleDist(0.0f, 2.0f * glm::pi<float>());
 
         float angle = angleDist(gen);
-        std::unique_ptr<Bullet> b = std::make_unique<Bullet>(transform2D.GetPosition(), glm::vec2(std::cos(angle), std::sin(angle)));
+        std::unique_ptr<Bullet> b = std::make_unique<Bullet>(GetWorldPosition(), glm::vec2(std::cos(angle), std::sin(angle)));
         engineContext.stateManager->GetCurrentState()->GetObjectManager().AddObject(std::move(b),"bullet");
     }
 }

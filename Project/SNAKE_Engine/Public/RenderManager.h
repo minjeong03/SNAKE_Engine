@@ -50,7 +50,7 @@ public:
 
     void RegisterShader(const std::string& tag, std::unique_ptr<Shader> shader);
 
-    void RegisterTexture(const std::string& tag, const FilePath& path, const TextureSettings& settings);
+    void RegisterTexture(const std::string& tag, const FilePath& path, const TextureSettings& settings = {});
 
     void RegisterTexture(const std::string& tag, std::unique_ptr<Texture> texture);
 

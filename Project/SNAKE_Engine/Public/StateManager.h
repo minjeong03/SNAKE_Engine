@@ -14,6 +14,7 @@ public:
     void ChangeState(std::unique_ptr<GameState> newState);
 
 private:
+
     void Update(float dt, const EngineContext& engineContext);
 
     void Draw(const EngineContext& engineContext);

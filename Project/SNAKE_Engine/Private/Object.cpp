@@ -100,14 +100,49 @@ void Object::SetCollision(ObjectManager& objectManager, const std::string& tag, 
         collisionMask |= reg.GetGroupBit(c);
 }
 
-bool Object::ShouldIgnoreCamera()
+bool Object::ShouldIgnoreCamera() const
 {
     return ignoreCamera;
 }
 
-void Object::SetIgnoreCamera(bool shouldIgnoreCamera)
+void Object::SetIgnoreCamera(bool shouldIgnoreCamera, Camera2D* cameraForTransformCalc)
 {
     ignoreCamera = shouldIgnoreCamera;
+    if (ignoreCamera)
+    {
+        referenceCamera = cameraForTransformCalc;
+    }
+}
+
+glm::vec2 Object::GetWorldPosition() const
+{
+    if (ShouldIgnoreCamera() && referenceCamera)
+    {
+        float zoom = referenceCamera->GetZoom();
+        glm::vec2 camPos = referenceCamera->GetPosition();
+        glm::vec2 screenSpace = transform2D.GetPosition();
+
+        int windowW = referenceCamera->GetScreenWidth();
+        int windowH = referenceCamera->GetScreenHeight();
+
+        glm::vec2 offset = screenSpace * glm::vec2(1.0f / zoom);
+        glm::vec2 corrected = camPos + offset;
+
+        return corrected;
+    }
+    else
+    {
+        return transform2D.GetPosition();
+    }
+}
+
+
+glm::vec2 Object::GetWorldScale() const
+{
+    if (ShouldIgnoreCamera() && referenceCamera)
+        return transform2D.GetScale() / referenceCamera->GetZoom();
+    else
+        return transform2D.GetScale();
 }
 
 

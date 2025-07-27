@@ -71,9 +71,11 @@ int main(int argc, char* argv[])
     };
     snakeEngine.GetEngineContext().renderManager->RegisterMesh("star", starVertices, starIndices);
     TextureSettings ts;
-    snakeEngine.GetEngineContext().renderManager->RegisterTexture("default", "Textures/Default.jpg", ts);
-    snakeEngine.GetEngineContext().renderManager->RegisterTexture("uvchecker", "Textures/uvchecker.jpg", ts);
-    snakeEngine.GetEngineContext().renderManager->RegisterTexture("animTest", "Textures/penguin.png", ts);
+    snakeEngine.GetEngineContext().renderManager->RegisterTexture("default", "Textures/Default.jpg");
+    snakeEngine.GetEngineContext().renderManager->RegisterTexture("uvchecker", "Textures/uvchecker.jpg");
+    snakeEngine.GetEngineContext().renderManager->RegisterTexture("animTest", "Textures/penguin.png");
+    snakeEngine.GetEngineContext().renderManager->RegisterTexture("blueMButton", "Textures/blueMButton.png");
+    snakeEngine.GetEngineContext().renderManager->RegisterTexture("blueMButtonClicked", "Textures/blueMButtonClicked.png");
 
     snakeEngine.GetEngineContext().renderManager->RegisterSpriteSheet("animTest", "animTest", 128,128);
 
@@ -84,6 +86,8 @@ int main(int argc, char* argv[])
     snakeEngine.GetEngineContext().renderManager->RegisterMaterial("m_default", "s_default", { std::pair<std::string, std::string>("u_Texture","uvchecker") });
     snakeEngine.GetEngineContext().renderManager->RegisterMaterial("m_animation", "s_animation", { std::pair<std::string, std::string>("u_Texture","animTest") });
     snakeEngine.GetEngineContext().renderManager->RegisterMaterial("m_instancing", "s_instancing", { std::pair<std::string, std::string>("u_Texture","default") });
+    snakeEngine.GetEngineContext().renderManager->RegisterMaterial("m_blueMButton", "s_default", { std::pair<std::string, std::string>("u_Texture","blueMButton") });
+    snakeEngine.GetEngineContext().renderManager->RegisterMaterial("m_blueMButtonClicked", "s_default", { std::pair<std::string, std::string>("u_Texture","blueMButtonClicked") });
 
     snakeEngine.GetEngineContext().renderManager->RegisterRenderLayer("Bullet");
     snakeEngine.GetEngineContext().renderManager->RegisterRenderLayer("Text");

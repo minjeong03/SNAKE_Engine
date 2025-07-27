@@ -7,7 +7,7 @@
 
 float CircleCollider::GetRadius() const
 {
-    return useTransformScale ? baseRadius * std::max(glm::abs(owner->GetTransform2D().GetScale().x), glm::abs(owner->GetTransform2D().GetScale().y)): scaledRadius;
+    return useTransformScale ? baseRadius * std::max(glm::abs(owner->GetWorldScale().x), glm::abs(owner->GetWorldScale().y)): scaledRadius;
 }
 
 void CircleCollider::SetRadius(float r)
@@ -30,8 +30,8 @@ bool CircleCollider::CheckCollision(const Collider* other) const
 
 bool CircleCollider::DispatchAgainst(const CircleCollider& other) const
 {
-    glm::vec2 a = owner->GetTransform2D().GetPosition();
-    glm::vec2 b = other.GetOwner()->GetTransform2D().GetPosition();
+    glm::vec2 a = owner->GetWorldPosition();
+    glm::vec2 b = other.GetOwner()->GetWorldPosition();
 
     float distSqr = glm::length2(a - b);
     float rSum = GetRadius() + other.GetRadius();
@@ -47,20 +47,20 @@ void CircleCollider::SyncWithTransformScale()
 {
     if (!useTransformScale) return;
 
-    float scale = std::max(glm::abs(owner->GetTransform2D().GetScale().x),glm::abs(owner->GetTransform2D().GetScale().y));
+    float scale = std::max(glm::abs(owner->GetWorldScale().x),glm::abs(owner->GetWorldScale().y));
     scaledRadius = baseRadius * scale;
 }
 
 bool CircleCollider::CheckPointCollision(const glm::vec2& point) const
 {
-    glm::vec2 center = owner->GetTransform2D().GetPosition();
+    glm::vec2 center = owner->GetWorldPosition();
     float distSqr = glm::dot(center - point, center - point);
     return distSqr <= GetRadius() * GetRadius();
 }
 
 void CircleCollider::DrawDebug(RenderManager* rm, Camera2D* cam, const glm::vec4& color) const
 {
-    glm::vec2 center = owner->GetTransform2D().GetPosition();
+    glm::vec2 center = owner->GetWorldPosition();
     float r = GetRadius();
     const int segments = 20;
     const float angleStep = glm::two_pi<float>() / segments;
@@ -80,7 +80,7 @@ void CircleCollider::DrawDebug(RenderManager* rm, Camera2D* cam, const glm::vec4
 
 glm::vec2 AABBCollider::GetHalfSize() const
 {
-    return useTransformScale ? baseHalfSize * glm::abs(owner->GetTransform2D().GetScale()) : scaledHalfSize;
+    return useTransformScale ? baseHalfSize * glm::abs(owner->GetWorldScale()) : scaledHalfSize;
 }
 
 void AABBCollider::SetHalfSize(const glm::vec2& halfSize)
@@ -105,7 +105,7 @@ bool AABBCollider::CheckCollision(const Collider* other) const
 
 bool AABBCollider::CheckPointCollision(const glm::vec2& point) const
 {
-    glm::vec2 center = owner->GetTransform2D().GetPosition();
+    glm::vec2 center = owner->GetWorldPosition();
     glm::vec2 half = GetHalfSize();
 
     glm::vec2 min = center - half;
@@ -117,8 +117,8 @@ bool AABBCollider::CheckPointCollision(const glm::vec2& point) const
 
 bool AABBCollider::DispatchAgainst(const AABBCollider& other) const
 {
-    glm::vec2 aPos = owner->GetTransform2D().GetPosition();
-    glm::vec2 bPos = other.GetOwner()->GetTransform2D().GetPosition();
+    glm::vec2 aPos = owner->GetWorldPosition();
+    glm::vec2 bPos = other.GetOwner()->GetWorldPosition();
 
     glm::vec2 aHalf = GetHalfSize();
     glm::vec2 bHalf = other.GetHalfSize();
@@ -130,12 +130,12 @@ bool AABBCollider::DispatchAgainst(const AABBCollider& other) const
 void AABBCollider::SyncWithTransformScale()
 {
     if (useTransformScale)
-        scaledHalfSize = baseHalfSize * glm::abs(owner->GetTransform2D().GetScale());
+        scaledHalfSize = baseHalfSize * glm::abs(owner->GetWorldScale());
 }
 
 void AABBCollider::DrawDebug(RenderManager* rm, Camera2D* cam, const glm::vec4& color) const
 {
-    glm::vec2 center = owner->GetTransform2D().GetPosition();
+    glm::vec2 center = owner->GetWorldPosition();
     glm::vec2 half = GetHalfSize();
 
     glm::vec2 min = center - half;
@@ -149,10 +149,10 @@ void AABBCollider::DrawDebug(RenderManager* rm, Camera2D* cam, const glm::vec4& 
 
 bool AABBCollider::DispatchAgainst(const CircleCollider& other) const
 {
-    glm::vec2 aPos = owner->GetTransform2D().GetPosition();
+    glm::vec2 aPos = owner->GetWorldPosition();
     glm::vec2 half = GetHalfSize();
 
-    glm::vec2 circlePos = other.GetOwner()->GetTransform2D().GetPosition();
+    glm::vec2 circlePos = other.GetOwner()->GetWorldPosition();
     float radius = other.GetRadius();
 
     glm::vec2 closest = glm::clamp(circlePos, aPos - half, aPos + half);
@@ -173,7 +173,7 @@ void SpatialHashGrid::Insert(Object* obj)
     if (!obj->IsAlive() || !obj->GetCollider())
         return;
 
-    glm::vec2 pos = obj->GetTransform2D().GetPosition();
+    glm::vec2 pos = obj->GetWorldPosition();
     float radius = obj->GetCollider()->GetBoundingRadius();
 
     glm::ivec2 minCell = GetCell(pos - glm::vec2(radius));

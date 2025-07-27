@@ -149,9 +149,11 @@ void ObjectManager::CheckCollision()
 
     for (Object* obj : rawPtrObjects)
     {
-        broadPhaseGrid.Insert(obj);
+        Collider* collider = obj->GetCollider();
+        if (collider)
+            broadPhaseGrid.Insert(obj);
     }
-    broadPhaseGrid.ComputeCollisions([&](Object* a, Object* b)
+    broadPhaseGrid.ComputeCollisions([](Object* a, Object* b)
         {
  
             if ((a->GetCollisionMask() & b->GetCollisionCategory()) == 0 ||

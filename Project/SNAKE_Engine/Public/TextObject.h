@@ -50,6 +50,11 @@ public:
 
     SpriteAnimator* GetAnimator() override { return nullptr; }
 
+    glm::vec2 GetWorldPosition() const override;
+
+    glm::vec2 GetWorldScale() const override;
+
+
     void SetMaterial(const EngineContext& engineContext, const std::string& tag) = delete;
 
     [[nodiscard]] Material* GetMaterial() const = delete;
