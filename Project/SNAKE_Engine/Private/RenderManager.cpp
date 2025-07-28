@@ -329,10 +329,10 @@ void RenderManager::SubmitRenderMap(const EngineContext& engineContext)
                             if (batch.front().first->ShouldIgnoreCamera() || batch.front().second == nullptr)
                             {
                                 projection = glm::ortho(
-                                    -static_cast<float>(engineContext.windowManager->GetWidth()) / 2,
-                                    static_cast<float>(engineContext.windowManager->GetWidth()) / 2,
-                                    -static_cast<float>(engineContext.windowManager->GetHeight()) / 2,
-                                    static_cast<float>(engineContext.windowManager->GetHeight()) / 2
+                                    -static_cast<float>(batch.front().first->GetReferenceCamera()->GetScreenWidth()) / 2,
+                                    static_cast<float>(batch.front().first->GetReferenceCamera()->GetScreenWidth()) / 2,
+                                    -static_cast<float>(batch.front().first->GetReferenceCamera()->GetScreenHeight()) / 2,
+                                    static_cast<float>(batch.front().first->GetReferenceCamera()->GetScreenHeight()) / 2
                                 );
                             }
                             else
@@ -372,10 +372,10 @@ void RenderManager::SubmitRenderMap(const EngineContext& engineContext)
                                 if (obj->ShouldIgnoreCamera() || camera == nullptr)
                                 {
                                     projection = glm::ortho(
-                                        -static_cast<float>(engineContext.windowManager->GetWidth()) / 2,
-                                        static_cast<float>(engineContext.windowManager->GetWidth()) / 2,
-                                        -static_cast<float>(engineContext.windowManager->GetHeight()) / 2,
-                                        static_cast<float>(engineContext.windowManager->GetHeight()) / 2
+                                        -static_cast<float>(obj->GetReferenceCamera()->GetScreenWidth()) / 2,
+                                        static_cast<float>(obj->GetReferenceCamera()->GetScreenWidth()) / 2,
+                                        -static_cast<float>(obj->GetReferenceCamera()->GetScreenHeight()) / 2,
+                                        static_cast<float>(obj->GetReferenceCamera()->GetScreenHeight()) / 2
                                     );
                                 }
                                 else

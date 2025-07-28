@@ -48,6 +48,8 @@ void Level1::SetupUI(const EngineContext& engineContext)
     bulletCountText->GetTransform2D().SetPosition({ 100, 100 });
     bulletCountText->GetTransform2D().SetScale({ 1, 1 });
     bulletCountText->SetRenderLayer(engineContext, "UI");
+    bulletCountText->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
+
 
     volumeDisplayText = static_cast<TextObject*>(objectManager.AddObject(
         std::make_unique<TextObject>(font, GetVolumeText(), TextAlignH::Left, TextAlignV::Top), "ui"));
@@ -192,7 +194,7 @@ void Level1::UpdateUIText(const EngineContext& engineContext)
 
     objectManager.FindByTag("enemyBullet", bullets);
     bulletCountText->SetText(std::to_string(bullets.size()));
-    bulletCountText->GetTransform2D().SetPosition(player->GetWorldPosition() + glm::vec2(0, 50));
+    bulletCountText->GetTransform2D().SetPosition(player->GetTransform2D().GetPosition() + glm::vec2(0, 50));
 
     engineContext.renderManager->DrawDebugLine(
         enemy->GetTransform2D().GetPosition(),
@@ -212,30 +214,36 @@ void Level1::LateUpdate(float dt, const EngineContext& engineContext)
 
 void Level1::Draw(const EngineContext& engineContext)
 {
+   // objectManager.DrawAll(engineContext, cameraManager.GetActiveCamera());
+    auto& rm = *engineContext.renderManager;
+
+    rm.SetViewport(0, 0, engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
+    cameraManager.SetActiveCamera("main");
+    player->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
+    bulletCountText->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
+    volumeDisplayText->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
+    //bulletCountText->GetTransform2D().SetPosition(player->GetWorldPosition() + glm::vec2(0, 50));
     objectManager.DrawAll(engineContext, cameraManager.GetActiveCamera());
-    //auto& rm = *engineContext.renderManager;
+    rm.FlushDrawCommands(engineContext);
 
-    //rm.SetViewport(0, 0, engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
-    //cameraManager.SetActiveCamera("main");
-    //player->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
-    //bulletCountText->GetTransform2D().SetPosition(player->GetWorldPosition() + glm::vec2(0, 50));
-    //objectManager.DrawAll(engineContext, cameraManager.GetActiveCamera());
-    //rm.FlushDrawCommands(engineContext);
+    rm.ClearBackground(10, 10, 200, 200, glm::vec4(0.3, 0.3, 1, 0));
+    rm.SetViewport(10, 10, 200, 200);
 
-    //rm.ClearBackground(10, 10, 200, 200, glm::vec4(0.3, 0.3, 1, 0));
-    //rm.SetViewport(10, 10, 200, 200);
+    cameraManager.SetActiveCamera("minimap");
+    cameraManager.SetScreenSize("minimap", 200, 200);
+    player->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
+    bulletCountText->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
+    volumeDisplayText->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
+   // bulletCountText->GetTransform2D().SetPosition(player->GetWorldPosition() + glm::vec2(0, 50));
+    objectManager.DrawAll(engineContext, cameraManager.GetActiveCamera());
 
-    //cameraManager.SetActiveCamera("minimap");
-    //cameraManager.SetScreenSize("minimap", 200, 200);
-    //player->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
-    //bulletCountText->GetTransform2D().SetPosition(player->GetWorldPosition() + glm::vec2(0, 50));
-    //objectManager.DrawAll(engineContext, cameraManager.GetActiveCamera());
-
-    //rm.FlushDrawCommands(engineContext);
-    //rm.SetViewport(0, 0, engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
-    //cameraManager.SetActiveCamera("main");
-    //player->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
-    //bulletCountText->GetTransform2D().SetPosition(player->GetWorldPosition() + glm::vec2(0, 50));
+    rm.FlushDrawCommands(engineContext);
+    rm.SetViewport(0, 0, engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
+    cameraManager.SetActiveCamera("main");
+    player->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
+    bulletCountText->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
+    volumeDisplayText->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
+   // bulletCountText->GetTransform2D().SetPosition(player->GetWorldPosition() + glm::vec2(0, 50));
 }
 
 void Level1::Free(const EngineContext& engineContext)
