@@ -10,8 +10,9 @@ int main(int argc, char* argv[])
 {
     SNAKE_Engine snakeEngine;
 
-    int width = 800;
-    int height = 600;
+    float multiplier = 1.5f;
+    int width = 800* multiplier;
+    int height = 480* multiplier;
 
     try
     {
@@ -57,14 +58,13 @@ int main(int argc, char* argv[])
     
     snakeEngine.GetEngineContext().renderManager->RegisterRenderLayer("Game");
     snakeEngine.GetEngineContext().renderManager->RegisterRenderLayer("UI");
-    snakeEngine.GetEngineContext().renderManager->RegisterRenderLayer("UI.Text");
 
     snakeEngine.GetEngineContext().soundManager->LoadSound("bgm", "Sounds/test.mp3");
     snakeEngine.GetEngineContext().soundManager->LoadSound("click", "Sounds/mouse.mp3");
     snakeEngine.GetEngineContext().soundManager->LoadSound("beep", "Sounds/beep.mp3");
 
-    snakeEngine.GetEngineContext().renderManager->RegisterFont("default", "Fonts/NotoSans-VariableFont_wdth,wght.ttf", 32);
-    snakeEngine.GetEngineContext().renderManager->RegisterFont("kr", "Fonts/NotoSansKR-VariableFont_wght.ttf", 32);
+    snakeEngine.GetEngineContext().renderManager->RegisterFont("default", "Fonts/NotoSans-VariableFont_wdth,wght.ttf", 28);
+    snakeEngine.GetEngineContext().renderManager->RegisterFont("kr", "Fonts/NotoSansKR-VariableFont_wght.ttf", 28);
 
     snakeEngine.GetEngineContext().stateManager->ChangeState(std::make_unique<MainMenu>());
 

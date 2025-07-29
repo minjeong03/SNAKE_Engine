@@ -1,15 +1,20 @@
 ﻿#include "Level1.h"
 #include <iostream>
 #include "Debug.h"
-#include "Enemy.h"
 #include "MainMenu.h"
 
 #include "Engine.h"
 #include "TextObject.h"
+#include "Apple.h"
 
 void Level1::Load(const EngineContext& engineContext)
 {
     SNAKE_LOG("[Level1] load called");
+
+    engineContext.renderManager->RegisterTexture("t_apple", "Textures/apple.png");
+    engineContext.renderManager->RegisterTexture("t_background", "Textures/tiled_pattern_800x480.png");
+    engineContext.renderManager->RegisterMaterial("m_apple", "s_default", { std::pair<std::string, std::string>("u_Texture","t_apple") });
+    engineContext.renderManager->RegisterMaterial("m_background", "s_default", { std::pair<std::string, std::string>("u_Texture","t_background") });
 }
 
 void Level1::Init(const EngineContext& engineContext)
@@ -18,10 +23,31 @@ void Level1::Init(const EngineContext& engineContext)
 
     auto font = engineContext.renderManager->GetFontByTag("default");
 
-    cameraManager.GetActiveCamera()->SetPosition({ 0, 0 });
+    cameraManager.GetActiveCamera()->SetPosition(
+        { 
+            engineContext.windowManager->GetWidth() * 0.5f - margin_x * multiplier,
+            engineContext.windowManager->GetHeight() * 0.5f - margin_y * multiplier
+        });
     cameraManager.GetActiveCamera()->SetZoom(1.0f);
 
     engineContext.soundManager->Play("bgm", 1, 20);
+
+   
+    for (int col = 0; col < cols; ++col)
+    {
+        glm::vec2 pos = { col * (spacing_x + apple_size_x) * multiplier, 0 };
+        Apple* apple = (Apple*)objectManager.AddObject(std::make_unique<Apple>(), "apple");
+        apple->GetTransform2D().SetPosition(pos);
+        apple->GetTransform2D().SetScale({ apple_size_x, apple_size_y });
+        apple->SetRenderLayer(engineContext, "Game");
+
+        auto text = new TextObject(engineContext.renderManager->GetFontByTag("default"), std::to_string(apple->GetValue()), TextAlignH::Center, TextAlignV::Middle);
+        objectManager.AddObject(std::unique_ptr<TextObject>(text), "apple_text");
+        text->GetTransform2D().SetPosition(pos);
+        text->SetRenderLayer(engineContext, "UI");
+    }
+
+
 }
 
 void Level1::LateInit(const EngineContext& engineContext)
