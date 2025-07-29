@@ -6,15 +6,20 @@
 #include "Engine.h"
 #include "TextObject.h"
 #include "Apple.h"
+#include "ApplePlayerController.h"
 
 void Level1::Load(const EngineContext& engineContext)
 {
     SNAKE_LOG("[Level1] load called");
 
+    engineContext.inputManager->Clear();
+
     engineContext.renderManager->RegisterTexture("t_apple", "Textures/apple.png");
     engineContext.renderManager->RegisterTexture("t_background", "Textures/tiled_pattern_800x480.png");
     engineContext.renderManager->RegisterMaterial("m_apple", "s_default", { std::pair<std::string, std::string>("u_Texture","t_apple") });
     engineContext.renderManager->RegisterMaterial("m_background", "s_default", { std::pair<std::string, std::string>("u_Texture","t_background") });
+
+    engineContext.engine->RenderDebugDraws(true);
 }
 
 void Level1::Init(const EngineContext& engineContext)
@@ -38,6 +43,8 @@ void Level1::Init(const EngineContext& engineContext)
     background_obj->GetTransform2D().SetScale({ engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight()});
     background_obj->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
     background_obj->SetRenderLayer(engineContext, "Game.Background");
+
+    objectManager.AddObject(std::make_unique<ApplePlayerController>(), "player_controller");
 
     for (int row = 0; row < rows; ++row)
     {

@@ -14,11 +14,8 @@ void Apple::Init(const EngineContext& engineContext)
 {
     SetMesh(engineContext, "default");
     SetMaterial(engineContext, "m_apple");
-    SetCollider(std::make_unique<AABBCollider>(this, glm::vec2(0.5, 0.5))); 
-    // GameObject.Transform.Scale 50, 50
-    // AABBCollider 0.5 0.5
-    // => Collider 50 50
-
+    SetCollider(std::make_unique<AABBCollider>(this, glm::vec2(0.4, 0.4))); 
+    SetCollision(engineContext.stateManager->GetCurrentState()->GetObjectManager(), "apple", { "player_selection" });
 }
 
 void Apple::LateInit(const EngineContext& engineContext)

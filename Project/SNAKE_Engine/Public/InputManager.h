@@ -28,6 +28,8 @@ public:
 
     [[nodiscard]] double GetMouseY() const;
 
+    void Clear();
+
 private:
     void Init(GLFWwindow* _window);
 
