@@ -55,7 +55,8 @@ int main(int argc, char* argv[])
     
     snakeEngine.GetEngineContext().renderManager->RegisterMaterial("m_instancing", "s_instancing", { std::pair<std::string, std::string>("u_Texture","default") });
     snakeEngine.GetEngineContext().renderManager->RegisterMaterial("m_blueMButton", "s_default", { std::pair<std::string, std::string>("u_Texture","blueMButton") });
-    
+
+    snakeEngine.GetEngineContext().renderManager->RegisterRenderLayer("Game.Background");
     snakeEngine.GetEngineContext().renderManager->RegisterRenderLayer("Game");
     snakeEngine.GetEngineContext().renderManager->RegisterRenderLayer("UI");
 

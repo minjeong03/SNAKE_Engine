@@ -32,19 +32,28 @@ void Level1::Init(const EngineContext& engineContext)
 
     engineContext.soundManager->Play("bgm", 1, 20);
 
-   
-    for (int col = 0; col < cols; ++col)
-    {
-        glm::vec2 pos = { col * (spacing_x + apple_size_x) * multiplier, 0 };
-        Apple* apple = (Apple*)objectManager.AddObject(std::make_unique<Apple>(), "apple");
-        apple->GetTransform2D().SetPosition(pos);
-        apple->GetTransform2D().SetScale({ apple_size_x, apple_size_y });
-        apple->SetRenderLayer(engineContext, "Game");
+    auto* background_obj = objectManager.AddObject(std::make_unique<GameObject>(), "background");
+    background_obj->SetMesh(engineContext, "default");
+    background_obj->SetMaterial(engineContext, "m_background");
+    background_obj->GetTransform2D().SetScale({ engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight()});
+    background_obj->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
+    background_obj->SetRenderLayer(engineContext, "Game.Background");
 
-        auto text = new TextObject(engineContext.renderManager->GetFontByTag("default"), std::to_string(apple->GetValue()), TextAlignH::Center, TextAlignV::Middle);
-        objectManager.AddObject(std::unique_ptr<TextObject>(text), "apple_text");
-        text->GetTransform2D().SetPosition(pos);
-        text->SetRenderLayer(engineContext, "UI");
+    for (int row = 0; row < rows; ++row)
+    {
+        for (int col = 0; col < cols; ++col)
+        {
+            glm::vec2 pos = { col * (spacing_x + apple_size_x) * multiplier, row * (spacing_y + apple_size_y) * multiplier};
+            Apple* apple = (Apple*)objectManager.AddObject(std::make_unique<Apple>(), "apple");
+            apple->GetTransform2D().SetPosition(pos);
+            apple->GetTransform2D().SetScale({ apple_size_x, apple_size_y });
+            apple->SetRenderLayer(engineContext, "Game");
+
+            auto text = new TextObject(engineContext.renderManager->GetFontByTag("default"), std::to_string(apple->GetValue()), TextAlignH::Center, TextAlignV::Middle);
+            objectManager.AddObject(std::unique_ptr<TextObject>(text), "apple_text");
+            text->GetTransform2D().SetPosition(pos);
+            text->SetRenderLayer(engineContext, "UI");
+        }
     }
 
 
