@@ -49,8 +49,6 @@ void ObjectManager::UpdateAll(float dt, const EngineContext& engineContext)
         }
     }
 
-    EraseDeadObjects(engineContext);
-    AddAllPendingObjects(engineContext);
 }
 
 void ObjectManager::AddAllPendingObjects(const EngineContext& engineContext)
@@ -86,12 +84,11 @@ void ObjectManager::EraseDeadObjects(const EngineContext& engineContext)
         objectMap.erase(obj->GetTag());
         rawPtrObjects.erase(std::remove(rawPtrObjects.begin(), rawPtrObjects.end(), obj), rawPtrObjects.end());
     }
-
     objects.erase(
         std::remove_if(objects.begin(), objects.end(),
-            [](const std::unique_ptr<Object>& obj)
+            [&](const std::unique_ptr<Object>& obj)
             {
-                return !obj->IsAlive();
+                return std::find(deadObjects.begin(), deadObjects.end(), obj.get()) != deadObjects.end();
             }),
         objects.end());
 }
@@ -150,7 +147,7 @@ void ObjectManager::CheckCollision()
     for (Object* obj : rawPtrObjects)
     {
         Collider* collider = obj->GetCollider();
-        if (collider)
+        if (collider && obj->IsAlive())
             broadPhaseGrid.Insert(obj);
     }
     broadPhaseGrid.ComputeCollisions([](Object* a, Object* b)

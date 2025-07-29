@@ -66,12 +66,14 @@ private:
 
     virtual void SystemUpdate(float dt, const EngineContext& engineContext)
     {
+        objectManager.EraseDeadObjects(engineContext);
+        objectManager.AddAllPendingObjects(engineContext);
         Update(dt, engineContext);
         objectManager.UpdateAll(dt, engineContext);
         objectManager.CheckCollision();
         if (engineContext.engine->ShouldRenderDebugDraws())
             objectManager.DrawColliderDebug(engineContext.renderManager, cameraManager.GetActiveCamera());
-
+   
         LateUpdate(dt, engineContext);
     }
 

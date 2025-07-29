@@ -82,7 +82,7 @@ void ApplePlayerController::StartDragging(const EngineContext& engineContext)
 
 void ApplePlayerController::EndDragging(const EngineContext& engineContext)
 {
-    SNAKE_ERR("[ApplePlayerController]  CheckApples");
+    SNAKE_LOG("[ApplePlayerController]  CheckApples");
 
     glm::vec2 end_point = {
         engineContext.inputManager->GetMouseX(),
@@ -123,7 +123,6 @@ void ApplePlayerController::CheckSelectedApples(const EngineContext& engineConte
             obj->Kill();
         }
     }
-    SNAKE_ERR("[ApplePlayerController]  sum" << sum);
 
     checkApples = false;
     selected_objects.clear();

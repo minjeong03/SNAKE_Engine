@@ -1,13 +1,8 @@
 #include "Apple.h"
-#include <random>
 
-Apple::Apple()
+
+Apple::Apple(Object* dependant_, int value_) : dependant(dependant_), value(value_)
 {
-    static std::random_device rd;                          // 하드웨어 기반 난수 (seed)
-    static std::mt19937 gen(rd());                         // Mersenne Twister 19937 엔진
-    static std::uniform_int_distribution<int> dist(1, 9);  // [1, 9] 범위의 균등 분포
-
-    value = dist(gen);
 }
 
 void Apple::Init(const EngineContext& engineContext)
@@ -32,6 +27,7 @@ void Apple::Draw(const EngineContext& engineContext)
 
 void Apple::Free(const EngineContext& engineContext)
 {
+    dependant->Kill();
 }
 
 void Apple::LateFree(const EngineContext& engineContext)

@@ -4,7 +4,7 @@
 class Apple : public GameObject
 {
 public:
-    Apple();
+    Apple(Object* dependant, int value);
     void Init(const EngineContext& engineContext) override;
     void LateInit(const EngineContext& engineContext) override;
     void Update(float dt, const EngineContext& engineContext) override;
@@ -15,5 +15,6 @@ public:
     const int& GetValue() const;
 private:
     int value = 0;
+    Object* dependant;
 };
 

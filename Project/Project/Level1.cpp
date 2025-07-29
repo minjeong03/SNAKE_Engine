@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Debug.h"
 #include "MainMenu.h"
+#include <random>
 
 #include "Engine.h"
 #include "TextObject.h"
@@ -24,6 +25,10 @@ void Level1::Load(const EngineContext& engineContext)
 
 void Level1::Init(const EngineContext& engineContext)
 {
+    static std::random_device rd;                          // 하드웨어 기반 난수 (seed)
+    static std::mt19937 gen(rd());                         // Mersenne Twister 19937 엔진
+    static std::uniform_int_distribution<int> dist(1, 9);  // [1, 9] 범위의 균등 분포
+
     SNAKE_LOG("[Level1] init called");
 
     auto font = engineContext.renderManager->GetFontByTag("default");
@@ -50,16 +55,19 @@ void Level1::Init(const EngineContext& engineContext)
     {
         for (int col = 0; col < cols; ++col)
         {
-            glm::vec2 pos = { col * (spacing_x + apple_size_x) * multiplier, row * (spacing_y + apple_size_y) * multiplier};
-            Apple* apple = (Apple*)objectManager.AddObject(std::make_unique<Apple>(), "apple");
+            glm::vec2 pos = { col * (spacing_x + apple_size_x) * multiplier, row * (spacing_y + apple_size_y) * multiplier };
+            int value = dist(gen); 
+
+            auto text = new TextObject(engineContext.renderManager->GetFontByTag("default"), std::to_string(value), TextAlignH::Center, TextAlignV::Middle);
+            objectManager.AddObject(std::unique_ptr<TextObject>(text), "apple_text");
+            text->GetTransform2D().SetPosition(pos);
+            text->SetRenderLayer(engineContext, "UI");
+
+            Apple* apple = (Apple*)objectManager.AddObject(std::make_unique<Apple>(text, value), "apple");
             apple->GetTransform2D().SetPosition(pos);
             apple->GetTransform2D().SetScale({ apple_size_x, apple_size_y });
             apple->SetRenderLayer(engineContext, "Game");
 
-            auto text = new TextObject(engineContext.renderManager->GetFontByTag("default"), std::to_string(apple->GetValue()), TextAlignH::Center, TextAlignV::Middle);
-            objectManager.AddObject(std::unique_ptr<TextObject>(text), "apple_text");
-            text->GetTransform2D().SetPosition(pos);
-            text->SetRenderLayer(engineContext, "UI");
         }
     }
 
