@@ -40,7 +40,6 @@ void Apple::LateFree(const EngineContext& engineContext)
 
 void Apple::OnCollision(Object* other)
 {
-    GameObject::OnCollision(other);
 }
 
 const int& Apple::GetValue() const

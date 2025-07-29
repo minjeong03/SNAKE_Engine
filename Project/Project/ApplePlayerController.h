@@ -24,14 +24,16 @@ private:
     };
 
     void StartDragging(const EngineContext& engineContext);
-    void CheckApples(const EngineContext& engineContext);
+    void EndDragging(const EngineContext& engineContext);
     void DoNothing(const EngineContext& engineContext);
     void ShouldNotBeReached(const EngineContext& engineContext);
+    void CheckSelectedApples(const EngineContext& engineContext);
 
     InputState prev_state = Release;
     InputState current_state = Release;
     glm::vec2 start_point;
     bool checkApples = false;
+    std::vector<Object*> selected_objects;
     typedef void(ApplePlayerController::*InputActionFunc)(const EngineContext& engineContext);
     InputActionFunc funcs[InputState::COUNT][InputState::COUNT];
 };
