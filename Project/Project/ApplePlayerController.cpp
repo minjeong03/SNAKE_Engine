@@ -21,7 +21,6 @@ ApplePlayerController::ApplePlayerController() :
     funcs[Release][Pressed] = &ApplePlayerController::StartDragging;
     funcs[Release][Down] = &ApplePlayerController::ShouldNotBeReached;
     funcs[Release][Release] = &ApplePlayerController::DoNothing;
-
 }
 
 void ApplePlayerController::Init(const EngineContext& engineContext)
