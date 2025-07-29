@@ -13,23 +13,14 @@ void MainMenu::Init(const EngineContext& engineContext)
 {
     SNAKE_LOG("[MainMenu] init called");
 
-    startText = static_cast<TextObject*>(objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"),"START",TextAlignH::Center, TextAlignV::Middle), "StartText"));
-    startText->GetTransform2D().SetPosition({ 0,100 });
-    startText->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
-    startText->SetRenderLayer(engineContext, "UI");
+    playText = static_cast<TextObject*>(objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"),"START",TextAlignH::Center, TextAlignV::Middle), "playText"));
+    playText->GetTransform2D().SetPosition({ 0,100 });
+    playText->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
+    playText->SetRenderLayer(engineContext, "UI");
 
-    startButton = static_cast<GameObject*>(objectManager.AddObject(std::make_unique<Button>(), "StartButton"));
-    startButton->GetTransform2D().SetPosition({ startText->GetWorldPosition() });
-    startButton->GetTransform2D().SetScale({ startText->GetWorldScale()*1.5f });
-
-    quitText = static_cast<TextObject*>(objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"), "QUIT", TextAlignH::Center, TextAlignV::Middle), "QuitText"));
-    quitText->GetTransform2D().SetPosition({ 0,-100 });
-    quitText->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
-    quitText->SetRenderLayer(engineContext, "UI");
-
-    quitButton = static_cast<GameObject*>(objectManager.AddObject(std::make_unique<Button>(), "QuitButton"));
-    quitButton->GetTransform2D().SetPosition({ quitText->GetWorldPosition() });
-    quitButton->GetTransform2D().SetScale({ quitText->GetWorldScale() * 1.5f });
+    playButton = static_cast<GameObject*>(objectManager.AddObject(std::make_unique<Button>(), "playButton"));
+    playButton->GetTransform2D().SetPosition({ playText->GetWorldPosition() });
+    playButton->GetTransform2D().SetScale({ playText->GetWorldScale()*1.5f });
 }
 
 void MainMenu::LateInit(const EngineContext& engineContext)
@@ -58,10 +49,11 @@ void MainMenu::Update(float dt, const EngineContext& engineContext)
     }
 
 
-    if (startButton->GetCollider()->CheckPointCollision( cameraManager.GetActiveCamera()->GetPosition()+glm::vec2{ engineContext.inputManager->GetMouseX()-engineContext.windowManager->GetWidth()/2, engineContext.windowManager->GetHeight()/2-engineContext.inputManager->GetMouseY() }/cameraManager.GetActiveCamera()->GetZoom()))
+    if (playButton->GetCollider()->CheckPointCollision( 
+        cameraManager.GetActiveCamera()->GetPosition() + glm::vec2{ engineContext.inputManager->GetMouseX()-engineContext.windowManager->GetWidth()/2, engineContext.windowManager->GetHeight()/2-engineContext.inputManager->GetMouseY() }/cameraManager.GetActiveCamera()->GetZoom()))
     {
-        startButton->SetColor({ 0.3,0.3,0.3,1.0 });
-        startText->SetColor({ 0.3,0.3,0.3,1.0 });
+        playButton->SetColor({ 0.3,0.3,0.3,1.0 });
+        playText->SetColor({ 0.3,0.3,0.3,1.0 });
         if (engineContext.inputManager->IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
         {
             engineContext.stateManager->ChangeState(std::make_unique<Level1>());
@@ -69,21 +61,8 @@ void MainMenu::Update(float dt, const EngineContext& engineContext)
     }
     else
     {
-        startButton->SetColor({ 1.0,1.0,1.0,1.0});
-        startText->SetColor({ 1.0,1.0,1.0,1.0 });
-    }
-
-    if (quitButton->GetCollider()->CheckPointCollision(cameraManager.GetActiveCamera()->GetPosition() + glm::vec2{ engineContext.inputManager->GetMouseX() - engineContext.windowManager->GetWidth() / 2, engineContext.windowManager->GetHeight() / 2 - engineContext.inputManager->GetMouseY() } / cameraManager.GetActiveCamera()->GetZoom()))
-    {
-        quitButton->SetMaterial(engineContext, "m_blueMButtonClicked");
-        if (engineContext.inputManager->IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-        {
-            engineContext.engine->RequestQuit();
-        }
-    }
-    else
-    {
-        quitButton->SetMaterial(engineContext, "m_blueMButton");
+        playButton->SetColor({ 1.0,1.0,1.0,1.0});
+        playText->SetColor({ 1.0,1.0,1.0,1.0 });
     }
 }
 
