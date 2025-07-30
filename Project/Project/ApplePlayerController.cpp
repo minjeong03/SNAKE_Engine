@@ -2,12 +2,12 @@
 #include "Apple.h"
 #include <random>
 
-glm::vec2 GetRandomUnitVector1Q()
+glm::vec2 GetRandomUnitVectorRanged(float min_radian, float max_radian)
 {
     // 난수 엔진과 분포 설정
     static std::random_device rd;
     static std::mt19937 gen(rd());
-    static std::uniform_real_distribution<float> dist(1.0472f, 2.0944f); // 0 ~ π/2
+    static std::uniform_real_distribution<float> dist(min_radian, max_radian); // 60~120
 
     float angle = dist(gen);
     return { std::cos(angle), std::sin(angle) }; // 단위 벡터
@@ -147,7 +147,7 @@ void ApplePlayerController::CheckSelectedApples(const EngineContext& engineConte
         {
             Apple* apple = (Apple*)obj;
             
-            glm::vec2 vel = GetRandomUnitVector1Q() * glm::vec2{ 333 };
+            glm::vec2 vel = GetRandomUnitVectorRanged(1.0472f, 2.0944) * glm::vec2{ 333 };
             if (apple->GetTransform2D().GetPosition().x > GetTransform2D().GetPosition().x)
             {
                 vel.x = -vel.x;
