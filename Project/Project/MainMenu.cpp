@@ -85,6 +85,7 @@ void MainMenu::Update(float dt, const EngineContext& engineContext)
     {
         quitButton->SetMaterial(engineContext, "m_blueMButton");
     }
+    GameState::Update(dt, engineContext);
 }
 
 void MainMenu::LateUpdate(float dt, const EngineContext& engineContext)

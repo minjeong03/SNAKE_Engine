@@ -59,7 +59,7 @@ void Bullet::Update(float dt, const EngineContext& engineContext)
     transform2D.AddRotation(dt* rotAmount);
     transform2D.AddPosition(glm::vec2(dt*speed* dir.x, dt*speed * dir.y));
     timer += dt;
-    if (timer >5.f)
+    if (timer >15.f)
         Kill();
 }
 

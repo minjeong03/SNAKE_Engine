@@ -103,6 +103,7 @@ void Level1::Update(float dt, const EngineContext& engineContext)
     HandleCameraInput(dt, engineContext);
     HandleDebugDrawInput(engineContext);
     UpdateUIText(engineContext);
+    GameState::Update(dt, engineContext);
 }
 
 void Level1::HandleStateInput(const EngineContext& engineContext)

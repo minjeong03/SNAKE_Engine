@@ -24,7 +24,7 @@ void StateManager::Update(float dt, const EngineContext& engineContext)
 			currentState->SystemUnload(engineContext);
 			engineContext.soundManager->ControlAll(SoundManager::SoundControlType::Stop);
 		}
-		engineContext.inputManager->Reset();
+	//	engineContext.inputManager->Reset();
 		currentState = std::move(nextState);
 		currentState->SystemLoad(engineContext);
 		currentState->SystemInit(engineContext);
