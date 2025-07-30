@@ -4,21 +4,7 @@
 #include "Player.h"
 #include "TextObject.h"
 #include "Enemy.h"
-
-
-class Timer
-{
-public:
-    void Start(float time);
-    void Update(float dt);
-    bool IsTimedOut() const;
-
-    float GetProgressPercentage() const;
-
-public:
-    float time = 0;
-    float elapsed = 0;
-};
+#include "Timer.h"
 
 class Level1 : public GameState
 {

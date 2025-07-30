@@ -141,7 +141,7 @@ public:
     void ComputeCollisions(std::function<void(Object*, Object*)> onCollision);
 
 private:
-    int cellSize = 256; 
+    int cellSize = 50; 
     std::unordered_map<glm::ivec2, std::vector<Object*>, Vec2Hash> grid;
 
     glm::ivec2 GetCell(const glm::vec2& pos) const;

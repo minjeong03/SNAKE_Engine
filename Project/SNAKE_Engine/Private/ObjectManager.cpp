@@ -4,6 +4,7 @@
 #include "Debug.h"
 #include <cassert>
 #include <algorithm>
+#include <unordered_set>
 
 Object* ObjectManager::AddObject(std::unique_ptr<Object> obj, const std::string& tag)
 {
@@ -144,22 +145,33 @@ void ObjectManager::FindByTag(const std::string& tag, std::vector<Object*>& resu
 
 void ObjectManager::CheckCollision()
 {
+    std::unordered_set<uint64_t> checkedPairs;
+   // checkedPairs.reserve(2000);
+
     broadPhaseGrid.Clear();
 
     for (Object* obj : rawPtrObjects)
     {
         Collider* collider = obj->GetCollider();
-        if (collider && obj->IsAlive())
+        if (collider)
             broadPhaseGrid.Insert(obj);
     }
-    broadPhaseGrid.ComputeCollisions([](Object* a, Object* b)
+
+    broadPhaseGrid.ComputeCollisions([&](Object* a, Object* b)
         {
- 
             if ((a->GetCollisionMask() & b->GetCollisionCategory()) == 0 ||
                 (b->GetCollisionMask() & a->GetCollisionCategory()) == 0)
-            {
                 return;
-            }
+
+            if (a > b)std::swap(a, b);
+
+            uint64_t key = std::hash<Object*>()(a) ^ (std::hash<Object*>()(b) << 1);
+
+            if (checkedPairs.find(key) != checkedPairs.end())
+                return;
+
+            checkedPairs.insert(key);
+
             if (a->GetCollider()->CheckCollision(b->GetCollider()))
             {
                 a->OnCollision(b);

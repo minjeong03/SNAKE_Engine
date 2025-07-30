@@ -112,7 +112,7 @@ void Level1::Init(const EngineContext& engineContext)
     timer_bar_fill->GetTransform2D().SetScale({ apple_size_x, fill_initial_scale_y });
     timer_bar_fill->SetRenderLayer(engineContext, "Game");
     
-    game_timer.Start(10);
+    game_timer.Start(120);
 }
 
 void Level1::LateInit(const EngineContext& engineContext)
@@ -190,25 +190,4 @@ void Level1::Free(const EngineContext& engineContext)
 void Level1::Unload(const EngineContext& engineContext)
 {
     SNAKE_LOG("[Level1] unload called");
-}
-
-void Timer::Start(float time)
-{
-    this->time = time;
-    elapsed = 0;
-}
-
-void Timer::Update(float dt)
-{
-    elapsed += dt;
-}
-
-bool Timer::IsTimedOut() const
-{
-    return elapsed >= time;
-}
-
-float Timer::GetProgressPercentage() const
-{
-    return elapsed / time;
 }

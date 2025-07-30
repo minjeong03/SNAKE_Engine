@@ -75,7 +75,8 @@ void MainMenu::Update(float dt, const EngineContext& engineContext)
 
     if (quitButton->GetCollider()->CheckPointCollision(engineContext.inputManager->GetMouseWorldPos(cameraManager.GetActiveCamera())))
     {
-        quitButton->SetMaterial(engineContext, "m_blueMButtonClicked");
+        quitButton->SetColor({ 0.3,0.3,0.3,1.0 });
+        quitText->SetColor({ 0.3,0.3,0.3,1.0 });
         if (engineContext.inputManager->IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
         {
             engineContext.engine->RequestQuit();
@@ -83,7 +84,8 @@ void MainMenu::Update(float dt, const EngineContext& engineContext)
     }
     else
     {
-        quitButton->SetMaterial(engineContext, "m_blueMButton");
+        quitButton->SetColor({ 1.0,1.0,1.0,1.0 });
+        quitText->SetColor({ 1.0,1.0,1.0,1.0 });
     }
 }
 

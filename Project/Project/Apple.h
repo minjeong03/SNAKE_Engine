@@ -1,5 +1,7 @@
 #pragma once
 #include "Engine.h"
+#include "Timer.h"
+#include "glm.hpp"
 
 class Apple : public GameObject
 {
@@ -14,9 +16,12 @@ public:
     void OnCollision(Object* other) override;
     const int& GetValue() const;
     void SetSelected(bool selected);
+    void SetVelocityAndStartDeadTimer(const glm::vec2& vel);
 private:
     int value = 0;
     Object* dependant;
     const EngineContext* engineContext;
+    glm::vec2 vel;    
+    Timer dead_timer;
 };
 

@@ -1,5 +1,17 @@
 #include "ApplePlayerController.h"
 #include "Apple.h"
+#include <random>
+
+glm::vec2 GetRandomUnitVector1Q()
+{
+    // 난수 엔진과 분포 설정
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    static std::uniform_real_distribution<float> dist(1.0472f, 2.0944f); // 0 ~ π/2
+
+    float angle = dist(gen);
+    return { std::cos(angle), std::sin(angle) }; // 단위 벡터
+}
 
 ApplePlayerController::ApplePlayerController() :
     funcs{ nullptr }, start_point{0,0}
@@ -79,7 +91,7 @@ void ApplePlayerController::OnCollision(Object* other)
 
 void ApplePlayerController::StartDragging(const EngineContext& engineContext)
 {
-    SNAKE_ERR("[ApplePlayerController]  StartDragging");
+    SNAKE_LOG("[ApplePlayerController]  StartDragging");
     SetVisibility(true);
     start_point = {
         engineContext.inputManager->GetMouseX(),
@@ -91,7 +103,7 @@ void ApplePlayerController::StartDragging(const EngineContext& engineContext)
 
 void ApplePlayerController::EndDragging(const EngineContext& engineContext)
 {
-    SNAKE_ERR("[ApplePlayerController]  EndDragging");
+    SNAKE_LOG("[ApplePlayerController]  EndDragging");
     SetVisibility(false);
     checkApples = true;
     selected_objects.clear();
@@ -114,7 +126,7 @@ void ApplePlayerController::OnDragging(const EngineContext& engineContext)
 
 void ApplePlayerController::ShouldNotBeReached(const EngineContext& engineContext)
 {
-    SNAKE_ERR("[ApplePlayerController]  ShouldNotBeReached");
+    SNAKE_LOG("[ApplePlayerController]  ShouldNotBeReached");
 }
 
 void ApplePlayerController::CheckSelectedApples(const EngineContext& engineContext)
@@ -133,7 +145,15 @@ void ApplePlayerController::CheckSelectedApples(const EngineContext& engineConte
     {
         for (Object* obj : selected_objects)
         {
-            obj->Kill();
+            Apple* apple = (Apple*)obj;
+            
+            glm::vec2 vel = GetRandomUnitVector1Q() * glm::vec2{ 333 };
+            if (apple->GetTransform2D().GetPosition().x > GetTransform2D().GetPosition().x)
+            {
+                vel.x = -vel.x;
+            }
+
+            apple->SetVelocityAndStartDeadTimer(vel);
         }
         
         score += selected_objects.size();
