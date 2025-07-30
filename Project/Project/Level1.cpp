@@ -36,7 +36,7 @@ void Level1::Init(const EngineContext& engineContext)
     auto font = engineContext.renderManager->GetFontByTag("default");
 
     cameraManager.GetActiveCamera()->SetPosition(
-        { 
+        {
             engineContext.windowManager->GetWidth() * 0.5f - margin_x * multiplier,
             engineContext.windowManager->GetHeight() * 0.5f - margin_y * multiplier
         });
@@ -47,9 +47,26 @@ void Level1::Init(const EngineContext& engineContext)
     auto* background_obj = objectManager.AddObject(std::make_unique<GameObject>(), "background");
     background_obj->SetMesh(engineContext, "default");
     background_obj->SetMaterial(engineContext, "m_background");
-    background_obj->GetTransform2D().SetScale({ engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight()});
+    background_obj->GetTransform2D().SetScale({ engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight() });
     background_obj->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
     background_obj->SetRenderLayer(engineContext, "Game.Background");
+
+    auto* score_ui_obj = objectManager.AddObject(std::make_unique<GameObject>(), "score_ui");
+    score_ui_obj->SetMesh(engineContext, "default");
+    score_ui_obj->SetMaterial(engineContext, "m_apple");
+    score_ui_obj->GetTransform2D().SetPosition({ 0, 100 });
+    score_ui_obj->GetTransform2D().SetScale({400, 400});
+    score_ui_obj->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
+    score_ui_obj->SetRenderLayer(engineContext, "UI.Pause");
+    score_ui_obj->SetVisibility(false);
+
+    score_ui_text = new TextObject(engineContext.renderManager->GetFontByTag("default"), std::to_string(0), TextAlignH::Center, TextAlignV::Middle);
+    objectManager.AddObject(std::unique_ptr<TextObject>(score_ui_text), "score_ui_text");
+    score_ui_text->GetTransform2D().SetPosition(score_ui_obj->GetTransform2D().GetPosition());
+    score_ui_text->GetTransform2D().SetScale({ 10, 10 });
+    score_ui_text->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
+    score_ui_text->SetRenderLayer(engineContext, "UI.Pause.Text");
+    score_ui_text->SetVisibility(false);
 
     objectManager.AddObject(std::make_unique<ApplePlayerController>(), "player_controller");
 
@@ -71,6 +88,8 @@ void Level1::Init(const EngineContext& engineContext)
             apple->SetRenderLayer(engineContext, "Game");
         }
     }
+
+    game_timer.Start(10);
 }
 
 void Level1::LateInit(const EngineContext& engineContext)
@@ -79,8 +98,20 @@ void Level1::LateInit(const EngineContext& engineContext)
 
 void Level1::Update(float dt, const EngineContext& engineContext)
 {
-    HandleStateInput(engineContext);
-    HandleSoundInput(engineContext);
+    if (game_timer.IsTimedOut())
+    {
+        ApplePlayerController* player = (ApplePlayerController*)objectManager.FindByTag("player_controller");
+        score_ui_text->SetText(std::to_string(player->GetScore()));
+        score_ui_text->SetVisibility(true);
+        objectManager.FindByTag("score_ui")->SetVisibility(true);
+    }
+    else
+    {
+        game_timer.Update(dt);
+        HandleStateInput(engineContext);
+        HandleSoundInput(engineContext);
+        GameState::Update(dt, engineContext);
+    }
 }
 
 void Level1::HandleStateInput(const EngineContext& engineContext)
@@ -104,9 +135,13 @@ void Level1::HandleSoundInput(const EngineContext& engineContext)
 {
     auto& input = *engineContext.inputManager;
 
-    if (input.IsKeyPressed(KEY_W) || input.IsKeyPressed(KEY_A) || input.IsKeyPressed(KEY_S) || input.IsKeyPressed(KEY_D))
+    if (input.IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
     {
-        engineContext.soundManager->Play("click", 1.0f);
+        engineContext.soundManager->Play("click1", 1.0f);
+    }
+    if (input.IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
+    {
+        engineContext.soundManager->Play("click2", 1.0f);
     }
 }
 
@@ -128,4 +163,20 @@ void Level1::Free(const EngineContext& engineContext)
 void Level1::Unload(const EngineContext& engineContext)
 {
     SNAKE_LOG("[Level1] unload called");
+}
+
+void Timer::Start(float time)
+{
+    this->time = time;
+    elapsed = 0;
+}
+
+void Timer::Update(float dt)
+{
+    elapsed += dt;
+}
+
+bool Timer::IsTimedOut() const
+{
+    return elapsed >= time;
 }

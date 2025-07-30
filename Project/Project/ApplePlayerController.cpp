@@ -135,6 +135,8 @@ void ApplePlayerController::CheckSelectedApples(const EngineContext& engineConte
         {
             obj->Kill();
         }
+        
+        score += selected_objects.size();
     }
 
     selected_objects.clear();
@@ -145,4 +147,9 @@ void ApplePlayerController::CheckSelectedApples(const EngineContext& engineConte
 glm::vec2 ApplePlayerController::ConvertScreenToCamera(Camera2D* cam, const glm::vec2& screen_pos)
 {
     return cam->GetPosition() + glm::vec2{ screen_pos.x - cam->GetScreenWidth() / 2, cam->GetScreenHeight() / 2 - screen_pos.y } / cam->GetZoom();
+}
+
+int ApplePlayerController::GetScore() const
+{
+    return score;
 }

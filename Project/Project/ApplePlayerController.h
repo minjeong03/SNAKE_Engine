@@ -14,6 +14,7 @@ public:
     void OnCollision(Object* other) override;
 
     glm::vec2 ConvertScreenToCamera(Camera2D* cam, const glm::vec2& screen_pos);
+    int GetScore() const;
 private:
     enum InputState
     {
@@ -35,6 +36,7 @@ private:
     glm::vec2 start_point;
     bool checkApples = false;
     std::vector<Object*> selected_objects;
+    int score = 0;
     typedef void(ApplePlayerController::*InputActionFunc)(const EngineContext& engineContext);
     InputActionFunc funcs[InputState::COUNT][InputState::COUNT];
 };

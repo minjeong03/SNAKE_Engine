@@ -59,9 +59,13 @@ int main(int argc, char* argv[])
     snakeEngine.GetEngineContext().renderManager->RegisterRenderLayer("Game.Background");
     snakeEngine.GetEngineContext().renderManager->RegisterRenderLayer("Game");
     snakeEngine.GetEngineContext().renderManager->RegisterRenderLayer("UI");
+    snakeEngine.GetEngineContext().renderManager->RegisterRenderLayer("UI.Pause");
+    snakeEngine.GetEngineContext().renderManager->RegisterRenderLayer("UI.Pause.Text");
 
     snakeEngine.GetEngineContext().soundManager->LoadSound("bgm", "Sounds/test.mp3");
     snakeEngine.GetEngineContext().soundManager->LoadSound("click", "Sounds/mouse.mp3");
+    snakeEngine.GetEngineContext().soundManager->LoadSound("click1", "Sounds/mouse1.mp3");
+    snakeEngine.GetEngineContext().soundManager->LoadSound("click2", "Sounds/mouse2.mp3");
     snakeEngine.GetEngineContext().soundManager->LoadSound("beep", "Sounds/beep.mp3");
 
     snakeEngine.GetEngineContext().renderManager->RegisterFont("default", "Fonts/NotoSans-VariableFont_wdth,wght.ttf", 28);

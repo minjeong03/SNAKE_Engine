@@ -6,6 +6,18 @@
 #include "Enemy.h"
 
 
+class Timer
+{
+public:
+    void Start(float time);
+    void Update(float dt);
+    bool IsTimedOut() const;
+
+public:
+    float time = 0;
+    float elapsed = 0;
+};
+
 class Level1 : public GameState
 {
 public:
@@ -21,7 +33,7 @@ public:
 private:
     void HandleStateInput(const EngineContext& engineContext);
     void HandleSoundInput(const EngineContext& engineContext);
-    
+
     float multiplier = 1.5f;
    
     const int rows = 10;
@@ -36,4 +48,6 @@ private:
     const int apple_size_x = 32;
     const int apple_size_y = 35;
 
+    TextObject* score_ui_text = nullptr;
+    Timer game_timer;
 };
