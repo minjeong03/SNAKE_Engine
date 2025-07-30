@@ -33,6 +33,11 @@ public:
         return GetCamera(activeCameraTag);
     }
 
+    [[nodiscard]] const std::string& GetActiveCameraTag() const
+    {
+        return activeCameraTag;
+    }
+
     void SetScreenSizeForAll(int width, int height)
     {
         for (auto& [tag, cam] : cameraMap)

@@ -41,5 +41,5 @@ private:
 
     float volume = 1.0f;
     bool trigger = false;
-    SoundInstanceID id = 0;
+    SoundInstanceID bgmID = 0;
 };

@@ -24,7 +24,7 @@ void Level1::Init(const EngineContext& engineContext)
     SetupMinimapCamera(engineContext);
 
     volume = 1.0f;
-    id = engineContext.soundManager->Play("bgm", 1, 20);
+    bgmID = engineContext.soundManager->Play("bgm", 1, 20);
 }
 
 void Level1::SetupCamera(const EngineContext&)
@@ -36,7 +36,6 @@ void Level1::SetupCamera(const EngineContext&)
 void Level1::SetupPlayer(const EngineContext& engineContext)
 {
     player = static_cast<Player*>(objectManager.AddObject(std::make_unique<Player>(), "level1 player"));
-    player->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
 }
 
 void Level1::SetupUI(const EngineContext& engineContext)
@@ -48,7 +47,6 @@ void Level1::SetupUI(const EngineContext& engineContext)
     bulletCountText->GetTransform2D().SetPosition({ 100, 100 });
     bulletCountText->GetTransform2D().SetScale({ 1, 1 });
     bulletCountText->SetRenderLayer(engineContext, "UI");
-    bulletCountText->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
 
 
     volumeDisplayText = static_cast<TextObject*>(objectManager.AddObject(
@@ -89,9 +87,9 @@ void Level1::SetupEnemy(const EngineContext&)
 
 void Level1::SetupMinimapCamera(const EngineContext& engineContext)
 {
-    auto minimapCam = std::make_unique<Camera2D>(engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
-    minimapCam->SetZoom(0.2f);
-    cameraManager.RegisterCamera("minimap", std::move(minimapCam));
+    auto miniCam = std::make_unique<Camera2D>(engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
+    miniCam->SetZoom(5.f);
+    cameraManager.RegisterCamera("mini", std::move(miniCam));
 }
 
 void Level1::LateInit(const EngineContext& engineContext)
@@ -100,12 +98,12 @@ void Level1::LateInit(const EngineContext& engineContext)
 
 void Level1::Update(float dt, const EngineContext& engineContext)
 {
-    volumeDisplayText->GetTransform2D().SetPosition({ -engineContext.windowManager->GetWidth() / 2, engineContext.windowManager->GetHeight() / 2 });
     HandleStateInput(engineContext);
     HandleSoundInput(engineContext);
     HandleCameraInput(dt, engineContext);
     HandleDebugDrawInput(engineContext);
     UpdateUIText(engineContext);
+    std::cout << cameraManager.GetActiveCameraTag() << std::endl;
 }
 
 void Level1::HandleStateInput(const EngineContext& engineContext)
@@ -137,20 +135,20 @@ void Level1::HandleSoundInput(const EngineContext& engineContext)
     if (input.IsKeyPressed(KEY_P))
     {
         trigger = !trigger;
-        engineContext.soundManager->ControlByID(trigger ? SoundManager::SoundControlType::Pause : SoundManager::SoundControlType::Resume, id);
+        engineContext.soundManager->ControlByID(trigger ? SoundManager::SoundControlType::Pause : SoundManager::SoundControlType::Resume, bgmID);
     }
 
     if (input.IsKeyPressed(KEY_1))
     {
         volume += 0.1f;
-        engineContext.soundManager->SetVolumeByID(id, volume);
+        engineContext.soundManager->SetVolumeByID(bgmID, volume);
         volumeDisplayText->SetText(GetVolumeText());
     }
 
     if (input.IsKeyPressed(KEY_2))
     {
         volume = std::max(0.0f, volume - 0.1f);
-        engineContext.soundManager->SetVolumeByID(id, volume);
+        engineContext.soundManager->SetVolumeByID(bgmID, volume);
         volumeDisplayText->SetText(GetVolumeText());
     }
 }
@@ -166,6 +164,11 @@ void Level1::HandleCameraInput(float dt, const EngineContext& engineContext)
     if (input.IsKeyDown(KEY_L)) cam->AddPosition({ 100 * dt, 0 });
     if (input.IsKeyDown(KEY_U)) cam->SetZoom(cam->GetZoom() + 0.1f * dt);
     if (input.IsKeyDown(KEY_O)) cam->SetZoom(cam->GetZoom() - 0.1f * dt);
+
+    if (input.IsKeyPressed(KEY_5))
+        cameraManager.SetActiveCamera("mini");
+    if (input.IsKeyPressed(KEY_6))
+        cameraManager.SetActiveCamera("main");
 }
 
 void Level1::HandleDebugDrawInput(const EngineContext& engineContext)
@@ -201,6 +204,8 @@ void Level1::UpdateUIText(const EngineContext& engineContext)
         player->GetWorldPosition(),
         cameraManager.GetActiveCamera(),
         { 1, 0, 1, 1 }, 3.0f);
+
+    volumeDisplayText->GetTransform2D().SetPosition({ -engineContext.windowManager->GetWidth() / 2, engineContext.windowManager->GetHeight() / 2 });
 }
 
 std::string Level1::GetVolumeText() const
@@ -214,36 +219,33 @@ void Level1::LateUpdate(float dt, const EngineContext& engineContext)
 
 void Level1::Draw(const EngineContext& engineContext)
 {
-   // objectManager.DrawAll(engineContext, cameraManager.GetActiveCamera());
-    auto& rm = *engineContext.renderManager;
-
-    rm.SetViewport(0, 0, engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
-    cameraManager.SetActiveCamera("main");
-    player->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
-    bulletCountText->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
-    volumeDisplayText->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
-    //bulletCountText->GetTransform2D().SetPosition(player->GetWorldPosition() + glm::vec2(0, 50));
     objectManager.DrawAll(engineContext, cameraManager.GetActiveCamera());
-    rm.FlushDrawCommands(engineContext);
+    //auto& rm = *engineContext.renderManager;
 
-    rm.ClearBackground(10, 10, 200, 200, glm::vec4(0.3, 0.3, 1, 0));
-    rm.SetViewport(10, 10, 200, 200);
+    //rm.SetViewport(0, 0, engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
+    //cameraManager.SetActiveCamera("main");
+    //player->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
+    //bulletCountText->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
+    //volumeDisplayText->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
+    //objectManager.DrawAll(engineContext, cameraManager.GetActiveCamera());
+    //rm.FlushDrawCommands(engineContext);
 
-    cameraManager.SetActiveCamera("minimap");
-    cameraManager.SetScreenSize("minimap", 200, 200);
-    player->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
-    bulletCountText->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
-    volumeDisplayText->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
-   // bulletCountText->GetTransform2D().SetPosition(player->GetWorldPosition() + glm::vec2(0, 50));
-    objectManager.DrawAll(engineContext, cameraManager.GetActiveCamera());
+    //rm.ClearBackground(10, 10, 200, 200, glm::vec4(0.3, 0.3, 1, 0));
+    //rm.SetViewport(10, 10, 200, 200);
 
-    rm.FlushDrawCommands(engineContext);
-    rm.SetViewport(0, 0, engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
-    cameraManager.SetActiveCamera("main");
-    player->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
-    bulletCountText->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
-    volumeDisplayText->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
-   // bulletCountText->GetTransform2D().SetPosition(player->GetWorldPosition() + glm::vec2(0, 50));
+    //cameraManager.SetActiveCamera("minimap");
+    //cameraManager.SetScreenSize("minimap", 200, 200);
+    //player->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
+    //bulletCountText->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
+    //volumeDisplayText->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
+    //objectManager.DrawAll(engineContext, cameraManager.GetActiveCamera());
+
+    //rm.FlushDrawCommands(engineContext);
+    //rm.SetViewport(0, 0, engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
+    //cameraManager.SetActiveCamera("main");
+    //player->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
+    //bulletCountText->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
+    //volumeDisplayText->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
 }
 
 void Level1::Free(const EngineContext& engineContext)

@@ -74,10 +74,10 @@ void Material::UpdateInstanceBuffer(const std::vector<glm::mat4>& transforms, co
     glBindBuffer(GL_ARRAY_BUFFER, instanceVBO[1]);
     glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(glm::vec4), colors.data(), GL_DYNAMIC_DRAW);
 
-    glBindBuffer(GL_ARRAY_BUFFER, instanceVBO[3]);
+    glBindBuffer(GL_ARRAY_BUFFER, instanceVBO[2]);
     glBufferData(GL_ARRAY_BUFFER, uvOffsets.size() * sizeof(glm::vec2), uvOffsets.data(), GL_DYNAMIC_DRAW);
 
-    glBindBuffer(GL_ARRAY_BUFFER, instanceVBO[4]);
+    glBindBuffer(GL_ARRAY_BUFFER, instanceVBO[3]);
     glBufferData(GL_ARRAY_BUFFER, uvScales.size() * sizeof(glm::vec2), uvScales.data(), GL_DYNAMIC_DRAW);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);

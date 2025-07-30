@@ -34,10 +34,6 @@ void Player::LateInit(const EngineContext& engineContext)
 
 void Player::Update(float dt, const EngineContext& engineContext)
 {
-    if (engineContext.inputManager->IsKeyDown(KEY_5))
-    {
-        transform2D.SetScale({ 150,150 });
-    }
     if (engineContext.inputManager->IsKeyDown(KEY_W))
     {
         transform2D.AddPosition(glm::vec2(0, 150 * dt));
