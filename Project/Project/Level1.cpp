@@ -121,6 +121,7 @@ void Level1::LateInit(const EngineContext& engineContext)
 
 void Level1::Update(float dt, const EngineContext& engineContext)
 {
+    HandleStateInput(engineContext);
     if (game_timer.IsTimedOut())
     {
         ApplePlayerController* player = (ApplePlayerController*)objectManager.FindByTag("player_controller");
@@ -136,7 +137,6 @@ void Level1::Update(float dt, const EngineContext& engineContext)
         timer_bar_fill->GetTransform2D().SetPosition(
             { timer_bar_fill->GetTransform2D().GetPosition().x, current_scale_y * 0.5f});
         game_timer.Update(dt);
-        HandleStateInput(engineContext);
         HandleSoundInput(engineContext);
         GameState::Update(dt, engineContext);
     }

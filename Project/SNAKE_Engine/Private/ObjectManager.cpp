@@ -49,6 +49,8 @@ void ObjectManager::UpdateAll(float dt, const EngineContext& engineContext)
         }
     }
 
+    EraseDeadObjects(engineContext);
+    AddAllPendingObjects(engineContext);
 }
 
 void ObjectManager::AddAllPendingObjects(const EngineContext& engineContext)

@@ -69,7 +69,6 @@ private:
     virtual void SystemUpdate(float dt, const EngineContext& engineContext)
     {
         Update(dt, engineContext);
-     
         objectManager.CheckCollision();
         if (engineContext.engine->ShouldRenderDebugDraws())
             objectManager.DrawColliderDebug(engineContext.renderManager, cameraManager.GetActiveCamera());
