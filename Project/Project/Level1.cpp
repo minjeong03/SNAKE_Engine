@@ -13,14 +13,14 @@ void Level1::Load(const EngineContext& engineContext)
 {
     SNAKE_LOG("[Level1] load called");
 
-
-
     engineContext.renderManager->RegisterTexture("t_apple", "Textures/apple.png");
     engineContext.renderManager->RegisterTexture("t_background", "Textures/tiled_pattern_800x480.png");
+    engineContext.renderManager->RegisterTexture("t_selection_box", "Textures/TransparentSquare.png");
     engineContext.renderManager->RegisterMaterial("m_apple", "s_default", { std::pair<std::string, std::string>("u_Texture","t_apple") });
     engineContext.renderManager->RegisterMaterial("m_background", "s_default", { std::pair<std::string, std::string>("u_Texture","t_background") });
+    engineContext.renderManager->RegisterMaterial("m_selection_box", "s_default", { std::pair<std::string, std::string>("u_Texture","t_selection_box") });
 
-    engineContext.engine->RenderDebugDraws(true);
+    engineContext.engine->RenderDebugDraws(false);
 }
 
 void Level1::Init(const EngineContext& engineContext)

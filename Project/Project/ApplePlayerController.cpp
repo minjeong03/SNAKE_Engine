@@ -8,16 +8,16 @@ ApplePlayerController::ApplePlayerController() :
     +----------------+----------------+----------------+----------------+
     | prev \ current |   Pressed      |     Down       |   Released     |
     +----------------+----------------+----------------+----------------+
-    | Pressed        |      N/A       | do nothing     | small chance   |
-    | Down           |      N/A       | do nothing     | collision check|
+    | Pressed        |      N/A       | dragging       | small chance   |
+    | Down           |      N/A       | dragging       | collision check|
     | Released       | start rect     | N/A            | do nothing     |
     +----------------+----------------+----------------+----------------+
     */
     funcs[Pressed][Pressed] = &ApplePlayerController::ShouldNotBeReached;
-    funcs[Pressed][Down] = &ApplePlayerController::DoNothing;
+    funcs[Pressed][Down] = &ApplePlayerController::OnDragging;
     funcs[Pressed][Release] = &ApplePlayerController::DoNothing;
     funcs[Down][Pressed] = &ApplePlayerController::ShouldNotBeReached;
-    funcs[Down][Down] = &ApplePlayerController::DoNothing;
+    funcs[Down][Down] = &ApplePlayerController::OnDragging;
     funcs[Down][Release] = &ApplePlayerController::EndDragging;
     funcs[Release][Pressed] = &ApplePlayerController::StartDragging;
     funcs[Release][Down] = &ApplePlayerController::ShouldNotBeReached;
@@ -26,7 +26,11 @@ ApplePlayerController::ApplePlayerController() :
 
 void ApplePlayerController::Init(const EngineContext& engineContext)
 {
-    SetCollider(std::make_unique<AABBCollider>(this, glm::vec2(0.5, 0.5)));
+    SetMesh(engineContext, "default");
+    SetMaterial(engineContext, "m_selection_box");
+    SetRenderLayer(engineContext, "UI");
+    SetVisibility(false);
+    SetCollider(std::make_unique<AABBCollider>(this, glm::vec2(1, 1)));
     SetCollision(engineContext.stateManager->GetCurrentState()->GetObjectManager(), "player_selection", { "apple" });
 }
 
@@ -73,31 +77,36 @@ void ApplePlayerController::OnCollision(Object* other)
 void ApplePlayerController::StartDragging(const EngineContext& engineContext)
 {
     SNAKE_ERR("[ApplePlayerController]  StartDragging");
+    SetVisibility(true);
     start_point = {
         engineContext.inputManager->GetMouseX(),
         engineContext.inputManager->GetMouseY()
     };
-
     start_point = ConvertScreenToCamera(engineContext.stateManager->GetCurrentState()->GetActiveCamera(), start_point);
+    GetTransform2D().SetScale({ 0,0 });
 }
 
 void ApplePlayerController::EndDragging(const EngineContext& engineContext)
 {
     SNAKE_ERR("[ApplePlayerController]  EndDragging");
-
-    glm::vec2 end_point = {
-        engineContext.inputManager->GetMouseX(),
-        engineContext.inputManager->GetMouseY()
-    };
-    end_point = ConvertScreenToCamera(engineContext.stateManager->GetCurrentState()->GetActiveCamera(), end_point);
-    GetTransform2D().SetPosition((end_point+start_point) * 0.5f);
-    GetTransform2D().SetScale(glm::abs(end_point-start_point));
+    SetVisibility(false);
     checkApples = true;
     selected_objects.clear();
 }
 
 void ApplePlayerController::DoNothing(const EngineContext& engineContext)
 {
+}
+
+void ApplePlayerController::OnDragging(const EngineContext& engineContext)
+{
+    glm::vec2 end_point = {
+        engineContext.inputManager->GetMouseX(),
+        engineContext.inputManager->GetMouseY()
+    };
+    end_point = ConvertScreenToCamera(engineContext.stateManager->GetCurrentState()->GetActiveCamera(), end_point);
+    GetTransform2D().SetPosition((end_point + start_point) * 0.5f);
+    GetTransform2D().SetScale(glm::abs(end_point - start_point));
 }
 
 void ApplePlayerController::ShouldNotBeReached(const EngineContext& engineContext)

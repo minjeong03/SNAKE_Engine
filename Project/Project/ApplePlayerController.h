@@ -26,6 +26,7 @@ private:
     void StartDragging(const EngineContext& engineContext);
     void EndDragging(const EngineContext& engineContext);
     void DoNothing(const EngineContext& engineContext);
+    void OnDragging(const EngineContext& engineContext);
     void ShouldNotBeReached(const EngineContext& engineContext);
     void CheckSelectedApples(const EngineContext& engineContext);
 

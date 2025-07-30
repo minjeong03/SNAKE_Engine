@@ -9,7 +9,7 @@ void Apple::Init(const EngineContext& engineContext)
 {
     SetMesh(engineContext, "default");
     SetMaterial(engineContext, "m_apple");
-    SetCollider(std::make_unique<AABBCollider>(this, glm::vec2(0.4, 0.4))); 
+    SetCollider(std::make_unique<AABBCollider>(this, glm::vec2(0.9, 0.9))); 
     SetCollision(engineContext.stateManager->GetCurrentState()->GetObjectManager(), "apple", { "player_selection" });
 }
 
