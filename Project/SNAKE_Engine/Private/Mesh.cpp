@@ -85,14 +85,14 @@ void Mesh::SetupInstanceAttributes(GLuint* instanceVBO) const
     glVertexArrayBindingDivisor(vao, 2, 1);
 
     loc = 7;
-    glVertexArrayVertexBuffer(vao, 3, instanceVBO[3], 0, sizeof(glm::vec2));
+    glVertexArrayVertexBuffer(vao, 3, instanceVBO[2], 0, sizeof(glm::vec2));
     glEnableVertexArrayAttrib(vao, loc);
     glVertexArrayAttribFormat(vao, loc, 2, GL_FLOAT, GL_FALSE, 0);
     glVertexArrayAttribBinding(vao, loc, 3);
     glVertexArrayBindingDivisor(vao, 3, 1);
 
     loc = 8;
-    glVertexArrayVertexBuffer(vao, 4, instanceVBO[4], 0, sizeof(glm::vec2));
+    glVertexArrayVertexBuffer(vao, 4, instanceVBO[3], 0, sizeof(glm::vec2));
     glEnableVertexArrayAttrib(vao, loc);
     glVertexArrayAttribFormat(vao, loc, 2, GL_FLOAT, GL_FALSE, 0);
     glVertexArrayAttribBinding(vao, loc, 4);

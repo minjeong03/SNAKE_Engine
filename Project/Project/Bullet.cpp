@@ -44,7 +44,7 @@ void Bullet::Init(const EngineContext& engineContext)
     rotAmount = rotDist(gen);
 
     transform2D.SetScale(glm::vec2(scale));
-    auto collider = std::make_unique<CircleCollider>(this, 0.5f);
+    auto collider = std::make_unique<CircleCollider>(this, 1.f);
     collider->SetUseTransformScale(true);
     SetCollider(std::move(collider));
     SetCollision(engineContext.stateManager->GetCurrentState()->GetObjectManager(), "bullet", { "player"});

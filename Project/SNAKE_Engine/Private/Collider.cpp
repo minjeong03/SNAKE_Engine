@@ -3,11 +3,18 @@
 #include "RenderManager.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
+#include <unordered_set>
+
 #include "gtx/norm.hpp"
 
 float CircleCollider::GetRadius() const
 {
     return useTransformScale ? baseRadius * std::max(glm::abs(owner->GetWorldScale().x), glm::abs(owner->GetWorldScale().y)): scaledRadius;
+}
+
+float CircleCollider::GetSize() const
+{
+    return GetRadius() * 2.f;
 }
 
 void CircleCollider::SetRadius(float r)
@@ -83,12 +90,17 @@ glm::vec2 AABBCollider::GetHalfSize() const
     return useTransformScale ? baseHalfSize * glm::abs(owner->GetWorldScale()) : scaledHalfSize;
 }
 
-void AABBCollider::SetHalfSize(const glm::vec2& halfSize)
+glm::vec2 AABBCollider::GetSize() const
 {
-    baseHalfSize = halfSize;
+    return GetHalfSize() * glm::vec2(2);
+}
+
+void AABBCollider::SetSize(const glm::vec2& size)
+{
+    baseHalfSize = size/glm::vec2(2);
 
     if (!useTransformScale)
-        scaledHalfSize = halfSize;
+        scaledHalfSize = size / glm::vec2(2);
 }
 
 float AABBCollider::GetBoundingRadius() const
@@ -190,6 +202,8 @@ void SpatialHashGrid::Insert(Object* obj)
 
 void SpatialHashGrid::ComputeCollisions(std::function<void(Object*, Object*)> onCollision)
 {
+    std::unordered_set<uint64_t> checkedPairs;
+
     for (auto& [cell, list] : grid)
     {
         const size_t count = list.size();
@@ -197,11 +211,23 @@ void SpatialHashGrid::ComputeCollisions(std::function<void(Object*, Object*)> on
         {
             for (size_t j = i + 1; j < count; ++j)
             {
-                onCollision(list[i], list[j]);
+                Object* a = list[i];
+                Object* b = list[j];
+
+                Object* first = std::min(a, b);
+                Object* second = std::max(a, b);
+                uint64_t key = (reinterpret_cast<uint64_t>(first) << 32) | reinterpret_cast<uint64_t>(second);
+
+                if (checkedPairs.find(key) == checkedPairs.end())
+                {
+                    checkedPairs.insert(key);
+                    onCollision(first, second);
+                }
             }
         }
     }
 }
+
 
 glm::ivec2 SpatialHashGrid::GetCell(const glm::vec2& pos) const
 {

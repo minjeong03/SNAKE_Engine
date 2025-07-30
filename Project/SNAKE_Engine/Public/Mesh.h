@@ -52,6 +52,11 @@ private:
             localHalfSize = glm::vec2(0.5f);
             return;
         }
+        else if (vertices.size()==1)
+        {
+            localHalfSize = glm::vec2( 0.0001f);
+            return;
+        }
 
         glm::vec2 minPos = vertices[0].position;
         glm::vec2 maxPos = vertices[1].position;

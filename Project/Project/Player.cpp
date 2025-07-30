@@ -10,7 +10,7 @@ void Player::Init(const EngineContext& engineContext)
 {
     transform2D.SetPosition(glm::vec2(0, 0));
     transform2D.SetScale(glm::vec2(50.f));
-    auto collider = std::make_unique<AABBCollider>(this, glm::vec2(0.5,0.5));
+    auto collider = std::make_unique<AABBCollider>(this, glm::vec2(1.0,1.0));
     collider->SetUseTransformScale(true); 
     SetCollider(std::move(collider));
     SetCollision(engineContext.stateManager->GetCurrentState()->GetObjectManager(),"player", { "bullet" });
@@ -34,10 +34,6 @@ void Player::LateInit(const EngineContext& engineContext)
 
 void Player::Update(float dt, const EngineContext& engineContext)
 {
-    if (engineContext.inputManager->IsKeyDown(KEY_5))
-    {
-        transform2D.SetScale({ 150,150 });
-    }
     if (engineContext.inputManager->IsKeyDown(KEY_W))
     {
         transform2D.AddPosition(glm::vec2(0, 150 * dt));
