@@ -13,6 +13,8 @@ public:
     void Update(float dt);
     bool IsTimedOut() const;
 
+    float GetProgressPercentage() const;
+
 public:
     float time = 0;
     float elapsed = 0;
@@ -50,4 +52,7 @@ private:
 
     TextObject* score_ui_text = nullptr;
     Timer game_timer;
+    Object* timer_bar_fill = nullptr;
+    float fill_initial_scale_y; 
+
 };

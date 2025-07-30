@@ -17,10 +17,14 @@ void Level1::Load(const EngineContext& engineContext)
     engineContext.renderManager->RegisterTexture("t_apple_selected", "Textures/apple_highlighted.png");
     engineContext.renderManager->RegisterTexture("t_background", "Textures/tiled_pattern_800x480.png");
     engineContext.renderManager->RegisterTexture("t_selection_box", "Textures/TransparentSquare.png");
+    engineContext.renderManager->RegisterTexture("t_border", "Textures/SquareBorder.png");
+    engineContext.renderManager->RegisterTexture("t_fill", "Textures/Square.png");
     engineContext.renderManager->RegisterMaterial("m_apple", "s_default", { std::pair<std::string, std::string>("u_Texture","t_apple") });
     engineContext.renderManager->RegisterMaterial("m_apple_highlighted", "s_default", { std::pair<std::string, std::string>("u_Texture","t_apple_selected") });
     engineContext.renderManager->RegisterMaterial("m_background", "s_default", { std::pair<std::string, std::string>("u_Texture","t_background") });
     engineContext.renderManager->RegisterMaterial("m_selection_box", "s_default", { std::pair<std::string, std::string>("u_Texture","t_selection_box") });
+    engineContext.renderManager->RegisterMaterial("m_border", "s_default", { std::pair<std::string, std::string>("u_Texture","t_border") });
+    engineContext.renderManager->RegisterMaterial("m_fill", "s_default", { std::pair<std::string, std::string>("u_Texture","t_fill") });
 
     engineContext.engine->RenderDebugDraws(false);
 }
@@ -89,6 +93,25 @@ void Level1::Init(const EngineContext& engineContext)
         }
     }
 
+    fill_initial_scale_y = engineContext.windowManager->GetHeight() * 0.8f;
+    glm::vec2 pos = { cols * (spacing_x + apple_size_x) * multiplier, fill_initial_scale_y * 0.5f};
+
+    auto timer_bar_background = objectManager.AddObject(std::make_unique<GameObject>(), "timer_bar_background");
+    timer_bar_background->SetMesh(engineContext, "default");
+    timer_bar_background->SetMaterial(engineContext, "m_border");
+    timer_bar_background->SetColor({0.0f, 1.0f, 0.12f, 1.0f});
+    timer_bar_background->GetTransform2D().SetPosition(pos);
+    timer_bar_background->GetTransform2D().SetScale({ apple_size_x, fill_initial_scale_y });
+    timer_bar_background->SetRenderLayer(engineContext, "Game");
+
+    timer_bar_fill = objectManager.AddObject(std::make_unique<GameObject>(), "timer_bar_fill");
+    timer_bar_fill->SetMesh(engineContext, "default");
+    timer_bar_fill->SetMaterial(engineContext, "m_fill");
+    timer_bar_fill->SetColor({ 0.0f, 1.0f, 0.12f, 1.0f });
+    timer_bar_fill->GetTransform2D().SetPosition(pos);
+    timer_bar_fill->GetTransform2D().SetScale({ apple_size_x, fill_initial_scale_y });
+    timer_bar_fill->SetRenderLayer(engineContext, "Game");
+    
     game_timer.Start(10);
 }
 
@@ -107,6 +130,11 @@ void Level1::Update(float dt, const EngineContext& engineContext)
     }
     else
     {
+        float current_scale_y = fill_initial_scale_y * (1 - game_timer.GetProgressPercentage());
+        timer_bar_fill->GetTransform2D().SetScale(
+            { timer_bar_fill->GetTransform2D().GetScale().x, current_scale_y });
+        timer_bar_fill->GetTransform2D().SetPosition(
+            { timer_bar_fill->GetTransform2D().GetPosition().x, current_scale_y * 0.5f});
         game_timer.Update(dt);
         HandleStateInput(engineContext);
         HandleSoundInput(engineContext);
@@ -118,7 +146,6 @@ void Level1::HandleStateInput(const EngineContext& engineContext)
 {
     if (engineContext.inputManager->IsKeyReleased(KEY_N))
     {
-        SNAKE_LOG("[Level1] key n pressed , move to mainmenu");
         engineContext.stateManager->ChangeState(std::make_unique<MainMenu>());
     }
     if (engineContext.inputManager->IsKeyPressed(KEY_ESCAPE))
@@ -179,4 +206,9 @@ void Timer::Update(float dt)
 bool Timer::IsTimedOut() const
 {
     return elapsed >= time;
+}
+
+float Timer::GetProgressPercentage() const
+{
+    return elapsed / time;
 }
