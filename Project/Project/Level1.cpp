@@ -13,7 +13,7 @@ void Level1::Load(const EngineContext& engineContext)
 {
     SNAKE_LOG("[Level1] load called");
 
-    engineContext.inputManager->Clear();
+
 
     engineContext.renderManager->RegisterTexture("t_apple", "Textures/apple.png");
     engineContext.renderManager->RegisterTexture("t_background", "Textures/tiled_pattern_800x480.png");
@@ -86,7 +86,7 @@ void Level1::Update(float dt, const EngineContext& engineContext)
 
 void Level1::HandleStateInput(const EngineContext& engineContext)
 {
-    if (engineContext.inputManager->IsKeyPressed(KEY_N))
+    if (engineContext.inputManager->IsKeyReleased(KEY_N))
     {
         SNAKE_LOG("[Level1] key n pressed , move to mainmenu");
         engineContext.stateManager->ChangeState(std::make_unique<MainMenu>());

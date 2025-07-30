@@ -72,6 +72,7 @@ void ApplePlayerController::OnCollision(Object* other)
 
 void ApplePlayerController::StartDragging(const EngineContext& engineContext)
 {
+    SNAKE_ERR("[ApplePlayerController]  StartDragging");
     start_point = {
         engineContext.inputManager->GetMouseX(),
         engineContext.inputManager->GetMouseY()
@@ -82,7 +83,7 @@ void ApplePlayerController::StartDragging(const EngineContext& engineContext)
 
 void ApplePlayerController::EndDragging(const EngineContext& engineContext)
 {
-    SNAKE_LOG("[ApplePlayerController]  CheckApples");
+    SNAKE_ERR("[ApplePlayerController]  EndDragging");
 
     glm::vec2 end_point = {
         engineContext.inputManager->GetMouseX(),
@@ -97,7 +98,6 @@ void ApplePlayerController::EndDragging(const EngineContext& engineContext)
 
 void ApplePlayerController::DoNothing(const EngineContext& engineContext)
 {
-    SNAKE_LOG("[ApplePlayerController]  DoNothing");
 }
 
 void ApplePlayerController::ShouldNotBeReached(const EngineContext& engineContext)

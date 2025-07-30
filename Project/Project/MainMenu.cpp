@@ -29,7 +29,7 @@ void MainMenu::LateInit(const EngineContext& engineContext)
 
 void MainMenu::Update(float dt, const EngineContext& engineContext)
 {
-    if (engineContext.inputManager->IsKeyPressed(KEY_N))
+    if (engineContext.inputManager->IsKeyReleased(KEY_N))
     {
         SNAKE_LOG("[MainMenu] key n pressed , move to level1");
         engineContext.stateManager->ChangeState(std::make_unique<Level1>());

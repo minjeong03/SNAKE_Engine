@@ -64,8 +64,10 @@ double InputManager::GetMouseY() const
 
 void InputManager::Clear()
 {
+    previousKeyState = currentKeyState;
+    previousMouseState = currentMouseState;
     currentKeyState.reset();
-    previousKeyState.reset();
+
     currentMouseState.reset();
-    previousMouseState.reset();
+
 }

@@ -24,10 +24,12 @@ void StateManager::Update(float dt, const EngineContext& engineContext)
 			currentState->SystemUnload(engineContext);
 			engineContext.soundManager->ControlAll(SoundManager::SoundControlType::Stop);
 		}
+		engineContext.inputManager->Clear();
 		currentState = std::move(nextState);
 		currentState->SystemLoad(engineContext);
 		currentState->SystemInit(engineContext);
-		currentState->GetCameraManager().SetScreenSizeForAll(engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
+		currentState->GetCameraManager().SetScreenSizeForAll(
+engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
 	}
 	if (currentState != nullptr)
 	{
