@@ -13,8 +13,10 @@ public:
     void LateFree(const EngineContext& engineContext) override;
     void OnCollision(Object* other) override;
     const int& GetValue() const;
+    void SetSelected(bool selected);
 private:
     int value = 0;
     Object* dependant;
+    const EngineContext* engineContext;
 };
 

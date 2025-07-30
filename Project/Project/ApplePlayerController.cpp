@@ -32,6 +32,9 @@ void ApplePlayerController::Init(const EngineContext& engineContext)
     SetVisibility(false);
     SetCollider(std::make_unique<AABBCollider>(this, glm::vec2(1, 1)));
     SetCollision(engineContext.stateManager->GetCurrentState()->GetObjectManager(), "player_selection", { "apple" });
+
+    GetTransform2D().SetPosition({ -1000, -1000 });
+    GetTransform2D().SetScale({ 0.0,0.0 });
 }
 
 void ApplePlayerController::LateInit(const EngineContext& engineContext)
@@ -83,7 +86,7 @@ void ApplePlayerController::StartDragging(const EngineContext& engineContext)
         engineContext.inputManager->GetMouseY()
     };
     start_point = ConvertScreenToCamera(engineContext.stateManager->GetCurrentState()->GetActiveCamera(), start_point);
-    GetTransform2D().SetScale({ 0,0 });
+    GetTransform2D().SetScale({ 0.0,0.0 });
 }
 
 void ApplePlayerController::EndDragging(const EngineContext& engineContext)
@@ -122,6 +125,7 @@ void ApplePlayerController::CheckSelectedApples(const EngineContext& engineConte
     for (Object* obj : selected_objects)
     {
         Apple* apple = (Apple*)obj;
+        apple->SetSelected(false);
         sum += apple->GetValue();
     }
 
@@ -133,8 +137,9 @@ void ApplePlayerController::CheckSelectedApples(const EngineContext& engineConte
         }
     }
 
-    checkApples = false;
     selected_objects.clear();
+    checkApples = false;
+    GetTransform2D().SetPosition({ -1000, -1000 });
 }
 
 glm::vec2 ApplePlayerController::ConvertScreenToCamera(Camera2D* cam, const glm::vec2& screen_pos)

@@ -14,9 +14,11 @@ void Level1::Load(const EngineContext& engineContext)
     SNAKE_LOG("[Level1] load called");
 
     engineContext.renderManager->RegisterTexture("t_apple", "Textures/apple.png");
+    engineContext.renderManager->RegisterTexture("t_apple_selected", "Textures/apple_highlighted.png");
     engineContext.renderManager->RegisterTexture("t_background", "Textures/tiled_pattern_800x480.png");
     engineContext.renderManager->RegisterTexture("t_selection_box", "Textures/TransparentSquare.png");
     engineContext.renderManager->RegisterMaterial("m_apple", "s_default", { std::pair<std::string, std::string>("u_Texture","t_apple") });
+    engineContext.renderManager->RegisterMaterial("m_apple_highlighted", "s_default", { std::pair<std::string, std::string>("u_Texture","t_apple_selected") });
     engineContext.renderManager->RegisterMaterial("m_background", "s_default", { std::pair<std::string, std::string>("u_Texture","t_background") });
     engineContext.renderManager->RegisterMaterial("m_selection_box", "s_default", { std::pair<std::string, std::string>("u_Texture","t_selection_box") });
 
@@ -67,11 +69,8 @@ void Level1::Init(const EngineContext& engineContext)
             apple->GetTransform2D().SetPosition(pos);
             apple->GetTransform2D().SetScale({ apple_size_x, apple_size_y });
             apple->SetRenderLayer(engineContext, "Game");
-
         }
     }
-
-
 }
 
 void Level1::LateInit(const EngineContext& engineContext)
