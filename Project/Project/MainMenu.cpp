@@ -38,7 +38,7 @@ void MainMenu::LateInit(const EngineContext& engineContext)
 
 void MainMenu::Update(float dt, const EngineContext& engineContext)
 {
-    if (engineContext.inputManager->IsKeyPressed(KEY_N))
+    if (engineContext.inputManager->IsKeyReleased(KEY_N))
     {
         SNAKE_LOG("[MainMenu] key n pressed , move to level1");
         engineContext.stateManager->ChangeState(std::make_unique<Level1>());
@@ -58,7 +58,7 @@ void MainMenu::Update(float dt, const EngineContext& engineContext)
     }
 
 
-    if (startButton->GetCollider()->CheckPointCollision( cameraManager.GetActiveCamera()->GetPosition()+glm::vec2{ engineContext.inputManager->GetMouseX()-engineContext.windowManager->GetWidth()/2, engineContext.windowManager->GetHeight()/2-engineContext.inputManager->GetMouseY() }/cameraManager.GetActiveCamera()->GetZoom()))
+    if (startButton->GetCollider()->CheckPointCollision(engineContext.inputManager->GetMouseWorldPos(cameraManager.GetActiveCamera())))
     {
         startButton->SetColor({ 0.3,0.3,0.3,1.0 });
         startText->SetColor({ 0.3,0.3,0.3,1.0 });
@@ -73,7 +73,7 @@ void MainMenu::Update(float dt, const EngineContext& engineContext)
         startText->SetColor({ 1.0,1.0,1.0,1.0 });
     }
 
-    if (quitButton->GetCollider()->CheckPointCollision(cameraManager.GetActiveCamera()->GetPosition() + glm::vec2{ engineContext.inputManager->GetMouseX() - engineContext.windowManager->GetWidth() / 2, engineContext.windowManager->GetHeight() / 2 - engineContext.inputManager->GetMouseY() } / cameraManager.GetActiveCamera()->GetZoom()))
+    if (quitButton->GetCollider()->CheckPointCollision(engineContext.inputManager->GetMouseWorldPos(cameraManager.GetActiveCamera())))
     {
         quitButton->SetMaterial(engineContext, "m_blueMButtonClicked");
         if (engineContext.inputManager->IsMouseButtonPressed(MOUSE_BUTTON_LEFT))

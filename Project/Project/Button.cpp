@@ -8,7 +8,7 @@ void Button::Init(const EngineContext& engineContext)
 {
     SetMesh(engineContext, "default");
     SetMaterial(engineContext, "m_blueMButton");
-    SetCollider(std::make_unique<AABBCollider>(this, glm::vec2(0.5, 0.5)));
+    SetCollider(std::make_unique<AABBCollider>(this, glm::vec2(1.f,1.f)));
     SetIgnoreCamera(true, engineContext.stateManager->GetCurrentState()->GetCameraManager().GetActiveCamera());
 }
 

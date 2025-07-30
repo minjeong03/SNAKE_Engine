@@ -67,11 +67,12 @@ class CircleCollider : public Collider
     friend AABBCollider;
     friend SpatialHashGrid;
 public:
-    CircleCollider(Object* owner, float radius)
-        : Collider(owner), baseRadius(radius), scaledRadius(radius) {
+    CircleCollider(Object* owner, float size)
+        : Collider(owner), baseRadius(size/2.f), scaledRadius(size/2.f) {
     }
 
     [[nodiscard]] float GetRadius() const;
+    [[nodiscard]] float GetSize() const;
     void SetRadius(float r);
     bool CheckPointCollision(const glm::vec2& point) const override;
 private:
@@ -97,13 +98,14 @@ class AABBCollider : public Collider
     friend CircleCollider;
     friend SpatialHashGrid;
 public:
-    AABBCollider(Object* owner, const glm::vec2& halfSize)
-        : Collider(owner), baseHalfSize(halfSize), scaledHalfSize(halfSize) {
+    AABBCollider(Object* owner, const glm::vec2& size)
+        : Collider(owner), baseHalfSize(size/glm::vec2(2)), scaledHalfSize(size / glm::vec2(2)) {
     }
 
 
     [[nodiscard]] glm::vec2 GetHalfSize() const;
-    void SetHalfSize(const glm::vec2& hs);
+    [[nodiscard]] glm::vec2 GetSize() const;
+    void SetSize(const glm::vec2& hs);
     bool CheckPointCollision(const glm::vec2& point) const override;
 private:
     ColliderType GetType() const override { return ColliderType::AABB; }

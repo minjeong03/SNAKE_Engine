@@ -89,9 +89,9 @@ void ObjectManager::EraseDeadObjects(const EngineContext& engineContext)
 
     objects.erase(
         std::remove_if(objects.begin(), objects.end(),
-            [](const std::unique_ptr<Object>& obj)
+            [&](const std::unique_ptr<Object>& obj)
             {
-                return !obj->IsAlive();
+                return std::find(deadObjects.begin(), deadObjects.end(), obj.get()) != deadObjects.end();
             }),
         objects.end());
 }
