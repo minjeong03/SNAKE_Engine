@@ -24,7 +24,7 @@ class Material {
     friend RenderManager;
 
 public:
-    Material(Shader* _shader) : shader(_shader), isInstancingEnabled(false) {}
+    Material(Shader* _shader) : shader(_shader), isInstancingEnabled(false), instanceVBO(){}
 
     void SetTexture(const std::string& uniformName, Texture* texture)
     {

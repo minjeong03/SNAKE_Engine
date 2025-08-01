@@ -1,11 +1,12 @@
 #pragma once
-#include "ObjectManager.h"
 #include "Engine.h"
+#include "Timer.h"
+#include "glm.hpp"
 
-class Enemy : public GameObject
+class Apple : public GameObject
 {
 public:
-    Enemy(glm::vec2 pos);
+    Apple(Object* dependant, int value);
     void Init(const EngineContext& engineContext) override;
     void LateInit(const EngineContext& engineContext) override;
     void Update(float dt, const EngineContext& engineContext) override;
@@ -13,8 +14,14 @@ public:
     void Free(const EngineContext& engineContext) override;
     void LateFree(const EngineContext& engineContext) override;
     void OnCollision(Object* other) override;
-    bool CheckIdle();
+    const int& GetValue() const;
+    void SetSelected(bool selected);
+    void SetVelocityAndStartDeadTimer(const glm::vec2& vel);
 private:
-    bool checkIdle = true;
+    int value = 0;
+    Object* dependant;
+    const EngineContext* engineContext;
+    glm::vec2 vel;    
+    Timer dead_timer;
 };
 

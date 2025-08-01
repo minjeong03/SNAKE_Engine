@@ -9,5 +9,5 @@ uniform mat4 u_Model;
 void main()
 {
     gl_Position = u_Projection * u_Model * vec4(aPos, 1.0);
-    v_UV=a_UV;
+    v_UV = a_UV;
 }

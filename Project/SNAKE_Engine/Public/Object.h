@@ -98,6 +98,12 @@ public:
 
     virtual glm::vec2 GetWorldScale() const;
 
+    glm::vec2 GetUVFlipVector() const;
+
+    [[nodiscard]] void SetFlipUV_X(bool shouldFlip) { flipUV_X = shouldFlip; }
+
+    [[nodiscard]] void SetFlipUV_Y(bool shouldFlip) { flipUV_Y = shouldFlip; }
+
 protected:
     Object(ObjectType objectType) : type(objectType) {}
 
@@ -121,4 +127,7 @@ protected:
 
     uint32_t collisionCategory = 0;
     uint32_t collisionMask = 0;
+
+    bool flipUV_X = false;
+    bool flipUV_Y = false;
 };

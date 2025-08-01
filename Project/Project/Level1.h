@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "TextObject.h"
 #include "Enemy.h"
+#include "Timer.h"
 
 class Level1 : public GameState
 {
@@ -18,28 +19,28 @@ public:
     void Unload(const EngineContext& engineContext) override;
 
 private:
-    void SetupCamera(const EngineContext& engineContext);
-    void SetupPlayer(const EngineContext& engineContext);
-    void SetupUI(const EngineContext& engineContext);
-    void SetupMultilingualText(const EngineContext& engineContext);
-    void SetupEnemy(const EngineContext& engineContext);
-    void SetupMinimapCamera(const EngineContext& engineContext);
-
     void HandleStateInput(const EngineContext& engineContext);
     void HandleSoundInput(const EngineContext& engineContext);
-    void HandleCameraInput(float dt, const EngineContext& engineContext);
-    void HandleDebugDrawInput(const EngineContext& engineContext);
-    void UpdateUIText(const EngineContext& engineContext);
 
-    std::string GetVolumeText() const;
+    float multiplier = 1.5f;
+   
+    const int rows = 10;
+    const int cols = 17;
 
-    Player* player = nullptr;
-    Enemy* enemy = nullptr;
+    const int marginX = 45;
+    const int marginY = 40;
 
-    TextObject* volumeDisplayText = nullptr;
-    TextObject* bulletCountText = nullptr;
+    const int spacingX = 10;
+    const int spacingY = 8;
 
-    float volume = 1.0f;
-    bool trigger = false;
-    SoundInstanceID bgmID = 0;
+    const int appleSizeX = 32;
+    const int appleSizeY = 35;
+
+    TextObject* scoreUIText = nullptr;
+    TextObject* restartUIText = nullptr;
+    Timer gameTimer;
+    Timer dokidoki;
+    Object* timerBarFill = nullptr;
+    float fillInitialScaleY; 
+
 };

@@ -5,9 +5,8 @@ layout (location = 1) in vec2 aUV;
 
 uniform mat4 u_Model;
 uniform mat4 u_Projection;
-uniform vec2 u_UVOffset;
 uniform vec2 u_UVScale;
-
+uniform vec2 u_UVOffset;
 out vec2 v_UV;
 
 void main()

@@ -300,7 +300,11 @@ void RenderManager::SubmitRenderMap(const EngineContext& engineContext)
                         uvScales.reserve(batch.size());
                         for (const auto& [obj, camera] : batch)
                         {
-                            transforms.push_back(obj->GetTransform2DMatrix());
+                            glm::mat4 model = obj->GetTransform2DMatrix();
+                            glm::vec2 flip = obj->GetUVFlipVector();
+                            model = model * glm::scale(glm::mat4(1.0f), glm::vec3(flip, 1.0f));
+                            transforms.push_back(model);
+
                             colors.push_back(obj->GetColor());
                             if (obj->HasAnimation())
                             {
@@ -381,7 +385,12 @@ void RenderManager::SubmitRenderMap(const EngineContext& engineContext)
                                 else
                                     projection = camera->GetProjectionMatrix();
                                 mat->SetUniform("u_Projection", projection);
-                                mat->SetUniform("u_Model", obj->GetTransform2DMatrix());
+
+                                glm::mat4 model = obj->GetTransform2DMatrix();
+                                glm::vec2 flip = obj->GetUVFlipVector();
+                                model = model * glm::scale(glm::mat4(1.0f), glm::vec3(flip, 1.0f));
+
+                                mat->SetUniform("u_Model", model);
                                 mat->SetUniform("u_Color", obj->GetColor());
 
                                 lastShader = currentShader;

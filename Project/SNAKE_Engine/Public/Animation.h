@@ -31,14 +31,14 @@ public:
     [[nodiscard]] const SpriteClip* GetClip(const std::string& name) const;
 
 private:
-
-
     std::unordered_map<std::string, SpriteClip> animationClips;
     Texture* texture;
     int frameWidth, frameHeight;
     int columns, rows;
     int texWidth = 0, texHeight = 0;
 
+    bool flipUV_X = false;
+    bool flipUV_Y = false;
 };
 
 class SpriteAnimator
