@@ -44,14 +44,14 @@ public:
 protected:
     [[nodiscard]] Object* GetOwner() const { return owner; }
 
-    virtual ColliderType GetType() const = 0;
+    [[nodiscard]] virtual ColliderType GetType() const = 0;
 
-    virtual float GetBoundingRadius() const = 0;
+    [[nodiscard]] virtual float GetBoundingRadius() const = 0;
 
-    virtual bool CheckCollision(const Collider* other) const = 0;
+    [[nodiscard]] virtual bool CheckCollision(const Collider* other) const = 0;
 
-    virtual bool DispatchAgainst(const CircleCollider& other) const = 0;
-    virtual bool DispatchAgainst(const AABBCollider& other) const = 0;
+    [[nodiscard]] virtual bool DispatchAgainst(const CircleCollider& other) const = 0;
+    [[nodiscard]] virtual bool DispatchAgainst(const AABBCollider& other) const = 0;
 
     virtual void SyncWithTransformScale() = 0;
 
@@ -78,17 +78,17 @@ public:
 
     void SetRadius(float r);
 
-    bool CheckPointCollision(const glm::vec2& point) const override;
+    [[nodiscard]] bool CheckPointCollision(const glm::vec2& point) const override;
 
 private:
-    ColliderType GetType() const override { return ColliderType::Circle; }
+    [[nodiscard]] ColliderType GetType() const override { return ColliderType::Circle; }
 
-    float GetBoundingRadius() const override;
+    [[nodiscard]] float GetBoundingRadius() const override;
 
-    bool CheckCollision(const Collider* other) const override;
+    [[nodiscard]] bool CheckCollision(const Collider* other) const override;
     
-    bool DispatchAgainst(const CircleCollider& other) const override;
-    bool DispatchAgainst(const AABBCollider& other) const override;
+    [[nodiscard]] bool DispatchAgainst(const CircleCollider& other) const override;
+    [[nodiscard]] bool DispatchAgainst(const AABBCollider& other) const override;
 
     void SyncWithTransformScale() override;
 
@@ -113,17 +113,17 @@ public:
     [[nodiscard]] glm::vec2 GetSize() const;
     void SetSize(const glm::vec2& hs);
 
-    bool CheckPointCollision(const glm::vec2& point) const override;
+    [[nodiscard]] bool CheckPointCollision(const glm::vec2& point) const override;
 
 private:
-    ColliderType GetType() const override { return ColliderType::AABB; }
+    [[nodiscard]] ColliderType GetType() const override { return ColliderType::AABB; }
 
-    float GetBoundingRadius() const override;
+    [[nodiscard]] float GetBoundingRadius() const override;
 
-    bool CheckCollision(const Collider* other) const override;
+    [[nodiscard]] bool CheckCollision(const Collider* other) const override;
 
-    bool DispatchAgainst(const CircleCollider& other) const override;
-    bool DispatchAgainst(const AABBCollider& other) const override;
+    [[nodiscard]] bool DispatchAgainst(const CircleCollider& other) const override;
+    [[nodiscard]] bool DispatchAgainst(const AABBCollider& other) const override;
 
     void SyncWithTransformScale() override;
 
@@ -149,7 +149,7 @@ public:
     void ComputeCollisions(std::function<void(Object*, Object*)> onCollision);
 
 private:
-    glm::ivec2 GetCell(const glm::vec2& pos) const;
+    [[nodiscard]] glm::ivec2 GetCell(const glm::vec2& pos) const;
     void InsertToCell(Object* obj, const glm::ivec2& cell);
 
     int cellSize = 50; 
@@ -159,8 +159,8 @@ private:
 class CollisionGroupRegistry
 {
 public:
-    uint32_t GetGroupBit(const std::string& tag);
-    std::string GetGroupTag(uint32_t bit) const;
+    [[nodiscard]] uint32_t GetGroupBit(const std::string& tag);
+    [[nodiscard]] std::string GetGroupTag(uint32_t bit) const;
 
 private:
     std::unordered_map<std::string, uint32_t> tagToBit;
