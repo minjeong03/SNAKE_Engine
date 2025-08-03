@@ -120,7 +120,7 @@ private:
 
     float GetBoundingRadius() const override;
 
-    bool CheckCollision(const Collider* other) const override;\
+    bool CheckCollision(const Collider* other) const override;
 
     bool DispatchAgainst(const CircleCollider& other) const override;
     bool DispatchAgainst(const AABBCollider& other) const override;
