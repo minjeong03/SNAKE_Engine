@@ -30,7 +30,7 @@ class Collider
     friend SpatialHashGrid;
 public:
     Collider() = delete;
-    Collider(Object* owner_) : owner(owner_) {}
+    Collider(Object* owner_) : owner(owner_), worldPosition(){}
     virtual ~Collider() = default;
 
     void SetUseTransformScale(bool use) { useTransformScale = use; }
@@ -38,16 +38,17 @@ public:
 
     void SetWorldPosition(const glm::vec2& pos) { worldPosition = pos; }
     const glm::vec2& GetWorldPosition() const { return worldPosition; }
+
     virtual bool CheckPointCollision(const glm::vec2& point) const = 0;
 
 protected:
     [[nodiscard]] Object* GetOwner() const { return owner; }
 
     virtual ColliderType GetType() const = 0;
+
     virtual float GetBoundingRadius() const = 0;
 
     virtual bool CheckCollision(const Collider* other) const = 0;
-
 
     virtual bool DispatchAgainst(const CircleCollider& other) const = 0;
     virtual bool DispatchAgainst(const AABBCollider& other) const = 0;
@@ -72,22 +73,27 @@ public:
     }
 
     [[nodiscard]] float GetRadius() const;
+
     [[nodiscard]] float GetSize() const;
+
     void SetRadius(float r);
+
     bool CheckPointCollision(const glm::vec2& point) const override;
+
 private:
     ColliderType GetType() const override { return ColliderType::Circle; }
+
     float GetBoundingRadius() const override;
 
     bool CheckCollision(const Collider* other) const override;
-
-
+    
     bool DispatchAgainst(const CircleCollider& other) const override;
     bool DispatchAgainst(const AABBCollider& other) const override;
 
     void SyncWithTransformScale() override;
 
     void DrawDebug(RenderManager* rm, Camera2D* cam, const glm::vec4& color) const override;
+
     float baseRadius = 0.5f;
     float scaledRadius = 0.5f;
 };
@@ -102,17 +108,19 @@ public:
         : Collider(owner), baseHalfSize(size/glm::vec2(2)), scaledHalfSize(size / glm::vec2(2)) {
     }
 
-
     [[nodiscard]] glm::vec2 GetHalfSize() const;
+
     [[nodiscard]] glm::vec2 GetSize() const;
     void SetSize(const glm::vec2& hs);
+
     bool CheckPointCollision(const glm::vec2& point) const override;
+
 private:
     ColliderType GetType() const override { return ColliderType::AABB; }
+
     float GetBoundingRadius() const override;
 
-    bool CheckCollision(const Collider* other) const override;
-
+    bool CheckCollision(const Collider* other) const override;\
 
     bool DispatchAgainst(const CircleCollider& other) const override;
     bool DispatchAgainst(const AABBCollider& other) const override;
@@ -141,11 +149,11 @@ public:
     void ComputeCollisions(std::function<void(Object*, Object*)> onCollision);
 
 private:
-    int cellSize = 50; 
-    std::unordered_map<glm::ivec2, std::vector<Object*>, Vec2Hash> grid;
-
     glm::ivec2 GetCell(const glm::vec2& pos) const;
     void InsertToCell(Object* obj, const glm::ivec2& cell);
+
+    int cellSize = 50; 
+    std::unordered_map<glm::ivec2, std::vector<Object*>, Vec2Hash> grid;
 };
 
 class CollisionGroupRegistry

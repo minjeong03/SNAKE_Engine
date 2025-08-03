@@ -46,19 +46,18 @@ public:
         isChanged = true;
     }
 
-    const glm::vec2& GetPosition() const { return position; }
+    [[nodiscard]] const glm::vec2& GetPosition() const { return position; }
 
-    float GetRotation() const { return rotation; }
+    [[nodiscard]] float GetRotation() const { return rotation; }
 
-    const glm::vec2& GetScale() const { return scale; }
+    [[nodiscard]] const glm::vec2& GetScale() const { return scale; }
 
-    glm::mat4& GetMatrix();
+    [[nodiscard]] glm::mat4& GetMatrix();
 
 private:
     glm::vec2 position;
     float rotation;
     glm::vec2 scale;
-
     glm::mat4 matrix;
     bool isChanged;
 };

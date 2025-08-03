@@ -4,7 +4,6 @@
 #include <unordered_map>
 #include <string>
 
-
 #include "glm.hpp"
 #include "ft2build.h"
 #include FT_FREETYPE_H
@@ -46,20 +45,27 @@ public:
     Font(RenderManager& engineContext, const std::string& ttfPath, uint32_t fontSize);
     ~Font();
 
-    [[nodiscard]] Material* GetMaterial() const { return material.get(); }
-    [[nodiscard]] Mesh* GenerateTextMesh(const std::string& text, TextAlignH alignH = TextAlignH::Left, TextAlignV alignV = TextAlignV::Top);
 
-    [[nodiscard]] uint8_t GetRenderLayer() const { return renderLayer; }
     void SetRenderLayer(uint8_t layer) { renderLayer = layer; }
+    [[nodiscard]] uint8_t GetRenderLayer() const { return renderLayer; }
+
+    [[nodiscard]] Material* GetMaterial() const { return material.get(); }
 
     [[nodiscard]] glm::vec2 GetTextSize(const std::string& text) const;
 
+    [[nodiscard]] Mesh* GenerateTextMesh(const std::string& text, TextAlignH alignH = TextAlignH::Left, TextAlignV alignV = TextAlignV::Top);
+
 private:
     void LoadFont(const std::string& path, uint32_t fontSize);
+
     void BakeAtlas(RenderManager& renderManager);
+
     [[nodiscard]] const Glyph& GetGlyph(char32_t c) const;
+
     [[nodiscard]] bool TryBakeGlyph(char32_t c);
+
     void ExpandAtlas();
+
     FT_Library ft;
     FT_Face face;
 
@@ -69,8 +75,6 @@ private:
     std::unique_ptr<Texture> atlasTexture;
     std::unique_ptr<Material> material;
 
-    uint32_t atlasWidth = 0;
-    uint32_t atlasHeight = 0;
     uint8_t renderLayer = 0;
 
     int nextX = 0;

@@ -65,7 +65,6 @@ void Material::SendUniforms()
     }
 }
 
-
 void Material::UpdateInstanceBuffer(const std::vector<glm::mat4>& transforms, const std::vector<glm::vec4>& colors, const std::vector<glm::vec2>& uvOffsets, const std::vector<glm::vec2>& uvScales) const
 {
     glBindBuffer(GL_ARRAY_BUFFER, instanceVBO[0]);

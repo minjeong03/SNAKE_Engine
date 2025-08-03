@@ -25,8 +25,11 @@ public:
 
     [[nodiscard]] glm::vec2 GetUVOffset(int frameIndex) const;
     [[nodiscard]] glm::vec2 GetUVScale() const;
-    [[nodiscard]] int GetFrameCount() const;
+
     [[nodiscard]] Texture* GetTexture() const { return texture; }
+
+    [[nodiscard]] int GetFrameCount() const;
+
     void AddClip(const std::string& name, const std::vector<int>& frames, float frameDuration, bool looping=true);
     [[nodiscard]] const SpriteClip* GetClip(const std::string& name) const;
 
@@ -47,7 +50,6 @@ public:
     SpriteAnimator(SpriteSheet* sheet_, float frameTime_, bool loop_ = true);
 
     void PlayClip(int start, int end, bool loop_ = true);
-
     void PlayClip(const std::string& clipName);
 
     void Update(float dt);
@@ -56,8 +58,10 @@ public:
     [[nodiscard]] glm::vec2 GetUVScale() const;
 
     [[nodiscard]] Texture* GetTexture() { return sheet->GetTexture();}
+
     void SetFrame(int frame) { currentFrame = frame; }
     [[nodiscard]] int GetCurrentFrame() const { return currentFrame; }
+
 private:
     SpriteSheet* sheet;
     float frameTime;

@@ -45,9 +45,6 @@ private:
 
     void Update();
 
-
-
-
     GLFWwindow* window;
 
     static constexpr int MAX_KEYS = 349;

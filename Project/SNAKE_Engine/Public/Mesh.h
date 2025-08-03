@@ -76,6 +76,7 @@ private:
     GLuint vbo;
     GLuint ebo;
     GLsizei indexCount;
+
     bool useIndex;
 
     PrimitiveType primitiveType;

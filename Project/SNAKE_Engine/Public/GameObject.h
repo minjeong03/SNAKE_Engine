@@ -7,6 +7,7 @@ class GameObject : public Object
 public:
     GameObject() : Object(ObjectType::GAME) {}
     ~GameObject() override = default;
+
     void Init([[maybe_unused]] const EngineContext& engineContext) override {}
 
     void LateInit([[maybe_unused]] const EngineContext& engineContext) override {}
