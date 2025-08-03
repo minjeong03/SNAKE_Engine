@@ -96,7 +96,7 @@ public:
 
     void FlushDebugLineDrawCommands(const EngineContext& engineContext);
 
-    RenderLayerManager& GetRenderLayerManager();
+    [[nodiscard]] RenderLayerManager& GetRenderLayerManager();
 private:
     void Init(const EngineContext& engineContext);
 

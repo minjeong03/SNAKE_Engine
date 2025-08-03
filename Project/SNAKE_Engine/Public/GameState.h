@@ -15,9 +15,9 @@ public:
 
     [[nodiscard]] virtual ObjectManager& GetObjectManager() { return objectManager; }
 
-    CameraManager& GetCameraManager() { return cameraManager; }
+    [[nodiscard]] CameraManager& GetCameraManager() { return cameraManager; }
 
-    Camera2D* GetActiveCamera() const { return cameraManager.GetActiveCamera(); }
+    [[nodiscard]] Camera2D* GetActiveCamera() const { return cameraManager.GetActiveCamera(); }
 
     void SetActiveCamera(const std::string& tag) { cameraManager.SetActiveCamera(tag); }
 

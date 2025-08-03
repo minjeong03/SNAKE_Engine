@@ -68,9 +68,9 @@ public:
 
     [[nodiscard]] const glm::vec4& GetColor();
 
-    virtual bool HasAnimation() const { return spriteAnimator != nullptr; }
+    [[nodiscard]] virtual bool HasAnimation() const { return spriteAnimator != nullptr; }
 
-    virtual SpriteAnimator* GetAnimator() { return spriteAnimator.get(); }
+    [[nodiscard]] virtual SpriteAnimator* GetAnimator() { return spriteAnimator.get(); }
 
     void AttachAnimator(std::unique_ptr<SpriteAnimator> anim) { spriteAnimator = std::move(anim); }
 
@@ -78,13 +78,13 @@ public:
 
     void SetCollider(std::unique_ptr<Collider> c) { collider = std::move(c); }
 
-    Collider* GetCollider() const { return collider.get(); }
+    [[nodiscard]] Collider* GetCollider() const { return collider.get(); }
 
     void SetCollision(ObjectManager& objectManager, const std::string& tag, const std::vector<std::string>& checkCollisionList);
 
-    uint32_t GetCollisionMask() const { return collisionMask; }
+    [[nodiscard]] uint32_t GetCollisionMask() const { return collisionMask; }
 
-    uint32_t GetCollisionCategory() const { return collisionCategory; }
+    [[nodiscard]] uint32_t GetCollisionCategory() const { return collisionCategory; }
 
     [[nodiscard]] bool ShouldIgnoreCamera() const;
 
@@ -94,15 +94,15 @@ public:
 
     [[nodiscard]] Camera2D* GetReferenceCamera() const { return referenceCamera; }
 
-    virtual glm::vec2 GetWorldPosition() const;
+    [[nodiscard]] virtual glm::vec2 GetWorldPosition() const;
 
-    virtual glm::vec2 GetWorldScale() const;
+    [[nodiscard]] virtual glm::vec2 GetWorldScale() const;
 
-    glm::vec2 GetUVFlipVector() const;
+    [[nodiscard]] glm::vec2 GetUVFlipVector() const;
 
-    [[nodiscard]] void SetFlipUV_X(bool shouldFlip) { flipUV_X = shouldFlip; }
+    void SetFlipUV_X(bool shouldFlip) { flipUV_X = shouldFlip; }
 
-    [[nodiscard]] void SetFlipUV_Y(bool shouldFlip) { flipUV_Y = shouldFlip; }
+    void SetFlipUV_Y(bool shouldFlip) { flipUV_Y = shouldFlip; }
 
 protected:
     Object(ObjectType objectType) : type(objectType) {}

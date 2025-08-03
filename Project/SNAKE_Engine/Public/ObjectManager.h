@@ -31,7 +31,7 @@ public:
     void CheckCollision();
     void DrawColliderDebug(RenderManager* rm, Camera2D* cam);
 
-    CollisionGroupRegistry& GetCollisionGroupRegistry() { return collisionGroupRegistry; }
+    [[nodiscard]] CollisionGroupRegistry& GetCollisionGroupRegistry() { return collisionGroupRegistry; }
 private:
     void AddAllPendingObjects(const EngineContext& engineContext);
     void EraseDeadObjects(const EngineContext& engineContext);

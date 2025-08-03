@@ -57,8 +57,8 @@ public:
 private:
     void LoadFont(const std::string& path, uint32_t fontSize);
     void BakeAtlas(RenderManager& renderManager);
-    const Glyph& GetGlyph(char32_t c) const;
-    bool TryBakeGlyph(char32_t c);
+    [[nodiscard]] const Glyph& GetGlyph(char32_t c) const;
+    [[nodiscard]] bool TryBakeGlyph(char32_t c);
     void ExpandAtlas();
     FT_Library ft;
     FT_Face face;

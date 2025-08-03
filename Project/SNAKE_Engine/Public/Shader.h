@@ -49,7 +49,7 @@ private:
 
     void Unuse() const;
 
-    bool SupportsInstancing() const;
+    [[nodiscard]] bool SupportsInstancing() const;
 
     void Link();
 
