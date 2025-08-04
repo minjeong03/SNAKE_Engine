@@ -8,16 +8,22 @@
 #include "StateManager.h"
 #include "ObjectManager.h"
 #include "RenderManager.h"
+#include "SoundManager.h"
+#include "CameraManager.h"
 
 #include "Texture.h"
 #include "Shader.h"
 #include "Transform.h"
 #include "Material.h"
 #include "Mesh.h"
+#include "Object.h"
+#include "TextObject.h"
+#include "GameObject.h"
+#include "Font.h"
 
 #include "EngineTimer.h"
-#include "CameraManager.h"
+
 #include "Camera2D.h"
 
-#include "../ThirdParty/glm/glm.hpp"
-#include "../ThirdParty/glm/gtc/matrix_transform.hpp"
+#include "glm.hpp"
+#include "gtc/matrix_transform.hpp"

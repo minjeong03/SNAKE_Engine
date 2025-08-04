@@ -175,7 +175,7 @@
       </AdditionalModuleDependencies>
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
-      <AdditionalIncludeDirectories>$(SolutionDir)SNAKE_Engine\public</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)SNAKE_Engine\public;$(SolutionDir)SNAKE_Engine\ThirdParty\Include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -195,7 +195,7 @@
       </AdditionalModuleDependencies>
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
-      <AdditionalIncludeDirectories>$(SolutionDir)SNAKE_Engine\public</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)SNAKE_Engine\public;$(SolutionDir)SNAKE_Engine\ThirdParty\Include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <SupportJustMyCode>false</SupportJustMyCode>
@@ -221,7 +221,7 @@
       </AdditionalModuleDependencies>
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
-      <AdditionalIncludeDirectories>$(SolutionDir)SNAKE_Engine\public</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)SNAKE_Engine\public;$(SolutionDir)SNAKE_Engine\ThirdParty\Include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -232,11 +232,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Apple.cpp" />
+    <ClCompile Include="ApplePlayerController.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Level1.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SNAKE_Engine\SNAKE_Engine.vcxproj">
@@ -244,10 +249,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Apple.h" />
+    <ClInclude Include="ApplePlayerController.h" />
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="Button.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Level1.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Timer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

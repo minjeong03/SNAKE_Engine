@@ -15,6 +15,7 @@ public:
 private:
     glm::vec2 dir;
     float timer = 0;
-    glm::vec4 color;
+    float rotAmount = 0;
+    float speed = 1;
 };
 

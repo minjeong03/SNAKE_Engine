@@ -1,5 +1,7 @@
 #include "InputManager.h"
-#include "glfw3/glfw3.h"
+
+#include "Camera2D.h"
+#include "glfw3.h"
 
 void InputManager::Init(GLFWwindow* _window)
 {
@@ -20,6 +22,14 @@ void InputManager::Update()
         currentMouseState.set(button, glfwGetMouseButton(window, button) == GLFW_PRESS);
     }
     glfwGetCursorPos(window, &mouseX, &mouseY);
+}
+
+void InputManager::Reset()
+{
+    previousKeyState = currentKeyState;
+    previousMouseState = currentMouseState;
+    currentKeyState.reset();
+    currentMouseState.reset();
 }
 
 bool InputManager::IsKeyDown(int key) const
@@ -60,4 +70,24 @@ double InputManager::GetMouseX() const
 double InputManager::GetMouseY() const
 {
     return mouseY;
+}
+
+glm::vec2 InputManager::GetMousePos() const
+{
+    return glm::vec2(mouseX, mouseY);
+}
+
+double InputManager::GetMouseWorldX(Camera2D* camera) const
+{
+    return camera->GetPosition().x +( GetMouseX() - camera->GetScreenWidth() / 2.f) / camera->GetZoom();
+}
+
+double InputManager::GetMouseWorldY(Camera2D* camera) const
+{
+    return camera->GetPosition().y + (camera->GetScreenHeight() / 2.f - GetMouseY()) / camera->GetZoom();
+}
+
+glm::vec2 InputManager::GetMouseWorldPos(Camera2D* camera) const
+{
+    return glm::vec2(GetMouseWorldX(camera), GetMouseWorldY(camera));
 }

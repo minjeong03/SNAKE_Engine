@@ -54,9 +54,6 @@
     <ClInclude Include="Public\Mesh.h">
       <Filter>public</Filter>
     </ClInclude>
-    <ClInclude Include="Private\InstanceBatchKey.h">
-      <Filter>private</Filter>
-    </ClInclude>
     <ClInclude Include="Public\Transform.h">
       <Filter>public</Filter>
     </ClInclude>
@@ -70,6 +67,27 @@
       <Filter>public</Filter>
     </ClInclude>
     <ClInclude Include="Public\RenderLayerManager.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\SoundManager.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Font.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Object.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\TextObject.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\InstanceBatchKey.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Animation.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Collider.h">
       <Filter>public</Filter>
     </ClInclude>
   </ItemGroup>
@@ -116,7 +134,22 @@
     <ClCompile Include="Private\Camera2D.cpp">
       <Filter>private</Filter>
     </ClCompile>
-    <ClCompile Include="Private\GameObject.cpp">
+    <ClCompile Include="Private\Object.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\SoundManager.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\Font.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\TextObject.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\Animation.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\Collider.cpp">
       <Filter>private</Filter>
     </ClCompile>
   </ItemGroup>

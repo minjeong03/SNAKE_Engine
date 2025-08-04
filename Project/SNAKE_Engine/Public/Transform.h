@@ -1,5 +1,5 @@
 #pragma once
-#include "../ThirdParty/glm/glm.hpp"
+#include "glm.hpp"
 
 class Transform2D
 {
@@ -28,25 +28,36 @@ public:
         isChanged = true;
     }
 
+    void AddRotation(float rot)
+    {
+        rotation += rot;
+        isChanged = true;
+    }
+
     void SetScale(const glm::vec2& scl)
     {
         scale = scl;
         isChanged = true;
     }
 
-    const glm::vec2& GetPosition() const { return position; }
+    void AddScale(const glm::vec2& scl)
+    {
+        scale += scl;
+        isChanged = true;
+    }
 
-    float GetRotation() const { return rotation; }
+    [[nodiscard]] const glm::vec2& GetPosition() const { return position; }
 
-    const glm::vec2& GetScale() const { return scale; }
+    [[nodiscard]] float GetRotation() const { return rotation; }
 
-    glm::mat4& GetMatrix();
+    [[nodiscard]] const glm::vec2& GetScale() const { return scale; }
+
+    [[nodiscard]] glm::mat4& GetMatrix();
 
 private:
     glm::vec2 position;
     float rotation;
     glm::vec2 scale;
-
     glm::mat4 matrix;
     bool isChanged;
 };

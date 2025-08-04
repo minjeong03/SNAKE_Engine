@@ -1,9 +1,8 @@
 #include "WindowManager.h"
-#include <iostream>
 
 #include "Debug.h"
-#include "glad/gl.h"
-#include "glfw3/glfw3.h"
+#include "gl.h"
+#include "glfw3.h"
 #include "SNAKE_Engine.h"
 #include "GameState.h"
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -15,6 +14,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
         snakeEngine->GetEngineContext().windowManager->SetWidth(width);
         snakeEngine->GetEngineContext().windowManager->SetHeight(height);
         snakeEngine->GetEngineContext().stateManager->GetCurrentState()->GetCameraManager().SetScreenSizeForAll(width, height);
+        snakeEngine->GetEngineContext().inputManager->Reset();
         SNAKE_LOG("changed: " << snakeEngine->GetEngineContext().windowManager->GetWidth() << " " << snakeEngine->GetEngineContext().windowManager->GetHeight());
     }
 
@@ -85,7 +85,7 @@ void WindowManager::SwapBuffers() const
 
 void WindowManager::ClearScreen() const
 {
-    glClearColor(0.f, 0.f, 0.f, 1.0f);
+    glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 }
 

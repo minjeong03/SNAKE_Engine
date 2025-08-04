@@ -2,7 +2,7 @@
 
 #include <string>
 #include <vector>
-#include "../ThirdParty/glm/glm.hpp"
+#include "glm.hpp"
 
 enum class ShaderStage
 {
@@ -49,11 +49,13 @@ private:
 
     void Unuse() const;
 
-    bool SupportsInstancing() const;
+    [[nodiscard]] bool SupportsInstancing() const;
 
     void Link();
 
     void AttachFromFile(ShaderStage stage, const FilePath& filepath);
+
+    void AttachFromSource(ShaderStage stage, const std::string& source);
 
     [[nodiscard]] std::string LoadShaderSource(const FilePath& filepath);
 

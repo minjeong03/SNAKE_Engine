@@ -2,7 +2,7 @@
 #include <string>
 #include <unordered_map>
 #include <variant>
-#include "../ThirdParty/glm/glm.hpp"
+#include "glm.hpp"
 
 class RenderManager;
 class ObjectManager;
@@ -24,7 +24,7 @@ class Material {
     friend RenderManager;
 
 public:
-    Material(Shader* _shader) : shader(_shader), instanceVBO(0), isInstancingEnabled(false) {}
+    Material(Shader* _shader) : shader(_shader), isInstancingEnabled(false), instanceVBO(){}
 
     void SetTexture(const std::string& uniformName, Texture* texture)
     {
@@ -47,7 +47,7 @@ private:
 
     void SendUniforms();
 
-    void UpdateInstanceBuffer(const std::vector<glm::mat4>& transforms) const;
+    void UpdateInstanceBuffer(const std::vector<glm::mat4>& transforms, const std::vector<glm::vec4>& colors, const std::vector<glm::vec2>& uvOffsets, const std::vector<glm::vec2>& uvScales) const;
 
     [[nodiscard]] Shader* GetShader() const { return shader; }
 
@@ -55,6 +55,6 @@ private:
     std::unordered_map<std::string, Texture*> textures;
     std::unordered_map<std::string, UniformValue> uniforms;
 
-    GLuint instanceVBO;
+    GLuint instanceVBO[4];
     bool isInstancingEnabled;
 };

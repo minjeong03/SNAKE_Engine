@@ -1,6 +1,5 @@
 #include "Transform.h"
-
-#include "../ThirdParty/glm/ext/matrix_transform.hpp"
+#include "ext/matrix_transform.hpp"
 
 glm::mat4& Transform2D::GetMatrix()
 {

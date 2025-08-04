@@ -1,7 +1,8 @@
 #pragma once
 #include "CameraManager.h"
+#include "EngineContext.h"
 #include "ObjectManager.h"
-
+#include "SNAKE_Engine.h"
 class StateManager;
 struct EngineContext;
 
@@ -14,9 +15,9 @@ public:
 
     [[nodiscard]] virtual ObjectManager& GetObjectManager() { return objectManager; }
 
-    CameraManager& GetCameraManager() { return cameraManager; }
+    [[nodiscard]] CameraManager& GetCameraManager() { return cameraManager; }
 
-    Camera2D* GetActiveCamera() const { return cameraManager.GetActiveCamera(); }
+    [[nodiscard]] Camera2D* GetActiveCamera() const { return cameraManager.GetActiveCamera(); }
 
     void SetActiveCamera(const std::string& tag) { cameraManager.SetActiveCamera(tag); }
 
@@ -25,7 +26,7 @@ protected:
 
     virtual void LateInit([[maybe_unused]] const EngineContext& engineContext) {}
 
-    virtual void Update(float dt, [[maybe_unused]] const EngineContext& engineContext) {}
+    virtual void Update(float dt, [[maybe_unused]] const EngineContext& engineContext) { objectManager.UpdateAll(dt, engineContext); }
 
     virtual void LateUpdate([[maybe_unused]] float dt, [[maybe_unused]] const EngineContext& engineContext) {}
 
@@ -60,12 +61,17 @@ private:
         Init(engineContext);
         objectManager.InitAll(engineContext);
         LateInit(engineContext);
+        objectManager.AddAllPendingObjects(engineContext);
     }
 
     virtual void SystemUpdate(float dt, const EngineContext& engineContext)
     {
         Update(dt, engineContext);
-        objectManager.UpdateAll(dt, engineContext);
+
+        objectManager.CheckCollision();
+        if (engineContext.engine->ShouldRenderDebugDraws())
+            objectManager.DrawColliderDebug(engineContext.renderManager, cameraManager.GetActiveCamera());
+
         LateUpdate(dt, engineContext);
     }
 

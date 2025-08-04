@@ -14,6 +14,9 @@ public:
 
     [[nodiscard]] EngineContext& GetEngineContext() { return engineContext; }
 
+    void RenderDebugDraws(bool shouldShow) { showDebugDraw = shouldShow; }
+
+    [[nodiscard]] bool ShouldRenderDebugDraws() const { return showDebugDraw; }
 private:
     void Free() const;
 
@@ -24,5 +27,7 @@ private:
     WindowManager windowManager;
     InputManager inputManager;
     RenderManager renderManager;
+    SoundManager soundManager;
     bool shouldRun = true;
+    bool showDebugDraw = false;
 };

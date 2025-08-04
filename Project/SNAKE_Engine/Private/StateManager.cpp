@@ -1,8 +1,9 @@
 #include "StateManager.h"
 #include "GameState.h"
 #include "EngineContext.h"
-#include"WindowManager.h"
-#include"RenderManager.h"
+#include "WindowManager.h"
+#include "RenderManager.h"
+#include "SNAKE_Engine.h"
 GameState* StateManager::GetCurrentState() const
 {
 	return currentState ? currentState.get() : nullptr;
@@ -21,6 +22,7 @@ void StateManager::Update(float dt, const EngineContext& engineContext)
 		{
 			currentState->SystemFree(engineContext);
 			currentState->SystemUnload(engineContext);
+			engineContext.soundManager->ControlAll(SoundManager::SoundControlType::Stop);
 		}
 		currentState = std::move(nextState);
 		currentState->SystemLoad(engineContext);
@@ -38,7 +40,9 @@ void StateManager::Draw(const EngineContext& engineContext)
 	if (currentState != nullptr)
 	{
 		currentState->Draw(engineContext);
-		engineContext.renderManager->FlushDrawCommands();
+		engineContext.renderManager->FlushDrawCommands(engineContext);
+                if (engineContext.engine->ShouldRenderDebugDraws())
+		    engineContext.renderManager->FlushDebugLineDrawCommands(engineContext);
 	}
 }
 

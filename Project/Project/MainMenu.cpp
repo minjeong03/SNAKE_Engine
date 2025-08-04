@@ -1,28 +1,46 @@
-#include "MainMenu.h"
+﻿#include "MainMenu.h"
 #include <iostream>
-#include "../ThirdParty/glad/gl.h"
-
+#include "Button.h"
 #include "Debug.h"
 #include "Level1.h"
 
-#include "Engine.h"
-std::string tmp = "main";
 void MainMenu::Load(const EngineContext& engineContext)
 {
     SNAKE_LOG("[MainMenu] load called");
-
 }
 
 void MainMenu::Init(const EngineContext& engineContext)
 {
     SNAKE_LOG("[MainMenu] init called");
-    objectManager.AddObject(std::make_unique<Player>(), "mainmenu player");
 
-    auto minimapCam = std::make_unique<Camera2D>(engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
-    minimapCam->SetZoom(0.05f);
-    cameraManager.RegisterCamera("minimap", std::move(minimapCam));
 
-    cameraManager.SetActiveCamera("minimap");
+    objectManager.AddObject(std::make_unique<Player>(), "player")->SetRenderLayer(engineContext, "Penguin");
+    objectManager.AddObject(std::make_unique<Enemy>(glm::vec2(200,0)), "enemy");
+
+
+    startText = static_cast<TextObject*>(objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"),"START",TextAlignH::Center, TextAlignV::Middle), "StartText"));
+    startText->GetTransform2D().SetPosition({ 0,100 });
+    startText->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
+    startText->SetRenderLayer(engineContext, "UI");
+
+    startButton = static_cast<GameObject*>(objectManager.AddObject(std::make_unique<Button>(), "StartButton"));
+    startButton->GetTransform2D().SetPosition({ startText->GetWorldPosition() });
+    startButton->GetTransform2D().SetScale({ startText->GetWorldScale()*1.5f });
+
+    quitText = static_cast<TextObject*>(objectManager.AddObject(std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"), "QUIT", TextAlignH::Center, TextAlignV::Middle), "QuitText"));
+    quitText->GetTransform2D().SetPosition({ 0,-100 });
+    quitText->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
+    quitText->SetRenderLayer(engineContext, "UI");
+
+    quitButton = static_cast<GameObject*>(objectManager.AddObject(std::make_unique<Button>(), "QuitButton"));
+    quitButton->GetTransform2D().SetPosition({ quitText->GetWorldPosition() });
+    quitButton->GetTransform2D().SetScale({ quitText->GetWorldScale() * 1.5f });
+
+
+    bulletCountText = static_cast<TextObject*>(objectManager.AddObject(
+        std::make_unique<TextObject>(engineContext.renderManager->GetFontByTag("default"), "0", TextAlignH::Center, TextAlignV::Middle), "text"));;
+    bulletCountText->GetTransform2D().SetScale({ 0.5, 0.5 });
+    bulletCountText->SetRenderLayer(engineContext, "UI.Penguin");
 }
 
 void MainMenu::LateInit(const EngineContext& engineContext)
@@ -31,42 +49,95 @@ void MainMenu::LateInit(const EngineContext& engineContext)
 
 void MainMenu::Update(float dt, const EngineContext& engineContext)
 {
-    if (engineContext.inputManager->IsKeyPressed(KEY_N))
+    if (engineContext.inputManager->IsKeyReleased(KEY_N))
     {
-        SNAKE_LOG("[MainMenu] key n pressed , move to mainmenu");
         engineContext.stateManager->ChangeState(std::make_unique<Level1>());
     }
     if (engineContext.inputManager->IsKeyPressed(KEY_ESCAPE))
     {
         engineContext.engine->RequestQuit();
     }
+
+    if (engineContext.inputManager->IsKeyPressed(KEY_3))
+    {
+        engineContext.engine->RenderDebugDraws(true);
+    }
+    if (engineContext.inputManager->IsKeyPressed(KEY_4))
+    {
+        engineContext.engine->RenderDebugDraws(false);
+    }
+
+    if (startButton->GetColor() == glm::vec4(0.3, 0.3, 0.3, 1.0))
+    {
+        if (engineContext.inputManager->IsKeyPressed(KEY_SPACE))
+        {
+            engineContext.stateManager->ChangeState(std::make_unique<Level1>());
+        }
+    }
+    if (quitButton->GetColor() == glm::vec4(0.3, 0.3, 0.3, 1.0))
+    {
+        if (engineContext.inputManager->IsKeyPressed(KEY_SPACE))
+        {
+            engineContext.engine->RequestQuit();
+        }
+    }
+
+    if (startButton->GetCollider()->CheckPointCollision(engineContext.inputManager->GetMouseWorldPos(cameraManager.GetActiveCamera())))
+    {
+        startButton->SetColor({ 0.3,0.3,0.3,1.0 });
+        startText->SetColor({ 0.3,0.3,0.3,1.0 });
+        if (engineContext.inputManager->IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
+        {
+            engineContext.stateManager->ChangeState(std::make_unique<Level1>());
+        }
+    }
+    else
+    {
+        startButton->SetColor({ 1.0,1.0,1.0,1.0});
+        startText->SetColor({ 1.0,1.0,1.0,1.0 });
+    }
+
+    if (quitButton->GetCollider()->CheckPointCollision(engineContext.inputManager->GetMouseWorldPos(cameraManager.GetActiveCamera())))
+    {
+        quitButton->SetColor({ 0.3,0.3,0.3,1.0 });
+        quitText->SetColor({ 0.3,0.3,0.3,1.0 });
+        if (engineContext.inputManager->IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
+        {
+            engineContext.engine->RequestQuit();
+        }
+    }
+    else
+    {
+        quitButton->SetColor({ 1.0,1.0,1.0,1.0 });
+        quitText->SetColor({ 1.0,1.0,1.0,1.0 });
+    }
+
+    std::vector<Object*> bullets;
+    objectManager.FindByTag("bullet", bullets);
+    for (auto* bullet : bullets)
+    {
+        engineContext.renderManager->DrawDebugLine(
+            bullet->GetTransform2D().GetPosition(),
+            objectManager.FindByTag("player")->GetWorldPosition(),
+            cameraManager.GetActiveCamera());
+    }
+
+    objectManager.FindByTag("enemyBullet", bullets);
+    bulletCountText->SetText(std::to_string(bullets.size()));
+    bulletCountText->GetTransform2D().SetPosition(objectManager.FindByTag("player")->GetTransform2D().GetPosition() + glm::vec2(0, 50));
+
+
+    objectManager.UpdateAll(dt, engineContext);
 }
 
 void MainMenu::LateUpdate(float dt, const EngineContext& engineContext)
 {
-    GameState::LateUpdate(dt, engineContext);
 }
 
 void MainMenu::Draw(const EngineContext& engineContext)
 {
-    auto& rm = *engineContext.renderManager;
-
-    rm.SetViewport(0, 0, engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
-    cameraManager.SetActiveCamera("main");
+    engineContext.renderManager->ClearBackground(0, 0, engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight(), { 0.2,0.2,0.5,1 });
     objectManager.DrawAll(engineContext, cameraManager.GetActiveCamera());
-    rm.FlushDrawCommands();
-
-    rm.ClearBackground(10, 10, 200, 200, glm::vec4(0.3, 0.3, 1, 0));
-    rm.SetViewport(10, 10, 200, 200);
-    rm.FlushDrawCommands();
-
-    cameraManager.SetActiveCamera("minimap");
-    cameraManager.SetScreenSize("minimap", 200, 200);
-    objectManager.DrawObjectsWithTag(engineContext, cameraManager.GetActiveCamera(), "bullet");
-    rm.FlushDrawCommands();
-
-    rm.SetViewport(0, 0, engineContext.windowManager->GetWidth(), engineContext.windowManager->GetHeight());
-    rm.FlushDrawCommands();
 }
 
 

@@ -1,6 +1,8 @@
 #pragma once
 #include <bitset>
+#include "vec2.hpp"
 
+class Camera2D;
 class SNAKE_Engine;
 struct GLFWwindow;
 
@@ -27,6 +29,16 @@ public:
     [[nodiscard]] double GetMouseX() const;
 
     [[nodiscard]] double GetMouseY() const;
+
+    [[nodiscard]] glm::vec2 GetMousePos() const;
+
+    [[nodiscard]] double GetMouseWorldX(Camera2D* camera) const;
+
+    [[nodiscard]] double GetMouseWorldY(Camera2D* camera) const;
+
+    [[nodiscard]] glm::vec2 GetMouseWorldPos(Camera2D* camera) const;
+
+    void Reset();
 
 private:
     void Init(GLFWwindow* _window);

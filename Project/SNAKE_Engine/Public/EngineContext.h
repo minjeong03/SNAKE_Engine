@@ -2,6 +2,7 @@
 
 #include "InputManager.h"
 #include "RenderManager.h"
+#include "SoundManager.h"
 #include "StateManager.h"
 #include "WindowManager.h"
 
@@ -14,5 +15,6 @@ struct EngineContext
     WindowManager* windowManager = nullptr;
     InputManager* inputManager = nullptr;
     RenderManager* renderManager = nullptr;
+    SoundManager* soundManager = nullptr;
     SNAKE_Engine* engine = nullptr;
 };

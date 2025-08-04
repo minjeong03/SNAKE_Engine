@@ -1,9 +1,8 @@
 #include "Shader.h"
 #include <iosfwd>
-#include <iostream>
 #include <sstream>
 #include <fstream>
-#include <glad/gl.h>
+#include "gl.h"
 
 #include "Debug.h"
 
@@ -53,6 +52,14 @@ void Shader::AttachFromFile(ShaderStage stage, const FilePath& path)
 {
     std::string src = LoadShaderSource(path);
     GLuint shader = CompileShader(stage, src);
+    glAttachShader(programID, shader);
+    attachedShaders.push_back(shader);
+    attachedStages.push_back(stage);
+}
+
+void Shader::AttachFromSource(ShaderStage stage, const std::string& source)
+{
+    GLuint shader = CompileShader(stage, source);
     glAttachShader(programID, shader);
     attachedShaders.push_back(shader);
     attachedStages.push_back(stage);

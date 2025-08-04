@@ -1,11 +1,12 @@
 #include "ObjectManager.h"
 #include "EngineContext.h"
-#include <cassert>
-
-#include <iostream>
+#include "Object.h"
 #include "Debug.h"
+#include <cassert>
+#include <algorithm>
+#include <unordered_set>
 
-void ObjectManager::AddObject(std::unique_ptr<GameObject> obj, const std::string& tag)
+Object* ObjectManager::AddObject(std::unique_ptr<Object> obj, const std::string& tag)
 {
     assert(obj != nullptr && "Cannot add null object");
 
@@ -14,36 +15,39 @@ void ObjectManager::AddObject(std::unique_ptr<GameObject> obj, const std::string
     if (!tag.empty())
     {
         if (objectMap.find(tag) != objectMap.end())
-            SNAKE_WRN("Duplicate GameObject ID");
+            SNAKE_WRN("Duplicate Object ID");
 
-        GameObject* rawPointer = obj.get();
+        Object* rawPointer = obj.get();
         objectMap[tag] = rawPointer;
     }
+
+    Object* returnVal = obj.get();
     rawPtrObjects.push_back(obj.get());
     pendingObjects.push_back(std::move(obj));
+    return returnVal;
 }
-
-
 
 void ObjectManager::InitAll(const EngineContext& engineContext)
 {
     for (const auto& obj : objects)
-    {
         obj->Init(engineContext);
-    }
-    for (const auto& obj : objects)
-    {
-        obj->LateInit(engineContext);
-    }
-}
 
+    for (const auto& obj : objects)
+        obj->LateInit(engineContext);
+}
 
 void ObjectManager::UpdateAll(float dt, const EngineContext& engineContext)
 {
     for (const auto& obj : objects)
     {
         if (obj->IsAlive())
+        {
             obj->Update(dt, engineContext);
+            if (obj->HasAnimation())
+                obj->GetAnimator()->Update(dt);
+            if (Collider* col = obj->GetCollider())
+                col->SyncWithTransformScale();
+        }
     }
 
     EraseDeadObjects(engineContext);
@@ -52,12 +56,12 @@ void ObjectManager::UpdateAll(float dt, const EngineContext& engineContext)
 
 void ObjectManager::AddAllPendingObjects(const EngineContext& engineContext)
 {
-    std::vector<std::unique_ptr<GameObject>> tmp;
+    std::vector<std::unique_ptr<Object>> tmp;
     std::swap(tmp, pendingObjects);
+
     for (auto& obj : tmp)
-    {
         obj->Init(engineContext);
-    }
+
     for (auto& obj : tmp)
     {
         obj->LateInit(engineContext);
@@ -67,18 +71,16 @@ void ObjectManager::AddAllPendingObjects(const EngineContext& engineContext)
 
 void ObjectManager::EraseDeadObjects(const EngineContext& engineContext)
 {
-    std::vector<GameObject*> deadObjects;
+    std::vector<Object*> deadObjects;
     for (const auto& obj : objects)
     {
         if (!obj->IsAlive())
-        {
             deadObjects.push_back(obj.get());
-        }
     }
+
     for (auto& obj : deadObjects)
-    {
         obj->Free(engineContext);
-    }
+
     for (auto& obj : deadObjects)
     {
         obj->LateFree(engineContext);
@@ -88,9 +90,9 @@ void ObjectManager::EraseDeadObjects(const EngineContext& engineContext)
 
     objects.erase(
         std::remove_if(objects.begin(), objects.end(),
-            [](const std::unique_ptr<GameObject>& obj)
+            [&](const std::unique_ptr<Object>& obj)
             {
-                return !obj->IsAlive();
+                return std::find(deadObjects.begin(), deadObjects.end(), obj.get()) != deadObjects.end();
             }),
         objects.end());
 }
@@ -100,43 +102,92 @@ void ObjectManager::DrawAll(const EngineContext& engineContext, Camera2D* camera
     engineContext.renderManager->Submit(engineContext, rawPtrObjects, camera);
 }
 
-void ObjectManager::DrawObjects(const EngineContext& engineContext, Camera2D* camera, const std::vector<GameObject*>& gameObjects)
+void ObjectManager::DrawObjects(const EngineContext& engineContext, Camera2D* camera, const std::vector<Object*>& objects)
 {
-    engineContext.renderManager->Submit(engineContext, gameObjects, camera);
+    engineContext.renderManager->Submit(engineContext, objects, camera);
 }
 
 void ObjectManager::DrawObjectsWithTag(const EngineContext& engineContext, Camera2D* camera, const std::string& tag)
 {
-    std::vector<GameObject*> filteredObjects;
-    for (GameObject* obj : rawPtrObjects)
-    {
-        if (obj && obj->IsAlive() && obj->GetTag() == tag)
-        {
-            filteredObjects.push_back(obj);
-        }
-    }
+    std::vector<Object*> filteredObjects;
+    FindByTag(tag, filteredObjects);
     engineContext.renderManager->Submit(engineContext, filteredObjects, camera);
 }
 
 void ObjectManager::FreeAll(const EngineContext& engineContext)
 {
     for (const auto& obj : objects)
-    {
         obj->Free(engineContext);
-    }
+
     for (const auto& obj : objects)
-    {
         obj->LateFree(engineContext);
-    }
 
     objects.clear();
     objectMap.clear();
+    rawPtrObjects.clear();
 }
 
-GameObject* ObjectManager::FindByID(const std::string& id) const
+Object* ObjectManager::FindByTag(const std::string& tag) const
 {
-    auto it = objectMap.find(id);
-    if (it != objectMap.end())
+    auto it = objectMap.find(tag);
+    if (it != objectMap.end() && it->second->IsAlive())
         return it->second;
     return nullptr;
+}
+
+void ObjectManager::FindByTag(const std::string& tag, std::vector<Object*>& result)
+{
+    for (Object* obj : rawPtrObjects)
+    {
+        if (obj && obj->IsAlive() && obj->GetTag() == tag)
+            result.push_back(obj);
+    }
+}
+void ObjectManager::CheckCollision()
+{
+    std::unordered_set<uint64_t> checkedPairs;
+    checkedPairs.reserve(2000);
+
+    broadPhaseGrid.Clear();
+
+    for (Object* obj : rawPtrObjects)
+    {
+        Collider* collider = obj->GetCollider();
+        if (collider)
+            broadPhaseGrid.Insert(obj);
+    }
+
+    broadPhaseGrid.ComputeCollisions([&](Object* a, Object* b)
+        {
+            if ((a->GetCollisionMask() & b->GetCollisionCategory()) == 0 ||
+                (b->GetCollisionMask() & a->GetCollisionCategory()) == 0)
+                return;
+
+            if (a > b) std::swap(a, b);
+            uint64_t key = std::hash<Object*>()(a) ^ (std::hash<Object*>()(b) << 1);
+
+            if (checkedPairs.find(key) != checkedPairs.end())
+                return;
+
+            checkedPairs.insert(key);
+
+            if (a->GetCollider()->CheckCollision(b->GetCollider()))
+            {
+                a->OnCollision(b);
+                b->OnCollision(a);
+            }
+        });
+}
+
+void ObjectManager::DrawColliderDebug(RenderManager* rm, Camera2D* cam)
+{
+    for (auto* obj : rawPtrObjects)
+    {
+        if (!obj->IsAlive() || !obj->IsVisible()) continue;
+
+        if (Collider* col = obj->GetCollider())
+        {
+            col->DrawDebug(rm, cam);
+        }
+    }
 }

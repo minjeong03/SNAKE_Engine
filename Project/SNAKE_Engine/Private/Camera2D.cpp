@@ -1,5 +1,6 @@
 #include "Camera2D.h"
-#include "glm/gtc/matrix_transform.hpp"
+#include "glm.hpp"
+#include "gtc/matrix_transform.hpp"
 
 Camera2D::Camera2D(int screenWidth, int screenHeight)
     : screenWidth(screenWidth), screenHeight(screenHeight)
@@ -15,6 +16,11 @@ void Camera2D::SetScreenSize(int width, int height)
 void Camera2D::SetPosition(const glm::vec2& pos)
 {
     position = pos;
+}
+
+void Camera2D::AddPosition(const glm::vec2& pos)
+{
+    position += pos;
 }
 
 void Camera2D::SetZoom(float z)
@@ -42,4 +48,15 @@ glm::mat4 Camera2D::GetProjectionMatrix() const
         -halfH + position.y, halfH + position.y,
         -1.0f, 1.0f
     );
+}
+
+bool Camera2D::IsInView(const glm::vec2& pos, float radius, glm::vec2 viewportSize) const
+{
+    glm::vec2 camPos = GetPosition();
+    glm::vec2 halfSize = viewportSize * 0.5f;
+
+    return !(pos.x + radius < camPos.x - halfSize.x ||
+        pos.x - radius > camPos.x + halfSize.x ||
+        pos.y + radius < camPos.y - halfSize.y ||
+        pos.y - radius > camPos.y + halfSize.y);
 }
