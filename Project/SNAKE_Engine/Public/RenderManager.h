@@ -94,8 +94,6 @@ public:
 
     void DrawDebugLine(const glm::vec2& from, const glm::vec2& to, Camera2D* camera = nullptr, const glm::vec4& color = { 1,1,1,1 }, float lineWidth = 1.0f);
 
-    void FlushDebugLineDrawCommands(const EngineContext& engineContext);
-
     [[nodiscard]] RenderLayerManager& GetRenderLayerManager();
 private:
     void Init(const EngineContext& engineContext);
@@ -105,6 +103,8 @@ private:
     void SubmitRenderMap(const EngineContext& engineContext);
 
     void Submit(const EngineContext& engineContext, const std::vector<Object*>& objects, Camera2D* camera);
+
+    void FlushDebugLineDrawCommands(const EngineContext& engineContext);
 
     std::unordered_map<std::string, std::unique_ptr<Shader>> shaderMap;
     std::unordered_map<std::string, std::unique_ptr<Texture>> textureMap;

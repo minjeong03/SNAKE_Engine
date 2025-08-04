@@ -143,12 +143,11 @@ struct Vec2Hash
 
 class SpatialHashGrid
 {
-public:
+    friend ObjectManager;
+private:
     void Clear();
     void Insert(Object* obj);
     void ComputeCollisions(std::function<void(Object*, Object*)> onCollision);
-
-private:
     [[nodiscard]] glm::ivec2 GetCell(const glm::vec2& pos) const;
     void InsertToCell(Object* obj, const glm::ivec2& cell);
 
@@ -158,11 +157,11 @@ private:
 
 class CollisionGroupRegistry
 {
-public:
+    friend Collider;
+    friend Object;
+private:
     [[nodiscard]] uint32_t GetGroupBit(const std::string& tag);
     [[nodiscard]] std::string GetGroupTag(uint32_t bit) const;
-
-private:
     std::unordered_map<std::string, uint32_t> tagToBit;
     std::unordered_map<uint32_t, std::string> bitToTag;
     uint32_t currentBit = 0;

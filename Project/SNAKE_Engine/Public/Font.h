@@ -45,10 +45,6 @@ public:
     Font(RenderManager& engineContext, const std::string& ttfPath, uint32_t fontSize);
     ~Font();
 
-
-    void SetRenderLayer(uint8_t layer) { renderLayer = layer; }
-    [[nodiscard]] uint8_t GetRenderLayer() const { return renderLayer; }
-
     [[nodiscard]] Material* GetMaterial() const { return material.get(); }
 
     [[nodiscard]] glm::vec2 GetTextSize(const std::string& text) const;
@@ -74,8 +70,6 @@ private:
     std::unordered_map<char32_t, Glyph> glyphs;
     std::unique_ptr<Texture> atlasTexture;
     std::unique_ptr<Material> material;
-
-    uint8_t renderLayer = 0;
 
     int nextX = 0;
     int nextY = 0;
