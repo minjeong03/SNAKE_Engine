@@ -147,13 +147,14 @@ Object* PathfindingTest::AddNode(const EngineContext& engineContext, uint32_t no
 	obj->SetRenderLayer(engineContext, "Game");
 	obj->SetVisibility(true);
 	obj->SetColor(color);
+	obj->GetMaterial()->EnableInstancing(true, obj->GetMesh());
 	return obj;
 }
 
 void PathfindingTest::Init(const EngineContext& engineContext)
 {
 	std::ifstream ifs{ "Assets/game.ini" };
-	std::string filepath{ "Assets/busan_2000_map.txt" };
+	std::string filepath{ "Assets/ca_20000_map.txt" };
 
 	if (ifs.is_open())
 	{
@@ -342,6 +343,7 @@ void PathfindingTest::Update(float dt, const EngineContext& engineContext)
 
 void PathfindingTest::Draw(const EngineContext& engineContext)
 {
+	engineContext.renderManager->ClearBackground(0, 0, 1600, 900, { 0,0,0,1 });
 	objectManager.DrawAll(engineContext, cameraManager.GetActiveCamera());
 }
 
