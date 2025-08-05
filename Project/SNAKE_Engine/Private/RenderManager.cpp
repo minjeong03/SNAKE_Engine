@@ -330,14 +330,26 @@ void RenderManager::SubmitRenderMap(const EngineContext& engineContext)
                         if (currentShader != lastShader)
                         {
                             glm::mat4 projection;
-                            if (batch.front().first->ShouldIgnoreCamera() || batch.front().second == nullptr)
+                            if (batch.front().first->ShouldIgnoreCamera())
                             {
-                                projection = glm::ortho(
-                                    -static_cast<float>(batch.front().first->GetReferenceCamera()->GetScreenWidth()) / 2,
-                                    static_cast<float>(batch.front().first->GetReferenceCamera()->GetScreenWidth()) / 2,
-                                    -static_cast<float>(batch.front().first->GetReferenceCamera()->GetScreenHeight()) / 2,
-                                    static_cast<float>(batch.front().first->GetReferenceCamera()->GetScreenHeight()) / 2
-                                );
+                                if (batch.front().second)
+                                {
+                                    projection = glm::ortho(
+                                        -static_cast<float>(batch.front().first->GetReferenceCamera()->GetScreenWidth()) / 2,
+                                        static_cast<float>(batch.front().first->GetReferenceCamera()->GetScreenWidth()) / 2,
+                                        -static_cast<float>(batch.front().first->GetReferenceCamera()->GetScreenHeight()) / 2,
+                                        static_cast<float>(batch.front().first->GetReferenceCamera()->GetScreenHeight()) / 2
+                                    );
+                                }
+                                else
+                                {
+                                    projection = glm::ortho(
+                                        -static_cast<float>(engineContext.windowManager->GetWidth()) / 2,
+                                        static_cast<float>(engineContext.windowManager->GetWidth()) / 2,
+                                        -static_cast<float>(engineContext.windowManager->GetHeight()) / 2,
+                                        static_cast<float>(engineContext.windowManager->GetHeight()) / 2
+                                    );
+                                }
                             }
                             else
                                 projection = batch.front().second->GetProjectionMatrix();
@@ -373,14 +385,26 @@ void RenderManager::SubmitRenderMap(const EngineContext& engineContext)
                             if (currentShader != lastShader)
                             {
                                 glm::mat4 projection;
-                                if (obj->ShouldIgnoreCamera() || camera == nullptr)
+                                if (obj->ShouldIgnoreCamera())
                                 {
-                                    projection = glm::ortho(
-                                        -static_cast<float>(obj->GetReferenceCamera()->GetScreenWidth()) / 2,
-                                        static_cast<float>(obj->GetReferenceCamera()->GetScreenWidth()) / 2,
-                                        -static_cast<float>(obj->GetReferenceCamera()->GetScreenHeight()) / 2,
-                                        static_cast<float>(obj->GetReferenceCamera()->GetScreenHeight()) / 2
-                                    );
+                                    if (obj->GetReferenceCamera())
+                                    {
+                                        projection = glm::ortho(
+                                            -static_cast<float>(obj->GetReferenceCamera()->GetScreenWidth()) / 2,
+                                            static_cast<float>(obj->GetReferenceCamera()->GetScreenWidth()) / 2,
+                                            -static_cast<float>(obj->GetReferenceCamera()->GetScreenHeight()) / 2,
+                                            static_cast<float>(obj->GetReferenceCamera()->GetScreenHeight()) / 2
+                                        );
+                                    }
+                                    else
+                                    {
+                                        projection = glm::ortho(
+                                            -static_cast<float>(engineContext.windowManager->GetWidth()) / 2,
+                                            static_cast<float>(engineContext.windowManager->GetWidth()) / 2,
+                                            -static_cast<float>(engineContext.windowManager->GetHeight()) / 2,
+                                            static_cast<float>(engineContext.windowManager->GetHeight()) / 2
+                                        );
+                                    }
                                 }
                                 else
                                     projection = camera->GetProjectionMatrix();

@@ -3,6 +3,7 @@
 #include "Button.h"
 #include "Debug.h"
 #include "Level1.h"
+#include "PathfindingTest.h" 
 
 void MainMenu::Load(const EngineContext& engineContext)
 {
@@ -88,7 +89,7 @@ void MainMenu::Update(float dt, const EngineContext& engineContext)
         startText->SetColor({ 0.3,0.3,0.3,1.0 });
         if (engineContext.inputManager->IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
         {
-            engineContext.stateManager->ChangeState(std::make_unique<Level1>());
+            engineContext.stateManager->ChangeState(std::make_unique<PathfindingTest>());
         }
     }
     else

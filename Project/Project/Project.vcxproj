@@ -240,6 +240,7 @@
     <ClCompile Include="Level1.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="PathfindingTest.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
@@ -256,6 +257,7 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Level1.h" />
     <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="PathfindingTest.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
