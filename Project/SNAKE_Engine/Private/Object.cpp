@@ -145,6 +145,11 @@ glm::vec2 Object::GetWorldScale() const
         return transform2D.GetScale();
 }
 
+glm::vec2 Object::GetUVFlipVector() const
+{
+    return { flipUV_X ? -1.0f : 1.0f, flipUV_Y ? -1.0f : 1.0f };
+}
+
 
 float Object::GetBoundingRadius() const
 {

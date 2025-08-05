@@ -31,11 +31,11 @@ private:
     void ShouldNotBeReached(const EngineContext& engineContext);
     void CheckSelectedApples(const EngineContext& engineContext);
 
-    InputState prev_state = Release;
-    InputState current_state = Release;
-    glm::vec2 start_point;
+    InputState prevState = Release;
+    InputState currentState = Release;
+    glm::vec2 startPoint;
     bool checkApples = false;
-    std::vector<Object*> selected_objects;
+    std::vector<Object*> selectedObjects;
     int score = 0;
     typedef void(ApplePlayerController::*InputActionFunc)(const EngineContext& engineContext);
     InputActionFunc funcs[InputState::COUNT][InputState::COUNT];

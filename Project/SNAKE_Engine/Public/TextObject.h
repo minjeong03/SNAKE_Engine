@@ -34,7 +34,7 @@ public:
     
     void LateFree([[maybe_unused]] const EngineContext& engineContext) override;
 
-    float GetBoundingRadius() const override;
+    [[nodiscard]] float GetBoundingRadius() const override;
 
     void SetText(const std::string& text);
 
@@ -46,13 +46,13 @@ public:
 
     TextInstance* GetTextInstance();
 
-    bool HasAnimation() const override { return false; }
+    [[nodiscard]] bool HasAnimation() const override { return false; }
 
-    SpriteAnimator* GetAnimator() override { return nullptr; }
+    [[nodiscard]] SpriteAnimator* GetAnimator() override { return nullptr; }
 
-    glm::vec2 GetWorldPosition() const override;
+    [[nodiscard]] glm::vec2 GetWorldPosition() const override;
 
-    glm::vec2 GetWorldScale() const override;
+    [[nodiscard]] glm::vec2 GetWorldScale() const override;
 
 
     void SetMaterial(const EngineContext& engineContext, const std::string& tag) = delete;

@@ -60,6 +60,7 @@
     <ClCompile Include="Private\Camera2D.cpp" />
     <ClCompile Include="Private\CameraManager.cpp" />
     <ClCompile Include="Private\Collider.cpp" />
+    <ClCompile Include="Private\Debug.cpp" />
     <ClCompile Include="Private\EngineTimer.cpp" />
     <ClCompile Include="Private\Font.cpp" />
     <ClCompile Include="Private\Object.cpp" />

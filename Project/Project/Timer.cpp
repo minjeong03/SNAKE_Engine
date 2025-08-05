@@ -22,6 +22,11 @@ bool Timer::IsStarted() const
     return started;
 }
 
+float Timer::GetElapsed() const
+{
+    return elapsed;
+}
+
 float Timer::GetProgressPercentage() const
 {
     return elapsed / time;

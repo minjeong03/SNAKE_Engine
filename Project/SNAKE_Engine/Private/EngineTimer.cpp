@@ -21,7 +21,7 @@ float EngineTimer::Tick()
 
 bool EngineTimer::ShouldUpdateFPS(float& outFPS)
 {
-    if (fpsTimer >= 1.0f)
+    if (fpsTimer >= 0.3f)
     {
         outFPS = frameCount / fpsTimer;
         fpsTimer = 0.0f;

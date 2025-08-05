@@ -82,8 +82,8 @@ void Font::LoadFont(const std::string& path, uint32_t fontSize)
 
 void Font::BakeAtlas(RenderManager& renderManager)
 {
-    int texWidth = 512;
-    int texHeight = 512;
+    int texWidth = 128;
+    int texHeight = 128;
     std::vector<unsigned char> pixels(texWidth * texHeight, 0);
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -253,7 +253,10 @@ Mesh* Font::GenerateTextMesh(const std::string& text, TextAlignH alignH, TextAli
         std::vector<char32_t> u32Line = UTF8ToCodepoints(lineText);
         //pre-bake for calculating width
         for (char32_t c : u32Line)
-            TryBakeGlyph(c);
+            if (!TryBakeGlyph(c))
+            {
+                SNAKE_WRN("Failed to bake glyph");
+            }
 
         float lineWidth = 0.0f;
         for (char32_t c : u32Line)
@@ -288,7 +291,10 @@ Mesh* Font::GenerateTextMesh(const std::string& text, TextAlignH alignH, TextAli
         std::vector<char32_t> u32 = UTF8ToCodepoints(lineText);
         for (char32_t c : u32)
         {
-            TryBakeGlyph(c);
+            if (!TryBakeGlyph(c))
+            {
+                SNAKE_WRN("Failed to bake glyph");
+            }
             const Glyph& glyph = GetGlyph(c);
             float xpos = xCursor + (float)glyph.bearing.x;
             float ypos = yCursor - (float)(glyph.size.y - glyph.bearing.y);
@@ -324,17 +330,29 @@ Mesh* Font::GenerateTextMesh(const std::string& text, TextAlignH alignH, TextAli
 
 void Font::ExpandAtlas()
 {
-    int newWidth = atlasTexture->GetWidth() * 2;
-    int newHeight = atlasTexture->GetHeight() * 2;
+    int oldWidth = atlasTexture->GetWidth();
+    int oldHeight = atlasTexture->GetHeight();
+
+    int newWidth = oldWidth * 2;
+    int newHeight = oldHeight * 2;
 
     std::vector<unsigned char> newPixels(newWidth * newHeight, 0);
-
     std::unique_ptr<Texture> newAtlas = std::make_unique<Texture>(newPixels.data(), newWidth, newHeight, 1);
-
     material->SetTexture("u_FontTexture", newAtlas.get());
-
     atlasTexture = std::move(newAtlas);
+
     nextX = 0;
     nextY = 0;
     maxRowHeight = 0;
+
+    std::unordered_map<char32_t, Glyph> oldGlyphs = glyphs;
+    glyphs.clear();
+
+    for (const auto& [c, _] : oldGlyphs)
+    {
+        if (!TryBakeGlyph(c))
+        {
+            SNAKE_WRN("Failed to bake glyph");
+        }
+    }
 }

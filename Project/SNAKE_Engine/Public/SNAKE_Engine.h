@@ -16,7 +16,7 @@ public:
 
     void RenderDebugDraws(bool shouldShow) { showDebugDraw = shouldShow; }
 
-    bool ShouldRenderDebugDraws() const { return showDebugDraw; }
+    [[nodiscard]] bool ShouldRenderDebugDraws() const { return showDebugDraw; }
 private:
     void Free() const;
 

@@ -16,7 +16,7 @@ class SoundManager
 public:
 
     void LoadSound(const std::string& tag, const std::string& filepath, bool loop = false);
-    SoundInstanceID Play(const std::string& tag, float volume = 1.0f, float startTimeSec = 0.0f);
+    [[maybe_unused]] SoundInstanceID Play(const std::string& tag, float volume = 1.0f, float startTimeSec = 0.0f);
 
     void SetVolumeByID(SoundInstanceID id, float volume);
     void SetVolumeByTag(const std::string& tag, float volume);

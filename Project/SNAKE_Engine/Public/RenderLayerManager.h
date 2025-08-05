@@ -13,7 +13,7 @@ class RenderLayerManager
 public:
     static constexpr uint8_t MAX_LAYERS = 16;
 
-    std::optional<uint8_t> GetLayerID(const std::string& name) const
+    [[nodiscard]] std::optional<uint8_t> GetLayerID(const std::string& name) const
     {
         auto it = nameToID.find(name);
         if (it != nameToID.end())
@@ -21,7 +21,7 @@ public:
         return std::nullopt;
     }
 
-    const std::string& GetLayerName(uint8_t id) const
+    [[nodiscard]] const std::string& GetLayerName(uint8_t id) const
     {
         return idToName.at(id);
     }

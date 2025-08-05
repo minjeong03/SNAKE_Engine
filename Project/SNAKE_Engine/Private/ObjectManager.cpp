@@ -87,6 +87,7 @@ void ObjectManager::EraseDeadObjects(const EngineContext& engineContext)
         objectMap.erase(obj->GetTag());
         rawPtrObjects.erase(std::remove(rawPtrObjects.begin(), rawPtrObjects.end(), obj), rawPtrObjects.end());
     }
+
     objects.erase(
         std::remove_if(objects.begin(), objects.end(),
             [&](const std::unique_ptr<Object>& obj)
@@ -142,11 +143,10 @@ void ObjectManager::FindByTag(const std::string& tag, std::vector<Object*>& resu
             result.push_back(obj);
     }
 }
-
 void ObjectManager::CheckCollision()
 {
     std::unordered_set<uint64_t> checkedPairs;
-   // checkedPairs.reserve(2000);
+    checkedPairs.reserve(2000);
 
     broadPhaseGrid.Clear();
 
@@ -163,8 +163,7 @@ void ObjectManager::CheckCollision()
                 (b->GetCollisionMask() & a->GetCollisionCategory()) == 0)
                 return;
 
-            if (a > b)std::swap(a, b);
-
+            if (a > b) std::swap(a, b);
             uint64_t key = std::hash<Object*>()(a) ^ (std::hash<Object*>()(b) << 1);
 
             if (checkedPairs.find(key) != checkedPairs.end())

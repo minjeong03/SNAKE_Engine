@@ -7,7 +7,7 @@ public:
     void Update(float dt);
     bool IsTimedOut() const;
     bool IsStarted() const;
-
+    float GetElapsed() const;
     float GetProgressPercentage() const;
 
 private:

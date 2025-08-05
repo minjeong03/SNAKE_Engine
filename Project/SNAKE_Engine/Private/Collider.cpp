@@ -213,6 +213,7 @@ void SpatialHashGrid::ComputeCollisions(std::function<void(Object*, Object*)> on
         }
     }
 }
+
 glm::ivec2 SpatialHashGrid::GetCell(const glm::vec2& pos) const
 {
     return glm::ivec2(

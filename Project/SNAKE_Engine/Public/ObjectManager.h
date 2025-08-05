@@ -30,11 +30,11 @@ public:
     void FindByTag(const std::string& tag, std::vector<Object*>& result);
     void CheckCollision();
     void DrawColliderDebug(RenderManager* rm, Camera2D* cam);
-    void EraseDeadObjects(const EngineContext& engineContext);
-    CollisionGroupRegistry& GetCollisionGroupRegistry() { return collisionGroupRegistry; }
+
+    [[nodiscard]] CollisionGroupRegistry& GetCollisionGroupRegistry() { return collisionGroupRegistry; }
 private:
     void AddAllPendingObjects(const EngineContext& engineContext);
-
+    void EraseDeadObjects(const EngineContext& engineContext);
 
     std::vector<std::unique_ptr<Object>> objects;
     std::vector<std::unique_ptr<Object>> pendingObjects;

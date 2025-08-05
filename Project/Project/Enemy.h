@@ -12,6 +12,9 @@ public:
     void Draw(const EngineContext& engineContext) override;
     void Free(const EngineContext& engineContext) override;
     void LateFree(const EngineContext& engineContext) override;
+    void OnCollision(Object* other) override;
+    bool CheckIdle();
 private:
+    bool checkIdle = true;
 };
 

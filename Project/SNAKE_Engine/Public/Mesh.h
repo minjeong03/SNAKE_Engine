@@ -32,7 +32,7 @@ public:
 
     ~Mesh();
 
-    glm::vec2 GetLocalBoundsHalfSize() const { return localHalfSize; }
+    [[nodiscard]] glm::vec2 GetLocalBoundsHalfSize() const { return localHalfSize; }
 
 private:
     void BindVAO() const;
@@ -76,6 +76,7 @@ private:
     GLuint vbo;
     GLuint ebo;
     GLsizei indexCount;
+
     bool useIndex;
 
     PrimitiveType primitiveType;

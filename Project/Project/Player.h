@@ -12,7 +12,8 @@ public:
     void Free(const EngineContext& engineContext) override;
     void LateFree(const EngineContext& engineContext) override;
     void OnCollision(Object* other) override;
+    bool CheckIdle();
 private:
-    int checkIdle=0;
+    bool checkIdle = true;
 };
 

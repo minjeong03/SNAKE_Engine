@@ -25,7 +25,7 @@ public:
     void Unload(const EngineContext& engineContext) override;
 
 private:
-    GameObject* startButton, * quitButton;
-    TextObject* startText, * quitText;
+    GameObject* startButton = nullptr, * quitButton = nullptr;
+    TextObject* startText = nullptr, * quitText = nullptr, * bulletCountText = nullptr;
 };
 

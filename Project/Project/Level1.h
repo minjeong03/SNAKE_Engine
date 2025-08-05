@@ -27,18 +27,20 @@ private:
     const int rows = 10;
     const int cols = 17;
 
-    const int margin_x = 45;
-    const int margin_y = 40;
+    const int marginX = 45;
+    const int marginY = 40;
 
-    const int spacing_x = 10;
-    const int spacing_y = 8;
+    const int spacingX = 10;
+    const int spacingY = 8;
 
-    const int apple_size_x = 32;
-    const int apple_size_y = 35;
+    const int appleSizeX = 32;
+    const int appleSizeY = 35;
 
-    TextObject* score_ui_text = nullptr;
-    Timer game_timer;
-    Object* timer_bar_fill = nullptr;
-    float fill_initial_scale_y; 
+    TextObject* scoreUIText = nullptr;
+    TextObject* restartUIText = nullptr;
+    Timer gameTimer;
+    Timer dokidoki;
+    Object* timerBarFill = nullptr;
+    float fillInitialScaleY; 
 
 };
