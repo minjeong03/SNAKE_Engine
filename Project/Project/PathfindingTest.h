@@ -63,11 +63,9 @@ public:
 	void Free(const EngineContext& engineContext) override;
 	void Unload(const EngineContext& engineContext) override;
 
-	void DrawNode(uint32_t node_id, float point_size, const std::vector<float>& color);
+	Object* AddNode(const EngineContext& engineContext, uint32_t nodeIdx, float nodeSize, const glm::vec4& color, std::string_view tag);
 private:
 	Graph map;
-	//AEGfxVertexList* map_edges;
-	//AEMtx33 map_transform;
 	float centerX;
 	float centerY;
 	float normalizingSizeX;
@@ -76,5 +74,8 @@ private:
 	TextObject* visitedNodeCountText;
 	TextObject* pathNodeCountText;
 	TextObject* algoText;
-
+	Object* startNode;
+	Object* goalNode;
+	uint32_t startNodeIdx;
+	uint32_t goalNodeIdx;
 };

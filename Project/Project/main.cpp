@@ -51,6 +51,7 @@ int main(int argc, char* argv[])
     snakeEngine.GetEngineContext().renderManager->RegisterTexture("blueMButton", "Textures/blueMButton.png");
 	snakeEngine.GetEngineContext().renderManager->RegisterTexture("penguinSpritesheet", "Textures/penguin.png");
 
+    snakeEngine.GetEngineContext().renderManager->RegisterShader("s_colorOnly", { {ShaderStage::Vertex,"Shaders/ColorOnly.vert"},{ShaderStage::Fragment,"Shaders/ColorOnly.frag"} });
     snakeEngine.GetEngineContext().renderManager->RegisterShader("s_default", { {ShaderStage::Vertex,"Shaders/Default.vert"},{ShaderStage::Fragment,"Shaders/Default.frag"} });
     snakeEngine.GetEngineContext().renderManager->RegisterShader("s_instancing", { {ShaderStage::Vertex,"Shaders/instancing.vert"},{ShaderStage::Fragment,"Shaders/instancing.frag"} });
     snakeEngine.GetEngineContext().renderManager->RegisterShader("s_animation", { {ShaderStage::Vertex,"Shaders/Animation.vert"},{ShaderStage::Fragment,"Shaders/Animation.frag"} });

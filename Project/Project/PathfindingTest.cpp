@@ -71,18 +71,6 @@ Pathfinding::Status Pathfinding::FindPath(const Graph& graph, int start, int tar
 	return Pathfinding::NOT_FOUND;
 }
 
-void PathfindingTest::DrawNode(uint32_t node_id, float point_size, const std::vector<float>& color)
-{
-	/*Renderer& renderer = Renderer::GetInstance();
-	AEMtx33 scale, trs;
-	AEMtx33Scale(&scale, point_size, point_size);
-	f32 x = (map.nodes[node_id].x - center_x) * normalizing_size_x;
-	f32 y = (map.nodes[node_id].y - center_y) * normalizing_size_x;
-	AEMtx33Trans(&trs, x, y);
-	AEMtx33Concat(&trs, &trs, &scale);
-	renderer.RenderCircle(trs, color);*/
-}
-
 void Graph::ParseFromFile(std::string_view path)
 {
 	nodes.clear();
@@ -141,6 +129,25 @@ void Graph::ParseFromFile(std::string_view path)
 
 void PathfindingTest::Load(const EngineContext& engineContext)
 {
+	engineContext.windowManager->Resize(1600, 900);
+	engineContext.renderManager->RegisterMaterial("m_map", "s_colorOnly", {}); 
+	engineContext.renderManager->RegisterTexture("t_circle", "Textures/circle.png"); 
+	engineContext.renderManager->RegisterMaterial("m_node", "s_default", { std::pair<std::string, std::string>("u_Texture","t_circle") });
+}
+
+Object* PathfindingTest::AddNode(const EngineContext& engineContext, uint32_t nodeIdx, float nodeSize, const glm::vec4& color, std::string_view tag)
+{
+	Object* obj = objectManager.AddObject(std::make_unique<GameObject>(), tag.data());
+	float x = (map.nodes[nodeIdx].x - centerX) * normalizingSizeX;
+	float y = (map.nodes[nodeIdx].y - centerY) * normalizingSizeX;
+	obj->GetTransform2D().SetPosition({x, y}); 
+	obj->SetMesh(engineContext, "default");
+	obj->SetMaterial(engineContext, "m_node");
+	obj->GetTransform2D().SetScale({nodeSize, nodeSize});
+	obj->SetRenderLayer(engineContext, "Game");
+	obj->SetVisibility(true);
+	obj->SetColor(color);
+	return obj;
 }
 
 void PathfindingTest::Init(const EngineContext& engineContext)
@@ -158,18 +165,42 @@ void PathfindingTest::Init(const EngineContext& engineContext)
 			filepath = filepath_read;
 		}
 	}
-
-	engineContext.windowManager->Resize(1600, 900);
-
 	map.ParseFromFile(filepath);
+
+	centerX = (map.x.max + map.x.min) * 0.5f;
+	centerY = (map.y.max + map.y.min) * 0.5f;
+	std::vector<Vertex> vertices;
+	vertices.reserve(map.nodes.size() * 2);
+	for (uint32_t from = 0; from < map.nodes.size(); ++from)
+	{
+		float fromX = map.nodes[from].x;
+		float fromY = map.nodes[from].y;
+		for (uint32_t j = 0; j < map.edges[from].size(); ++j)
+		{
+			uint32_t to = map.edges[from][j].first;
+			float toX = map.nodes[to].x;
+			float toY = map.nodes[to].y;
+			Vertex p0, p1;
+			p0.position = { fromX - centerX, fromY - centerY, 0.0f };
+			p1.position = { toX - centerX, toY - centerY, 0.0f};
+			vertices.push_back(p0);
+			vertices.push_back(p1);
+		}
+	}
+	engineContext.renderManager->RegisterMesh("map", vertices, {}, PrimitiveType::Lines);
 
 	normalizingSizeX = 1.f / (map.x.max - map.x.min);
 	normalizingSizeX = normalizingSizeX * engineContext.windowManager->GetHeight();
 
-	centerX = (map.x.max + map.x.min) * 0.5f;
-	centerY = (map.y.max + map.y.min) * 0.5f;
+	auto* mapObj = objectManager.AddObject(std::make_unique<GameObject>(), "map");
+	mapObj->SetMesh(engineContext, "map");
+	mapObj->SetMaterial(engineContext, "m_map");
+	mapObj->GetTransform2D().SetScale({ normalizingSizeX, normalizingSizeX });
+	mapObj->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
+	mapObj->SetRenderLayer(engineContext, "Game.Background");
+	mapObj->SetColor({0,0,1,1});
 
-	glm::vec2 pos = {
+	glm::vec2 text_pos = {
 			-engineContext.windowManager->GetWidth() * 0.5f + 50.f,
 			engineContext.windowManager->GetHeight() * 0.5f - 50.f
 	};
@@ -177,7 +208,7 @@ void PathfindingTest::Init(const EngineContext& engineContext)
 	visitedNodeCountText = new TextObject(engineContext.renderManager->GetFontByTag("default"), std::to_string(0), TextAlignH::Left, TextAlignV::Top);
 	objectManager.AddObject(std::unique_ptr<TextObject>(visitedNodeCountText), "debugText");
 	visitedNodeCountText->GetTransform2D().SetPosition(
-		pos + glm::vec2(0, -50));
+		text_pos + glm::vec2(0, -50));
 	visitedNodeCountText->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
 	visitedNodeCountText->SetRenderLayer(engineContext, "UI.Text");
 	visitedNodeCountText->SetText("Visited : " + std::to_string(0));
@@ -185,7 +216,7 @@ void PathfindingTest::Init(const EngineContext& engineContext)
 	pathNodeCountText = new TextObject(engineContext.renderManager->GetFontByTag("default"), std::to_string(0), TextAlignH::Left, TextAlignV::Top);
 	objectManager.AddObject(std::unique_ptr<TextObject>(pathNodeCountText), "debugText");
 	pathNodeCountText->GetTransform2D().SetPosition(
-		pos + glm::vec2(0, -100));
+		text_pos + glm::vec2(0, -100));
 	pathNodeCountText->SetRenderLayer(engineContext, "UI.Text");
 	pathNodeCountText->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
 	pathNodeCountText->SetText("Path : " + std::to_string(0));
@@ -193,34 +224,22 @@ void PathfindingTest::Init(const EngineContext& engineContext)
 	algoText = new TextObject(engineContext.renderManager->GetFontByTag("default"), std::to_string(0), TextAlignH::Left, TextAlignV::Top);
 	objectManager.AddObject(std::unique_ptr<TextObject>(algoText), "debugText");
 	algoText->GetTransform2D().SetPosition(
-		pos + glm::vec2(0, -150));
+		text_pos + glm::vec2(0, -150));
 	algoText->SetRenderLayer(engineContext, "UI.Text");
 	algoText->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
 	algoText->SetText("A*");
 
 	statusText = new TextObject(engineContext.renderManager->GetFontByTag("default"), std::to_string(0), TextAlignH::Left, TextAlignV::Top);
 	objectManager.AddObject(std::unique_ptr<TextObject>(statusText), "debugText");
-	statusText->GetTransform2D().SetPosition(pos);
+	statusText->GetTransform2D().SetPosition(text_pos);
 	statusText->SetIgnoreCamera(true);
 	statusText->SetRenderLayer(engineContext, "UI.Text");
 	statusText->SetText("N/A");
-
-
-	//AEGfxMeshStart();
-	//for (uint32_t from = 0; from < map.nodes.size(); ++from)
-	//{
-	//	float fromX = map.nodes[from].x;
-	//	float fromY = map.nodes[from].y;
-	//	for (uint32_t j = 0; j < map.edges[from].size(); ++j)
-	//	{
-	//		uint32_t to = map.edges[from][j].first;
-	//		float toX = map.nodes[to].x;
-	//		float toY = map.nodes[to].y;
-	//		AEGfxVertexAdd(fromX - centerX, fromY - centerY, 0xFFFFFFFF, 0, 0);
-	//		AEGfxVertexAdd(toX - centerX, toY - centerY, 0xFFFFFFFF, 0, 0);
-	//	}
-	//}
-	//map_edges = AEGfxMeshEnd();
+	
+	startNodeIdx = 0;
+	goalNodeIdx = 0;
+	startNode = AddNode(engineContext, 0, 10, { 1,1,1,1 }, "Node.Start");
+	goalNode = AddNode(engineContext, 0, 10, { 0,1,0,1 }, "Node.End");
 }
 
 void PathfindingTest::LateInit(const EngineContext& engineContext)
@@ -233,16 +252,13 @@ void PathfindingTest::LateUpdate(float dt, const EngineContext& engineContext)
 
 void PathfindingTest::Update(float dt, const EngineContext& engineContext)
 {
-	static uint32_t start_node_id = 0;
-	static uint32_t goal_node_id = 0;
-
 	if (engineContext.inputManager->IsKeyDown(KEY_COMMA))
 	{
-		start_node_id = (start_node_id + 1) % map.nodes.size();
+		startNodeIdx = (startNodeIdx + 1) % map.nodes.size();
 	}
 	if (engineContext.inputManager->IsKeyDown(KEY_PERIOD))
 	{
-		goal_node_id = (goal_node_id + 1) % map.nodes.size();
+		goalNodeIdx = (goalNodeIdx + 1) % map.nodes.size();
 	}
 	if (engineContext.inputManager->IsKeyReleased(KEY_M))
 	{
@@ -257,8 +273,8 @@ void PathfindingTest::Update(float dt, const EngineContext& engineContext)
 	{
 		path.clear();
 		visited.clear();
-		goal_node_id = 0;
-		start_node_id = 0;
+		goalNodeIdx = 0;
+		startNodeIdx = 0;
 		status = Pathfinding::NOT_FOUND;
 		Restart(engineContext);
 		return;
@@ -268,55 +284,64 @@ void PathfindingTest::Update(float dt, const EngineContext& engineContext)
 
 	if (engineContext.inputManager->IsKeyReleased(KEY_ENTER))
 	{
+		std::vector<Object*> nodes;
+		objectManager.FindByTag("Node", nodes);
+		for (Object* node : nodes)
+		{
+			node->Kill();
+		}
 		path.clear();
 		visited.clear();
-		status = pathfinder.FindPath(map, start_node_id, goal_node_id, pathfinder.prev, newIndices, true);
+		status = pathfinder.FindPath(map, startNodeIdx, goalNodeIdx, pathfinder.prev, newIndices, true);
 		statusText->SetText("Running");
-	}
+		if (status != Pathfinding::RUNNING)
+		{
+			SNAKE_ERR("didn't handle edge case correctly. yet.");
+		}
+	}		
+	
+	float x = (map.nodes[startNodeIdx].x - centerX) * normalizingSizeX;
+	float y = (map.nodes[startNodeIdx].y - centerY) * normalizingSizeX;
+	startNode->GetTransform2D().SetPosition({ x, y });
+
+	x = (map.nodes[goalNodeIdx].x - centerX) * normalizingSizeX;
+	y = (map.nodes[goalNodeIdx].y - centerY) * normalizingSizeX;
+	goalNode->GetTransform2D().SetPosition({ x, y });
 
 	if (status == Pathfinding::RUNNING)
 	{
-		status = pathfinder.FindPath(map, start_node_id, goal_node_id, pathfinder.prev, newIndices, false);
+		status = pathfinder.FindPath(map, startNodeIdx, goalNodeIdx, pathfinder.prev, newIndices, false);
+		visited.insert(visited.end(), newIndices.begin(), newIndices.end());
 
 		if (status != Pathfinding::RUNNING)
 		{
-			path = GetPath(goal_node_id, pathfinder.prev);
+			path = GetPath(goalNodeIdx, pathfinder.prev);
+			if (!path.empty())
+			{
+				glm::vec4 red = { 1, 0, 0, 1 };
+				for (int nodeIdx : path)
+					AddNode(engineContext, nodeIdx, 5, red, "Node");
+			}
 			statusText->SetText(status == Pathfinding::FOUND ? "FOUND" : "NOT FOUND");
 		}
+	}
+
+	if (!newIndices.empty())
+	{
+		glm::vec4 orange = { 210.f / 255.f, 105.f / 255.f, 0, 1 };
+		for (int nodeIdx : newIndices)
+			AddNode(engineContext, nodeIdx, 2, orange, "Node");
 	}
 
 	visitedNodeCountText->SetText("Visited: " + std::to_string(visited.size()));
 	pathNodeCountText->SetText("Path: " + std::to_string(path.size()));
 	algoText->SetText(pathfinder.useAStar ? "A*" : "Dijkstra");
 	
-
-	visited.insert(visited.end(), newIndices.begin(), newIndices.end());
 	GameState::Update(dt, engineContext);
 }
 
 void PathfindingTest::Draw(const EngineContext& engineContext)
 {
-	//renderer.RenderMesh(map_transform, map_edges, AE_GFX_MDM_LINES, Colors::Blue);
-
-	//DrawNode(start_node_id, 10, Colors::Red);
-	//DrawNode(goal_node_id, 10, Colors::Green);
-
-	//if (!visited.empty())
-	//{
-	//	for (const auto& node : visited)
-	//	{
-	//		DrawNode(node, 2, Colors::Orange);
-	//	}
-	//}
-
-	//if (!path.empty())
-	//{
-	//	for (const auto& node : path)
-	//	{
-	//		DrawNode(node, 5, Colors::Red);
-	//	}
-	//}
-
 	objectManager.DrawAll(engineContext, cameraManager.GetActiveCamera());
 }
 
