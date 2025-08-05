@@ -4,6 +4,7 @@
 
 TextObject::TextObject(Font* font, const std::string& text, TextAlignH alignH_, TextAlignV alignV_) : Object(ObjectType::TEXT)
 {
+
     std::string cacheKey = textInstance.GetCacheKey();
 
     alignH = alignH_;
@@ -31,6 +32,7 @@ void TextObject::Update(float dt, const EngineContext& engineContext)
 
 void TextObject::Draw(const EngineContext& engineContext)
 {
+    material->SetUniform("u_Color", color);
 }
 
 void TextObject::Free(const EngineContext& engineContext)
@@ -44,9 +46,9 @@ void TextObject::LateFree(const EngineContext& engineContext)
 float TextObject::GetBoundingRadius() const
 {
     if (!mesh) return 0.0f;
-    glm::vec2 size = textInstance.font->GetTextSize(textInstance.text); 
+    glm::vec2 size = textInstance.font->GetTextSize(textInstance.text);
     glm::vec2 scaled = size * transform2D.GetScale();
-    return glm::length(scaled) ;
+    return glm::length(scaled);
 }
 
 
@@ -116,7 +118,7 @@ glm::vec2 TextObject::GetWorldPosition() const
     {
         float zoom = referenceCamera->GetZoom();
         glm::vec2 camPos = referenceCamera->GetPosition();
-        return camPos + alignedScreenPos / zoom;
+        return (camPos + alignedScreenPos) / zoom;
     }
     else
     {
@@ -127,9 +129,20 @@ glm::vec2 TextObject::GetWorldPosition() const
 glm::vec2 TextObject::GetWorldScale() const
 {
     if (ShouldIgnoreCamera() && referenceCamera)
-        return transform2D.GetScale()* textInstance.font->GetTextSize(textInstance.text) / referenceCamera->GetZoom();
+        return transform2D.GetScale() * textInstance.font->GetTextSize(textInstance.text) / referenceCamera->GetZoom();
     else
-        return transform2D.GetScale()* textInstance.font->GetTextSize(textInstance.text);
+        return transform2D.GetScale() * textInstance.font->GetTextSize(textInstance.text);
+}
+
+void TextObject::CheckFontAtlasAndMeshUpdate()
+{
+    if (textAtlasVersionTracker == textInstance.font->GetTextAtlasVersion())
+        return;
+
+    textAtlasVersionTracker = textInstance.font->GetTextAtlasVersion();
+    std::unique_ptr<Mesh> newMesh(textInstance.font->GenerateTextMesh(textInstance.text, alignH, alignV));
+    mesh = newMesh.get();
+    textMeshCache[textInstance.GetCacheKey()] = std::move(newMesh);
 }
 
 void TextObject::UpdateMesh()

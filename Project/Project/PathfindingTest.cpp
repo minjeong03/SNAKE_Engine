@@ -132,7 +132,7 @@ void PathfindingTest::Load(const EngineContext& engineContext)
 	engineContext.windowManager->Resize(1600, 900);
 	engineContext.renderManager->RegisterMaterial("m_map", "s_colorOnly", {}); 
 	engineContext.renderManager->RegisterTexture("t_circle", "Textures/circle.png"); 
-	engineContext.renderManager->RegisterMaterial("m_node", "s_default", { std::pair<std::string, std::string>("u_Texture","t_circle") });
+	engineContext.renderManager->RegisterMaterial("m_node", "s_instancing", { std::pair<std::string, std::string>("u_Texture","t_circle") });
 }
 
 Object* PathfindingTest::AddNode(const EngineContext& engineContext, uint32_t nodeIdx, float nodeSize, const glm::vec4& color, std::string_view tag)
@@ -154,7 +154,7 @@ Object* PathfindingTest::AddNode(const EngineContext& engineContext, uint32_t no
 void PathfindingTest::Init(const EngineContext& engineContext)
 {
 	std::ifstream ifs{ "Assets/game.ini" };
-	std::string filepath{ "Assets/ca_20000_map.txt" };
+	std::string filepath{ "Assets/busan_2000_map.txt" };
 
 	if (ifs.is_open())
 	{
@@ -190,14 +190,14 @@ void PathfindingTest::Init(const EngineContext& engineContext)
 	}
 	engineContext.renderManager->RegisterMesh("map", vertices, {}, PrimitiveType::Lines);
 
-	normalizingSizeX = 1.f / (map.x.max - map.x.min);
-	normalizingSizeX = normalizingSizeX * engineContext.windowManager->GetHeight();
+	normalizingSizeX = 1.f;
+	//normalizingSizeX = 1.f / (map.x.max - map.x.min);
+	//normalizingSizeX = normalizingSizeX * engineContext.windowManager->GetHeight();
 
 	auto* mapObj = objectManager.AddObject(std::make_unique<GameObject>(), "map");
 	mapObj->SetMesh(engineContext, "map");
 	mapObj->SetMaterial(engineContext, "m_map");
 	mapObj->GetTransform2D().SetScale({ normalizingSizeX, normalizingSizeX });
-	mapObj->SetIgnoreCamera(true, cameraManager.GetActiveCamera());
 	mapObj->SetRenderLayer(engineContext, "Game.Background");
 	mapObj->SetColor({0,0,1,1});
 
@@ -265,6 +265,17 @@ void PathfindingTest::Update(float dt, const EngineContext& engineContext)
 	{
 		pathfinder.useAStar = !pathfinder.useAStar;
 	}
+
+	auto cam = cameraManager.GetActiveCamera();
+	if (engineContext.inputManager->IsKeyDown(KEY_I)) cam->AddPosition({ 0, 1000 * dt });
+	if (engineContext.inputManager->IsKeyDown(KEY_J)) cam->AddPosition({ -1000 * dt, 0 });
+	if (engineContext.inputManager->IsKeyDown(KEY_K)) cam->AddPosition({ 0, -1000 * dt });
+	if (engineContext.inputManager->IsKeyDown(KEY_L)) cam->AddPosition({ 1000 * dt, 0 });
+	if (engineContext.inputManager->IsKeyDown(KEY_U)) 
+		cam->SetZoom(cam->GetZoom() + .1f * dt);
+	if (engineContext.inputManager->IsKeyDown(KEY_O)) 
+		cam->SetZoom(cam->GetZoom() - .1f * dt);
+
 
 	static std::vector<int> path;
 	static std::vector<int> visited;

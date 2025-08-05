@@ -67,6 +67,7 @@ public:
 
     void AttachAnimator(SpriteSheet* sheet, float frameTime, bool loop = true) = delete;
 
+    void CheckFontAtlasAndMeshUpdate();
 
 protected:
 
@@ -76,4 +77,5 @@ protected:
 
     TextInstance textInstance;
     std::unordered_map<std::string, std::unique_ptr<Mesh>> textMeshCache;
+    int textAtlasVersionTracker;
 };
